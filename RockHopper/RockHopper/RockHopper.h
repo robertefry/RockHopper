@@ -1,7 +1,4 @@
 
 #pragma once
 
-namespace BuildSystemTest
-{
-    void printHelloWorld();
-}
+#include "Application.h"

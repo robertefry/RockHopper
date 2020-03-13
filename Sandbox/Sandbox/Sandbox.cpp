@@ -1,7 +1,18 @@
 
-#include "RockHopper/RockHopper.h"
+#include "Sandbox.h"
 
-int main()
+#include <iostream>
+
+Sandbox::Sandbox()
 {
-    BuildSystemTest::printHelloWorld();
+}
+
+Sandbox::~Sandbox()
+{
+}
+
+void Sandbox::run()
+{
+    RockHopper::Application::run();
+    std::cout << "Hello, World!" << std::endl;
 }

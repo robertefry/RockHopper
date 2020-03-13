@@ -1,10 +1,9 @@
 
 #include "RockHopper.h"
 
-#include <iostream>
-
-void BuildSystemTest::printHelloWorld()
+int main(int, const char**)
 {
-    using namespace std;
-    cout << "Hello, World!" << endl;
+    RockHopper::Application* application = RockHopper::CreateApplication();
+    application->run();
+    delete application;
 }
