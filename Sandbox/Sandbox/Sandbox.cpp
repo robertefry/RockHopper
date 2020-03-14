@@ -1,6 +1,8 @@
 
 #include "Sandbox.h"
 
+#include "RockHopper/Logging/Logger.h"
+
 #include <iostream>
 
 Sandbox::Sandbox()
@@ -13,6 +15,5 @@ Sandbox::~Sandbox()
 
 void Sandbox::run()
 {
-    RockHopper::Application::run();
-    std::cout << "Hello, World!" << std::endl;
+    ROCKHOPPER_LOG_INFO("Hello, World!");
 }

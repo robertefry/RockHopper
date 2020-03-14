@@ -1,0 +1,3 @@
+[submodule "RockHopper/ThirdParty/spdlog"]
+	path = RockHopper/ThirdParty/spdlog
+	url = https://github.com/gabime/spdlog

@@ -9,7 +9,7 @@ namespace RockHopper
         explicit Application();
         virtual ~Application();
 
-        virtual void run();
+        virtual void run() = 0;
     };
 
     // To be implemented by client!
