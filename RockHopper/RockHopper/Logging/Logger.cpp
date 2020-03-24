@@ -1,8 +1,8 @@
 
 #include "Logger.h"
 
-#include "spdlog/logger.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include <spdlog/logger.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 #include <memory>
 #include <unordered_map>
