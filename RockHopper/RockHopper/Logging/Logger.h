@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "RockHopper/Utility/StringBuilder.h"
+
 namespace RockHopper
 {
     class Logger
@@ -19,6 +21,8 @@ namespace RockHopper
             FATAL,
         };
         static void Log(Instance instance, LogLevel level, const char* msg);
+        template <typename... Args>
+        static void Log(Instance instance, LogLevel level, const Args&... args);
     };
 }
 
@@ -35,3 +39,17 @@ namespace RockHopper
 #define ROCKHOPPER_LOGINTERNAL_WARN(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::WARN, __VA_ARGS__)
 #define ROCKHOPPER_LOGINTERNAL_ERROR(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::ERROR, __VA_ARGS__)
 #define ROCKHOPPER_LOGINTERNAL_FATAL(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::FATAL, __VA_ARGS__)
+
+/******************************************************************************/
+/* [Implementation] RockHopper::Logger ****************************************/
+/******************************************************************************/
+
+template <typename... Args>
+void RockHopper::Logger::Log(Instance instance, LogLevel level, const Args&... args)
+{
+    StringBuilder builder;
+    for (const auto& arg : {args...}) {
+        builder << arg;
+    }
+    Log(instance, level, builder.str().c_str());
+}
