@@ -1,21 +1,17 @@
-cmake_minimum_required(VERSION 3.12)
-project(RockHopper)
 
-set(CXX_COMP_FLAGS "-Wall -Wextra -Weffc++ -pedantic -std=c++17 -ggdb")
-set(CXX_LINK_FLAGS "-lgcov")
+cmake_minimum_required(VERSION 3.0)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/bin)
+project(RockHopper_META)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_COMP_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CXX_LINK_FLAGS}")
+# Define the output directory
+set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/RockHopper)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Sandbox)
+# Add RockHopper
+add_subdirectory(RockHopper)
+include_directories(RockHopper/include)
 
-add_custom_target(run
-    COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Sandbox
-    DEPENDS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Sandbox
-    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-)
+# Add Sandbox
+add_subdirectory(Sandbox)

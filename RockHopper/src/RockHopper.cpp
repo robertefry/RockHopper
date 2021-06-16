@@ -1,7 +1,6 @@
 
-#include "RockHopper.h"
-
-#include "Logging/Logger.h"
+#include "RockHopper/RockHopper.h"
+#include "RockHopper/Logging/Logger.h"
 
 int main(int, const char**)
 {
