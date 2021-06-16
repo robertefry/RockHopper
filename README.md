@@ -1,2 +1,2 @@
 # RockHopper
-A C++ multithreaded logic and rendering framework.
+A C++ multi-thread logic and rendering framework.
