@@ -12,6 +12,6 @@ namespace RockHopper
         virtual void run() = 0;
     };
 
-    // To be implemented by client!
+    // To be implemented by the client!
     extern Application* CreateApplication();
 }
