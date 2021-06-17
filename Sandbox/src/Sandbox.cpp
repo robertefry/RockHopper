@@ -16,20 +16,38 @@ Sandbox::~Sandbox()
 
 void Sandbox::run()
 {
-    // define an event
-    struct HelloWorldEvent {
-        void sayHelloWorld() const { ROCKHOPPER_LOG_INFO("Hello, World!"); }
+
+    class WindowEvent
+    {
     };
 
-    // create an event handler
-    auto sandboxHelloWorldEventHandler = RockHopper::EventHandler<HelloWorldEvent>{};
+    class Window
+        : public RockHopper::EventHandler<WindowEvent>
+    {
+    public:
+        void trigger_event() const
+        {
+            WindowEvent event;
+            dispatch_event(event);
+        }
+    };
 
-    // register an event callback function
-    sandboxHelloWorldEventHandler.registerEventCallback([](const HelloWorldEvent& event) {
-        ROCKHOPPER_LOG_INFO("Handling a HelloWorld event.");
-        event.sayHelloWorld();
-    });
+    struct WindowManager
+        : public RockHopper::EventListener<WindowEvent>
+    {
+        Window window;
+    public:
+        WindowManager()
+        {
+            window.insert_event_listener(this);
+        }
+    private:
+        void on_event(WindowEvent const& event) override
+        {
+            ROCKHOPPER_LOG_INFO(__PRETTY_FUNCTION__);
+        }
+    };
 
-    // send a new event to the event handler
-    sandboxHelloWorldEventHandler.handleEvent(HelloWorldEvent{});
+    WindowManager window_manager;
+    window_manager.window.trigger_event();
 }
