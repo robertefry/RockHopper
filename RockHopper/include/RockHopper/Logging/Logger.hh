@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef __HH_ROCKHOPPER_LOGGER_
+#define __HH_ROCKHOPPER_LOGGER_
 
 #include "RockHopper/Utility/StringList.hh"
 
@@ -57,3 +58,5 @@ void RockHopper::Logger::Log(Instance instance, LogLevel level, const Args&... a
     }
     Log(instance, level, stringlist.to_string().c_str());
 }
+
+#endif /* __HH_ROCKHOPPER_LOGGER_ */

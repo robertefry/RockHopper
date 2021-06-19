@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef __HH_ROCKHOPPER_STRING_LIST_
+#define __HH_ROCKHOPPER_STRING_LIST_
 
 #include <list>
 #include <string>
@@ -130,3 +131,5 @@ namespace std
     }
 
 } // namespace std
+
+#endif /* __HH_ROCKHOPPER_STRING_LIST_ */

@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef __HH_ROCKHOPPER_APPLICATION_
+#define __HH_ROCKHOPPER_APPLICATION_
 
 namespace RockHopper
 {
@@ -15,3 +16,5 @@ namespace RockHopper
     // To be implemented by the client!
     extern Application* CreateApplication();
 }
+
+#endif /* __HH_ROCKHOPPER_APPLICATION_ */

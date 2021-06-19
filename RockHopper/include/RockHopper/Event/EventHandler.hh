@@ -1,4 +1,7 @@
 
+#ifndef __HH_ROCKHOPPER_EVENT_HANDLER_
+#define __HH_ROCKHOPPER_EVENT_HANDLER_
+
 #include <unordered_set>
 #include <mutex>
 
@@ -41,3 +44,5 @@ namespace RockHopper
     };
 
 }
+
+#endif /* __HH_ROCKHOPPER_EVENT_HANDLER_ */
