@@ -5,7 +5,7 @@
 int main(int, const char**)
 {
     RockHopper::Application* application = RockHopper::CreateApplication();
-    ROCKHOPPER_LOGINTERNAL_INFO("Starting RockHopper...");
+    ROCKHOPPER_LOGINTERNAL_INFO("Starting RockHopper client...");
     application->run();
     delete application;
 }
