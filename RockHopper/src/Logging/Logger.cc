@@ -69,3 +69,9 @@ void RockHopper::Logger::Log(Instance instance, LogLevel level, const char* msg)
         case LogLevel::FATAL: logger->critical(msg); break;
     }
 }
+
+/**
+ * @author Robert Fry
+ * @date create 19-Jun-2021
+ * @date modify 19-Jun-2021
+ */

@@ -60,3 +60,9 @@ void RockHopper::Logger::Log(Instance instance, LogLevel level, const Args&... a
 }
 
 #endif /* __HH_ROCKHOPPER_LOGGER_ */
+
+/**
+ * @author Robert Fry
+ * @date create 19-Jun-2021
+ * @date modify 19-Jun-2021
+ */

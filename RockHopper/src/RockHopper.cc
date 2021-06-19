@@ -9,3 +9,9 @@ int main(int, const char**)
     application->run();
     delete application;
 }
+
+/**
+ * @author Robert Fry
+ * @date create 19-Jun-2021
+ * @date modify 19-Jun-2021
+ */
