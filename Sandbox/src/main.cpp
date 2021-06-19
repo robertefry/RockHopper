@@ -1,6 +1,6 @@
 
-#include "RockHopper/RockHopper.h"
-#include "Sandbox.h"
+#include "RockHopper/RockHopper.hh"
+#include "Sandbox.hh"
 
 /*
  * main function implemented in RockHopper.cpp

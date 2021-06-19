@@ -1,8 +1,8 @@
 
-#include "Sandbox.h"
+#include "Sandbox.hh"
 
-#include "RockHopper/Logging/Logger.h"
-#include "RockHopper/Event/EventHandler.h"
+#include "RockHopper/Logging/Logger.hh"
+#include "RockHopper/Event/EventHandler.hh"
 
 #include <iostream>
 

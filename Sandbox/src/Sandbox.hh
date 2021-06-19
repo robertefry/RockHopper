@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "RockHopper/Application.h"
+#include "RockHopper/Application.hh"
 
 class Sandbox : public RockHopper::Application
 {

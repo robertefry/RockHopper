@@ -1,5 +1,5 @@
 
-#include "RockHopper/Application.h"
+#include "RockHopper/Application.hh"
 
 #include <iostream>
 
