@@ -2,17 +2,13 @@
 #ifndef __HH_ROCKHOPPER_EVENT_HANDLER_
 #define __HH_ROCKHOPPER_EVENT_HANDLER_
 
+#include "RockHopper/Event/EventListener.hh"
+
 #include <unordered_set>
 #include <mutex>
 
 namespace RockHopper
 {
-
-    template <typename T_Event>
-    struct EventListener
-    {
-        virtual void on_event(T_Event const&) = 0;
-    };
 
     template <typename T_Event>
     class EventHandler
