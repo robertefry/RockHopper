@@ -14,15 +14,20 @@ Sandbox::~Sandbox()
 
 void Sandbox::run()
 {
-    RockHopper::WindowDetails window_details
+    using namespace RockHopper;
+
+    WindowDetails window_details
     {
         .width = 800,
         .height = 600,
         .title = "RockHopper Client",
         .frametime = 1'000'000'000 / 60,
     };
+    Window window {window_details};
 
-    RockHopper::Window window {window_details};
+    EventWaitListener<EngineTerminationEvent> termination_event_listener;
+    window.EventHandler<EngineTerminationEvent>::insert_event_listener(&termination_event_listener);
+
     window.start();
-    while (window.alive());
+    termination_event_listener.wait();
 }
