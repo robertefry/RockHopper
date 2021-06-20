@@ -25,3 +25,8 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
 # Use spdlog
 target_include_directories(${PROJECT_NAME} PRIVATE "spdlog/include")
+
+#Use GLFW
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/glfw)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/glfw/include)
+target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} OpenGL ${OPENGL_glu_LIBRARY})

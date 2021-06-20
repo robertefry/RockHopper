@@ -1,3 +1,6 @@
 [submodule "RockHopper/spdlog"]
 	path = RockHopper/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "RockHopper/glfw"]
+	path = RockHopper/glfw
+	url = https://github.com/glfw/glfw
