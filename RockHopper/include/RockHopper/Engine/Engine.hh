@@ -2,6 +2,8 @@
 #ifndef __HH_ROCKHOPPER_ENGINE_
 #define __HH_ROCKHOPPER_ENGINE_
 
+#include "RockHopper/Event/EventHandler.hh"
+
 #include <thread>
 #include <atomic>
 
@@ -73,8 +75,16 @@ namespace RockHopper
 namespace RockHopper
 {
 
+    struct EngineInitializationEvent
+    {};
+
+    struct EngineTerminationEvent
+    {};
+
     class Engine
         : public EngineThread
+        , public EventHandler<EngineInitializationEvent>
+        , public EventHandler<EngineTerminationEvent>
     {
     public:
         explicit Engine() = default;
