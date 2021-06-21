@@ -25,6 +25,15 @@ namespace RockHopper
         explicit Window(WindowDetails const&);
         virtual ~Window();
 
+        explicit Window(Window const&) = delete;
+        Window& operator=(Window const&) = delete;
+
+        explicit Window(Window&&);
+        Window& operator=(Window&&);
+
+        void set_details(WindowDetails const&);
+        auto get_details() const -> WindowDetails const&;
+
     protected:
         virtual void init() override;
         virtual void tick() override;
