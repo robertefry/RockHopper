@@ -1,7 +1,7 @@
 
 #include "RockHopper/Window/Window.hh"
 
-#include "RockHopper/Logging/Logger.hh"
+#include "RockHopper/Debug.hh"
 
 #include "GLFW_Context.hh"
 
@@ -61,13 +61,8 @@ namespace RockHopper
         set_details(m_Details);
 
         // Create a GLFW windowed-mode window handle and it's OpenGL context
-        m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,
-            m_Details.title.c_str(),NULL,NULL);
-        if (!m_WindowHandle)
-        {
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Failed to create a GLFW window handle!");
-            abort();
-        }
+        m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle!");
 
         // Make the window's context current
         glfwMakeContextCurrent(m_WindowHandle);
