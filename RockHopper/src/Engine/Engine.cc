@@ -61,6 +61,7 @@ namespace RockHopper
     void EngineTiming::tick()
     {
         m_TimeSigma = clock::now() - m_TimeLast;
+        if (not triggered()) std::this_thread::sleep_for(time_span{1});
     }
 
     void EngineTiming::reduce()
