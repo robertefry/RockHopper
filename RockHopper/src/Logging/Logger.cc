@@ -66,7 +66,7 @@ void RockHopper::Logger::Log(Instance instance, LogLevel level, const char* msg)
         case LogLevel::INFO:  logger->info(msg); break;
         case LogLevel::WARN:  logger->warn(msg); break;
         case LogLevel::ERROR: logger->error(msg); break;
-        case LogLevel::FATAL: logger->critical(msg); break;
+        case LogLevel::FATAL: logger->critical(msg); abort();
     }
 }
 
