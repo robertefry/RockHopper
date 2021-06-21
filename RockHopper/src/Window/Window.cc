@@ -65,7 +65,7 @@ namespace RockHopper
             m_Details.title.c_str(),NULL,NULL);
         if (!m_WindowHandle)
         {
-            ROCKHOPPER_LOGINTERNAL_FATAL("Failed to create a GLFW window handle!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("Failed to create a GLFW window handle!");
             abort();
         }
 

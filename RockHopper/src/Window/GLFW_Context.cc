@@ -22,7 +22,7 @@ namespace RockHopper
     {
         if (m_Registered == 0)
         {
-            ROCKHOPPER_LOGINTERNAL_ERROR("Trying to remove non-existant GLFW context!");
+            ROCKHOPPER_INTERNAL_LOG_ERROR("Trying to remove non-existant GLFW context!");
         }
         m_Registered -= 1;
 
