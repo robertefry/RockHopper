@@ -14,6 +14,9 @@ namespace RockHopper
     class EventHandler
     {
     public:
+        explicit EventHandler() = default;
+        virtual ~EventHandler() = default;
+    public:
         void insert_event_listener(EventListener<T_Event>* listener)
         {
             std::lock_guard<std::mutex> guard {m_EventListenersMutex};

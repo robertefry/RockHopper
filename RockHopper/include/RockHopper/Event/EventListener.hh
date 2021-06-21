@@ -12,6 +12,7 @@ namespace RockHopper
     struct EventListener
     {
         virtual void on_event(T_Event const&) = 0;
+        virtual ~EventListener() = default;
     };
 
     template <typename T_Event>

@@ -60,10 +60,10 @@ namespace RockHopper
         bool triggered() const;
 
     private:
-        time_point m_TimeLast;
-        time_span m_TimeDelta;
-        time_span m_TimeSigma;
-        time_span m_TimeOmega;
+        time_point m_TimeLast{};
+        time_span m_TimeDelta{};
+        time_span m_TimeSigma{};
+        time_span m_TimeOmega{};
     };
 
 } // namespace RockHopper
