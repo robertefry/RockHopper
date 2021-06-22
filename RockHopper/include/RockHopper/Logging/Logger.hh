@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_LOGGER_
 #define __HH_ROCKHOPPER_LOGGER_
 
-// #include "RockHopper/Utility/StringList.hh"
+#include <fmt/core.h>
 
 /* ************************************************************************** */
 // [Definition] RockHopper::Logger
@@ -27,8 +27,8 @@ namespace RockHopper
             FATAL,
         };
         static void Log(Instance instance, LogLevel level, const char* msg);
-        // template <typename... Args>
-        // static void Log(Instance instance, LogLevel level, const Args&... args);
+        template <typename Format, typename... Args>
+        static void Log(Instance instance, LogLevel level, Format const& format, Args&&... args);
     };
 
 } // namespace RockHopper
@@ -53,14 +53,16 @@ namespace RockHopper
 // [Implementation] RockHopper::Logger
 /* ************************************************************************** */
 
-// template <typename... Args>
-// void RockHopper::Logger::Log(Instance instance, LogLevel level, const Args&... args)
-// {
-//     StringList stringlist;
-//     for (const auto& arg : {args...}) {
-//         stringlist << arg;
-//     }
-//     Log(instance, level, stringlist.to_string().c_str());
-// }
+namespace RockHopper
+{
+
+    template <typename Format, typename... Args>
+    void Logger::Log(Instance instance, LogLevel level, Format const& format, Args&&... args)
+    {
+        std::string const message = fmt::format(format,std::move(args)...);
+        return Log(instance,level,message.c_str());
+    }
+
+} // namespace RockHopper
 
 #endif /* __HH_ROCKHOPPER_LOGGER_ */

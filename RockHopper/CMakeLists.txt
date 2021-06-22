@@ -20,6 +20,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -pedantic)
 find_package(Threads)
 target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
+# Use fmtlib
+find_package(fmt)
+target_link_libraries(${PROJECT_NAME} fmt::fmt)
+
 # Use spdlog
 target_include_directories(${PROJECT_NAME} PRIVATE "spdlog/include")
 
