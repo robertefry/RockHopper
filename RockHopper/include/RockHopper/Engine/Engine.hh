@@ -83,8 +83,7 @@ namespace RockHopper
 
     class Engine
         : public EngineThread
-        , public EventHandler<EngineInitializationEvent>
-        , public EventHandler<EngineTerminationEvent>
+        , public EventHandler<EngineInitializationEvent,EngineTerminationEvent>
     {
     public:
         explicit Engine() = default;

@@ -86,7 +86,7 @@ namespace RockHopper
     void Engine::run()
     {
 
-        EventHandler<EngineInitializationEvent>::dispatch_event(EngineInitializationEvent{});
+        dispatch_event(EngineInitializationEvent{});
         init();
         m_Timing.init();
 
@@ -102,7 +102,7 @@ namespace RockHopper
         }
 
         dispose();
-        EventHandler<EngineTerminationEvent>::dispatch_event(EngineTerminationEvent{});
+        dispatch_event(EngineTerminationEvent{});
     }
 
 } // namespace RockHopper

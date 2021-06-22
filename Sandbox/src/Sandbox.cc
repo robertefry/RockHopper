@@ -29,6 +29,6 @@ void Sandbox::run()
 {
     using namespace RockHopper;
     EventWaitListener<EngineTerminationEvent> termination_event_listener;
-    m_Window.EventHandler<EngineTerminationEvent>::insert_event_listener(&termination_event_listener);
+    m_Window.insert_event_listener(&termination_event_listener);
     termination_event_listener.wait();
 }
