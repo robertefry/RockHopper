@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_LOGGER_
 #define __HH_ROCKHOPPER_LOGGER_
 
-#include "RockHopper/Utility/StringList.hh"
+// #include "RockHopper/Utility/StringList.hh"
 
 /* ************************************************************************** */
 // [Definition] RockHopper::Logger
@@ -10,6 +10,7 @@
 
 namespace RockHopper
 {
+
     class Logger
     {
     public:
@@ -26,10 +27,11 @@ namespace RockHopper
             FATAL,
         };
         static void Log(Instance instance, LogLevel level, const char* msg);
-        template <typename... Args>
-        static void Log(Instance instance, LogLevel level, const Args&... args);
+        // template <typename... Args>
+        // static void Log(Instance instance, LogLevel level, const Args&... args);
     };
-}
+
+} // namespace RockHopper
 
 // Client logger macros
 #define ROCKHOPPER_LOG_TRACE(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::TRACE, __VA_ARGS__)
@@ -51,20 +53,14 @@ namespace RockHopper
 // [Implementation] RockHopper::Logger
 /* ************************************************************************** */
 
-template <typename... Args>
-void RockHopper::Logger::Log(Instance instance, LogLevel level, const Args&... args)
-{
-    StringList stringlist;
-    for (const auto& arg : {args...}) {
-        stringlist << arg;
-    }
-    Log(instance, level, stringlist.to_string().c_str());
-}
+// template <typename... Args>
+// void RockHopper::Logger::Log(Instance instance, LogLevel level, const Args&... args)
+// {
+//     StringList stringlist;
+//     for (const auto& arg : {args...}) {
+//         stringlist << arg;
+//     }
+//     Log(instance, level, stringlist.to_string().c_str());
+// }
 
 #endif /* __HH_ROCKHOPPER_LOGGER_ */
-
-/**
- * @author Robert Fry
- * @date create 19-Jun-2021
- * @date modify 19-Jun-2021
- */
