@@ -14,7 +14,6 @@ namespace RockHopper
         : m_WindowHandle{}
         , m_Details{details}
     {
-        set_details(m_Details);
     }
 
     Window::~Window()
@@ -39,6 +38,7 @@ namespace RockHopper
     {
         m_Details = details;
 
+        ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for a window.");
         if (m_WindowHandle)
         {
             glfwSetWindowSize(m_WindowHandle,details.width,details.height);

@@ -14,8 +14,10 @@ namespace RockHopper
         {
             int status = glfwInit();
             ROCKHOPPER_INTERNAL_ASSERT_FATAL((status == GLFW_TRUE), "Failed to initialize GLFW!");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLFW.");
         }
         m_Registered += 1;
+        ROCKHOPPER_INTERNAL_LOG_INFO("Registered a new GLFW context - (count = {}).",m_Registered);
     }
 
     void GLFW_Context::Deregister()
@@ -26,9 +28,11 @@ namespace RockHopper
         }
         m_Registered -= 1;
 
+        ROCKHOPPER_INTERNAL_LOG_INFO("Deregistered a GLFW context - (count = {}).",m_Registered);
         if (m_Registered == 0)
         {
             glfwTerminate();
+            ROCKHOPPER_INTERNAL_LOG_INFO("Terminated GLFW.");
         }
     }
 

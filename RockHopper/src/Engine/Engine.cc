@@ -1,6 +1,8 @@
 
 #include "RockHopper/Engine/Engine.hh"
 
+#include "RockHopper/Logging/Logger.hh"
+
 #include <chrono>
 
 /* ************************************************************************** */
@@ -27,15 +29,18 @@ namespace RockHopper
     {
         if (m_IsAlive) return;
         m_Thread = std::thread([&](){
+            ROCKHOPPER_INTERNAL_LOG_INFO("Starting an EngineThread.");
             m_IsAlive = true;
             this->run();
             m_IsAlive = false;
+            ROCKHOPPER_INTERNAL_LOG_INFO("Stopped an EngineThread.");
         });
         m_IsAlive = true; // ensure m_IsAlive is set before returning.
     }
 
     void EngineThread::stop()
     {
+        ROCKHOPPER_INTERNAL_LOG_DEBUG("requesting an EngineThread stop");
         m_IsStopRequested = true;
     }
 
@@ -85,7 +90,6 @@ namespace RockHopper
 
     void Engine::run()
     {
-
         dispatch_event(EngineInitializationEvent{});
         init();
         m_Timing.init();

@@ -3,9 +3,11 @@
 #define __HH_ROCKHOPPER_EVENT_HANDLER_
 
 #include "RockHopper/Event/EventListener.hh"
+#include "RockHopper/Logging/Logger.hh"
 
 #include <unordered_set>
 #include <mutex>
+#include <typeinfo>
 
 namespace RockHopper
 {
@@ -21,11 +23,13 @@ namespace RockHopper
         {
             std::lock_guard<std::mutex> guard {m_EventListenersMutex};
             m_EventListeners.insert(listener);
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("inserted an event listener for events of type '{}'",typeid(T_Event).name());
         }
         void remove_event_listener(EventListener<T_Event>* listener)
         {
             std::lock_guard<std::mutex> guard {m_EventListenersMutex};
             m_EventListeners.erase(listener);
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("removed an event listener for events of type '{}'",typeid(T_Event).name());
         }
     protected:
         void dispatch_event(T_Event const& event) const
@@ -36,6 +40,7 @@ namespace RockHopper
             {
                 listener->on_event(event);
             }
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("dispatched an event of type '{}'",typeid(T_Event).name());
         }
     private:
         std::unordered_set<EventListener<T_Event>*> m_EventListeners{};
