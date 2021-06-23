@@ -4,6 +4,7 @@
 
 #include "RockHopper/Event/Event.hh"
 #include "RockHopper/Event/EventHandler.hh"
+#include "RockHopper/Engine/Engine.hh"
 
 namespace RockHopper
 {
@@ -15,7 +16,9 @@ namespace RockHopper
 
     struct EngineEvent
         : I_EventListenable<EngineEventSet>
-    {};
+    {
+        Engine* engine{};
+    };
 
     struct EngineInitializationEvent : EventListenable<EngineInitializationEvent,EngineEvent>
     {};
