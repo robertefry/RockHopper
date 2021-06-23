@@ -1,6 +1,7 @@
 
 #include "Sandbox.hh"
 
+#include "RockHopper/Event/EventListener.hh"
 #include "RockHopper/Logging/Logger.hh"
 #include "RockHopper/Window/Window.hh"
 
