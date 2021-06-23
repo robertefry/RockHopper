@@ -11,7 +11,7 @@ namespace RockHopper
         static void Register();
         static void Deregister();
     private:
-        inline static unsigned m_Registered = 0;
+        inline static bool m_Registered = 0;
     };
 
 } // namespace RockHopper
