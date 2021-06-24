@@ -1,0 +1,8 @@
+
+namespace RockHopper
+{
+
+    template <typename C = char>
+    class StringList;
+
+} // namespace RockHopper
