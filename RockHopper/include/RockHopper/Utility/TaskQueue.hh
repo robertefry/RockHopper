@@ -2,6 +2,7 @@
 #ifndef __HH_ROCKHOPPER_UTIL_TASK_QUEUE_
 #define __HH_ROCKHOPPER_UTIL_TASK_QUEUE_
 
+#include <functional>
 #include <queue>
 #include <mutex>
 
@@ -13,7 +14,7 @@ namespace RockHopper
     public:
         virtual ~TaskQueue() = default;
 
-        typedef void(*TaskFunc)(void);
+        using TaskFunc = std::function<void(void)>;
 
         void give(TaskFunc const&);
         void give(TaskFunc&&);
