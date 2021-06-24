@@ -1,6 +1,6 @@
 
-#ifndef __HH_ROCKHOPPER_STRING_LIST_
-#define __HH_ROCKHOPPER_STRING_LIST_
+#ifndef __HH_ROCKHOPPER_UTIL_STRING_LIST_
+#define __HH_ROCKHOPPER_UTIL_STRING_LIST_
 
 #include <list>
 #include <string>
@@ -132,10 +132,4 @@ namespace std
 
 } // namespace std
 
-#endif /* __HH_ROCKHOPPER_STRING_LIST_ */
-
-/**
- * @author Robert Fry
- * @date create 19-Jun-2021
- * @date modify 19-Jun-2021
- */
+#endif /* __HH_ROCKHOPPER_UTIL_STRING_LIST_ */
