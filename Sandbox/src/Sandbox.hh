@@ -3,6 +3,7 @@
 
 #include "RockHopper/Application.hh"
 #include "RockHopper/Window/Window.hh"
+#include "RockHopper/Input/Keyboard.hh"
 
 class Sandbox : public RockHopper::Application
 {
@@ -14,4 +15,5 @@ public:
 
 private:
     RockHopper::Window m_Window;
+    RockHopper::Keyboard m_Keyboard;
 };

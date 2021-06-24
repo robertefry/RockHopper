@@ -1,0 +1,19 @@
+
+#include "RockHopper/Event/Event.fwd"
+
+namespace RockHopper
+{
+
+    struct KeyEvent;
+    struct KeyPressEvent;
+    struct KeyReleaseEvent;
+    struct KeyRepeatEvent;
+
+    using KeyEventSet = EventSet<
+        KeyPressEvent,
+        KeyReleaseEvent,
+        KeyRepeatEvent >;
+
+    struct KeyEventHandler;
+
+} // namespace RockHopper

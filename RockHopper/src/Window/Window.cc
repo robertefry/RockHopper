@@ -2,6 +2,7 @@
 #include "RockHopper/Window/Window.hh"
 
 #include "RockHopper/Debug.hh"
+#include "RockHopper/Input/Keyboard.hh"
 
 #include "GLFW/GLFW_Context.hh"
 
@@ -16,10 +17,27 @@ namespace RockHopper
         : m_WindowHandle{}
         , m_Details{details}
     {
+        // Initialise GLFW
+        GLFW_Context::Register();
+
+        // Create a GLFW windowed-mode window handle and it's OpenGL context
+        m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle!");
+
+        // Set the GLFW user pointer to this window
+        glfwSetWindowUserPointer(m_WindowHandle,this);
     }
 
     Window::~Window()
     {
+        // Remove the GLFW user pointer
+        glfwSetWindowUserPointer(m_WindowHandle,nullptr);
+
+        // Destroy the GLFW window
+        glfwDestroyWindow(m_WindowHandle);
+
+        // Uninitialize the GLFW context
+        GLFW_Context::Deregister();
     }
 
     Window::Window(Window&& other)
@@ -54,21 +72,37 @@ namespace RockHopper
         return m_Details;
     }
 
+    auto Window::keyboard() const -> Keyboard const*
+    {
+        return m_KeyboardHandle;
+    }
+
+    auto Window::keyboard() -> Keyboard*
+    {
+        return m_KeyboardHandle;
+    }
+
+    void Window::attach(Keyboard* keyboard)
+    {
+        if (m_KeyboardHandle != nullptr)
+        {
+            ROCKHOPPER_INTERNAL_LOG_ERROR("Window already has a keyboard attached!");
+            return;
+        }
+        m_KeyboardHandle = keyboard;
+        keyboard->m_WindowHandle = this;
+        SetKeyboardGLFWCallbacks<true>(m_WindowHandle);
+    }
+
+    void Window::detach(Keyboard* keyboard)
+    {
+        SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
+        keyboard->m_WindowHandle = nullptr;
+        m_KeyboardHandle = nullptr;
+    }
+
     void Window::init()
     {
-        // Initialise GLFW
-        GLFW_Context::Register();
-
-        // Set the window details
-        set_details(m_Details);
-
-        // Create a GLFW windowed-mode window handle and it's OpenGL context
-        m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle!");
-
-        // Set the GLFW user pointer to this window
-        glfwSetWindowUserPointer(m_WindowHandle,this);
-
         // Set GLFW callbacks
         SetWindowGLFWCallbacks<true>(m_WindowHandle);
 
@@ -93,15 +127,6 @@ namespace RockHopper
     {
         // Set GLFW callbacks
         SetWindowGLFWCallbacks<false>(m_WindowHandle);
-
-        // Remove the GLFW user pointer
-        glfwSetWindowUserPointer(m_WindowHandle,nullptr);
-
-        // Destroy the GLFW window
-        glfwDestroyWindow(m_WindowHandle);
-
-        // Uninitialize the GLFW context
-        GLFW_Context::Deregister();
     }
 
 } // namespace RockHopper

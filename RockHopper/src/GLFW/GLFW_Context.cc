@@ -3,7 +3,7 @@
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Window/Window.hh"
-#include "RockHopper/Window/WindowEvents.hh"
+#include "RockHopper/Input/Keyboard.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -159,6 +159,71 @@ namespace RockHopper
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
             window->WindowEventHandler::dispatch_event(event);
+        });
+    }
+
+} // namespace RockHopper
+
+/* ************************************************************************** */
+// [Definition] RockHopper::SetKeyboardGLFWCallbacks
+/* ************************************************************************** */
+
+namespace RockHopper
+{
+
+    template <>
+    void SetKeyboardGLFWCallbacks<false>(GLFWwindow* handle)
+    {
+        glfwSetKeyCallback(handle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
+        {
+        });
+    }
+
+    template <>
+    void SetKeyboardGLFWCallbacks<true>(GLFWwindow* handle)
+    {
+        glfwSetKeyCallback(handle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
+        {
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    KeyPressEvent event;
+                    event.key = static_cast<KeyCode>(keycode);
+                    event.mods = mods;
+                    event.scancode = scancode;
+
+                    Keyboard const* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
+                    event.keyboard = keyboard;
+                    keyboard->dispatch_event(event);
+                }
+                break;
+                case GLFW_RELEASE:
+                {
+                    KeyReleaseEvent event;
+                    event.key = static_cast<KeyCode>(keycode);
+                    event.mods = mods;
+                    event.scancode = scancode;
+
+                    Keyboard const* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
+                    event.keyboard = keyboard;
+                    keyboard->dispatch_event(event);
+                }
+                break;
+                case GLFW_REPEAT:
+                {
+                    KeyRepeatEvent event;
+                    event.key = static_cast<KeyCode>(keycode);
+                    event.mods = mods;
+                    event.scancode = scancode;
+
+                    Keyboard const* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
+                    event.keyboard = keyboard;
+                    keyboard->dispatch_event(event);
+                }
+                break;
+                default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an unknown GLFW key event!");
+            }
         });
     }
 
