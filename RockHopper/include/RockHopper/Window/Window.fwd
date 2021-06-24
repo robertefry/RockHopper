@@ -1,0 +1,8 @@
+
+namespace RockHopper
+{
+
+    struct WindowDetails;
+    class Window;
+
+} // namespace RockHopper

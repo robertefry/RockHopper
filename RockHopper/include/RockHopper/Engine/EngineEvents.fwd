@@ -1,0 +1,15 @@
+
+#include "RockHopper/Event/Event.fwd"
+
+namespace RockHopper
+{
+
+    struct EngineEvent;
+    struct EngineInitializationEvent;
+    struct EngineTerminationEvent;
+
+    using EngineEventSet = EventSet<EngineInitializationEvent,EngineTerminationEvent>;
+
+    struct EngineEventHandler;
+
+} // namespace RockHopper

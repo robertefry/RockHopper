@@ -1,0 +1,9 @@
+
+namespace RockHopper
+{
+
+    class EngineThread;
+    class EngineTiming;
+    class Engine;
+
+} // namespace RockHopper

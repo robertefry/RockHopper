@@ -1,0 +1,20 @@
+
+namespace RockHopper
+{
+
+    template <typename T_Event>
+    struct I_EventListener_Base;
+
+    template <typename... T_Events>
+    struct I_EventListener;
+
+    template <typename... T_Events>
+    struct EventSet;
+
+    template <typename T_EventSet>
+    struct I_EventListenable;
+
+    template <typename T_Event, typename T_EventListenable>
+    struct EventListenable;
+
+} // namespace RockHopper

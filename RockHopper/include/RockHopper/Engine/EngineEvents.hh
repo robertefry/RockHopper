@@ -2,17 +2,14 @@
 #ifndef __HH_ROCKHOPPER_ENGINE_EVENTS_
 #define __HH_ROCKHOPPER_ENGINE_EVENTS_
 
+#include "RockHopper/Engine/Engine.fwd"
+#include "RockHopper/Engine/EngineEvents.fwd"
+
 #include "RockHopper/Event/Event.hh"
 #include "RockHopper/Event/EventHandler.hh"
-#include "RockHopper/Engine/Engine.hh"
 
 namespace RockHopper
 {
-
-    struct EngineInitializationEvent;
-    struct EngineTerminationEvent;
-
-    using EngineEventSet = EventSet<EngineInitializationEvent,EngineTerminationEvent>;
 
     struct EngineEvent
         : I_EventListenable<EngineEventSet>
