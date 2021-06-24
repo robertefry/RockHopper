@@ -12,6 +12,7 @@ file(GLOB_RECURSE SOURCES
 )
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC "include")
+target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
 # Define compiler configuration
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -pedantic)

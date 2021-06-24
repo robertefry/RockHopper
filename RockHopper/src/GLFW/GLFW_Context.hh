@@ -2,6 +2,8 @@
 #ifndef __HH_ROCKHOPPER_GLFW_CONTEXT_
 #define __HH_ROCKHOPPER_GLFW_CONTEXT_
 
+class GLFWwindow;
+
 namespace RockHopper
 {
 
@@ -13,6 +15,8 @@ namespace RockHopper
     private:
         inline static bool m_Registered = 0;
     };
+
+    void SetWindowGLFWCallbacks(GLFWwindow* handle);
 
 } // namespace RockHopper
 
