@@ -3,6 +3,7 @@
 #define __HH_ROCKHOPPER_WINDOW_
 
 #include "RockHopper/Engine/Engine.hh"
+#include "RockHopper/Window/WindowEvents.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -20,6 +21,7 @@ namespace RockHopper
 
     class Window
         : public RockHopper::Engine
+        , public WindowEventHandler
     {
     public:
         explicit Window(WindowDetails const&);

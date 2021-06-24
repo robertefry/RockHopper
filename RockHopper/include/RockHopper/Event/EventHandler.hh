@@ -33,7 +33,6 @@ namespace RockHopper
             m_EventListeners.erase(listener);
             ROCKHOPPER_INTERNAL_LOG_DEBUG("removed an event listener for events of type '{}'",typeid(T_EventListenable).name());
         }
-    protected:
         void dispatch_event(T_EventListenable const& event) const
         {
             std::lock_guard<std::mutex> guard {m_EventListenersMutex};

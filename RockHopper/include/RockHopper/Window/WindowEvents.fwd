@@ -1,0 +1,31 @@
+
+#include "RockHopper/Event/Event.fwd"
+
+namespace RockHopper
+{
+
+    struct WindowEvent;
+    struct WindowPositionEvent;
+    struct WindowSizeEvent;
+    struct WindowCloseEvent;
+    struct WindowRefreshEvent;
+    struct WindowFocusEvent;
+    struct WindowMinimizeEvent;
+    struct WindowMaximizedEvent;
+    struct WindowScaleEvent;
+    struct WindowBufferSizeEvent;
+
+    using WindowEventSet = EventSet<
+        WindowPositionEvent,
+        WindowSizeEvent,
+        WindowCloseEvent,
+        WindowRefreshEvent,
+        WindowFocusEvent,
+        WindowMinimizeEvent,
+        WindowMaximizedEvent,
+        WindowScaleEvent,
+        WindowBufferSizeEvent >;
+
+    struct WindowEventHandler;
+
+} // namespace RockHopper
