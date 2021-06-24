@@ -70,7 +70,7 @@ namespace RockHopper
         glfwSetWindowUserPointer(m_WindowHandle,this);
 
         // Set GLFW callbacks
-        SetWindowGLFWCallbacks(m_WindowHandle);
+        SetWindowGLFWCallbacks<true>(m_WindowHandle);
 
         // Make the window's context current
         glfwMakeContextCurrent(m_WindowHandle);
@@ -91,7 +91,16 @@ namespace RockHopper
 
     void Window::dispose()
     {
+        // Set GLFW callbacks
+        SetWindowGLFWCallbacks<false>(m_WindowHandle);
+
+        // Remove the GLFW user pointer
+        glfwSetWindowUserPointer(m_WindowHandle,nullptr);
+
+        // Destroy the GLFW window
         glfwDestroyWindow(m_WindowHandle);
+
+        // Uninitialize the GLFW context
         GLFW_Context::Deregister();
     }
 

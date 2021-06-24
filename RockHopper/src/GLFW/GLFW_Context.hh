@@ -16,6 +16,7 @@ namespace RockHopper
         inline static bool m_Registered = 0;
     };
 
+    template <bool>
     void SetWindowGLFWCallbacks(GLFWwindow* handle);
 
 } // namespace RockHopper

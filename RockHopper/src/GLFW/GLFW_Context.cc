@@ -42,7 +42,40 @@ namespace RockHopper
 namespace RockHopper
 {
 
-    void SetWindowGLFWCallbacks(GLFWwindow* handle)
+    template <>
+    void SetWindowGLFWCallbacks<false>(GLFWwindow* handle)
+    {
+        glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
+        {
+        });
+        glfwSetWindowSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
+        {
+        });
+        glfwSetWindowCloseCallback(handle,[](GLFWwindow* handle)
+        {
+        });
+        glfwSetWindowRefreshCallback(handle,[](GLFWwindow* handle)
+        {
+        });
+        glfwSetWindowFocusCallback(handle,[](GLFWwindow* handle, int focus)
+        {
+        });
+        glfwSetWindowIconifyCallback(handle,[](GLFWwindow* handle, int iconified)
+        {
+        });
+        glfwSetWindowMaximizeCallback(handle,[](GLFWwindow* handle, int maximized)
+        {
+        });
+        glfwSetWindowContentScaleCallback(handle,[](GLFWwindow* handle, float scale_x, float scale_y)
+        {
+        });
+        glfwSetFramebufferSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
+        {
+        });
+    }
+
+    template <>
+    void SetWindowGLFWCallbacks<true>(GLFWwindow* handle)
     {
         glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
         {
