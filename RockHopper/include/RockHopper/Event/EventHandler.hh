@@ -41,7 +41,7 @@ namespace RockHopper
             {
                 event.accept(listener);
             }
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("dispatched an event of type '{}'",typeid(T_EventListenable).name());
+            ROCKHOPPER_INTERNAL_LOG_TRACE("dispatched an event of type '{}'",typeid(T_EventListenable).name());
         }
     private:
         std::unordered_set<ListenerType*> m_EventListeners{};
