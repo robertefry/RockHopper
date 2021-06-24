@@ -3,6 +3,7 @@
 #define __HH_ROCKHOPPER_ENGINE_
 
 #include "RockHopper/Engine/EngineEvents.hh"
+#include "RockHopper/Utility/TaskQueue.hh"
 
 #include <thread>
 #include <atomic>
@@ -85,6 +86,9 @@ namespace RockHopper
 
         inline auto timing() -> EngineTiming& { return m_Timing; }
 
+        void insert_task(TaskQueue::TaskFunc const&);
+        void insert_task(TaskQueue::TaskFunc&&);
+
     protected:
         virtual void init() = 0;
         virtual void tick() = 0;
@@ -95,6 +99,7 @@ namespace RockHopper
 
     protected:
         EngineTiming m_Timing{};
+        TaskQueue m_TaskQueue{};
     };
 
 } // namespace RockHopper

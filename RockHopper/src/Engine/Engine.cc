@@ -88,6 +88,16 @@ namespace RockHopper
 namespace RockHopper
 {
 
+    void Engine::insert_task(TaskQueue::TaskFunc const& task)
+    {
+        m_TaskQueue.give(task);
+    }
+
+    void Engine::insert_task(TaskQueue::TaskFunc&& task)
+    {
+        m_TaskQueue.give(std::move(task));
+    }
+
     void Engine::run()
     {
         {
@@ -107,6 +117,7 @@ namespace RockHopper
                 m_Timing.reduce();
                 tick();
             }
+            m_TaskQueue.execute_all();
         }
 
         dispose();
