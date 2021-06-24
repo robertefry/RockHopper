@@ -5,9 +5,7 @@
 #include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Window/WindowEvents.hh"
 
-#include <GLFW/glfw3.h>
-
-#include <string>
+class GLFWwindow;
 
 namespace RockHopper
 {
@@ -49,9 +47,3 @@ namespace RockHopper
 } // namespace RockHopper
 
 #endif /* __HH_ROCKHOPPER_WINDOW_ */
-
-/**
- * @author Robert Fry
- * @date create 20-Jun-2021
- * @date modify 20-Jun-2021
- */

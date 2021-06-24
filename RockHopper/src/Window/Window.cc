@@ -6,6 +6,8 @@
 
 #include "GLFW_Context.hh"
 
+#include <GLFW/glfw3.h>
+
 #include <utility>
 
 void SetWindowGLFWCallbacks(GLFWwindow* handle);
