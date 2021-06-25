@@ -13,14 +13,17 @@
 namespace RockHopper
 {
 
+    template <typename T_EnumCode>
     class KeyManager
     {
     public:
         virtual ~KeyManager() = default;
 
         inline auto size() const { return m_KeyMap.size(); }
-        inline auto operator[](int enumcode) { return m_KeyMap.at(enumcode); }
-        inline auto operator[](int enumcode) const { return m_KeyMap.at(enumcode); }
+        inline auto operator[](T_EnumCode enumcode) { return m_KeyMap.at(enumcode); }
+        inline auto operator[](T_EnumCode enumcode) const { return m_KeyMap.at(enumcode); }
+        inline auto key(T_EnumCode enumcode) { return m_KeyMap.at(enumcode); }
+        inline auto key(T_EnumCode enumcode) const { return m_KeyMap.at(enumcode); }
 
         inline auto begin() { return m_KeyMap.begin(); }
         inline auto begin() const { return m_KeyMap.begin(); }
@@ -30,7 +33,7 @@ namespace RockHopper
         inline void tick();
 
     protected:
-        std::unordered_map<int,Key> m_KeyMap{};
+        std::unordered_map<T_EnumCode,Key> m_KeyMap{};
     };
 
 } // namespace RockHopper
@@ -42,7 +45,8 @@ namespace RockHopper
 namespace RockHopper
 {
 
-    void KeyManager::tick()
+    template <typename T_EnumCode>
+    void KeyManager<T_EnumCode>::tick()
     {
         for (auto& [keycode,key] : m_KeyMap)
         {

@@ -10,7 +10,7 @@ namespace RockHopper
 {
 
     class Keyboard
-        : public KeyManager
+        : public KeyManager<KeyCode>
         , public KeyEventHandler
     {
         friend Window;

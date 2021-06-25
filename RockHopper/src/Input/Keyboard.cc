@@ -13,9 +13,10 @@ namespace RockHopper
 
     Keyboard::Keyboard()
     {
-        for (size_t keycode = 0; keycode < (size_t)KeyCode::KEY_LAST; ++keycode)
+        for (int i = 0; i < (int)KeyCode::KEY_LAST; ++i)
         {
-            m_KeyMap.emplace(keycode,Key{keycode});
+            KeyCode keycode = static_cast<KeyCode>(i);
+            m_KeyMap.emplace(keycode,Key{i});
         }
     }
 
