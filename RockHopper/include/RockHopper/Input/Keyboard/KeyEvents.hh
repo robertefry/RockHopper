@@ -9,6 +9,8 @@
 #include "RockHopper/Event/Event.hh"
 #include "RockHopper/Event/EventHandler.hh"
 
+#include <iosfwd>
+
 namespace RockHopper
 {
 
@@ -44,5 +46,28 @@ namespace RockHopper
     {};
 
 } // namespace RockHopper
+
+namespace std
+{
+
+    template <typename C>
+    std::basic_ostream<C>& operator<<(std::basic_ostream<C>& ost, RockHopper::KeyPressEvent const& event)
+    {
+        return ost << "KeyPressEvent[" << event.key << "]";
+    }
+
+    template <typename C>
+    std::basic_ostream<C>& operator<<(std::basic_ostream<C>& ost, RockHopper::KeyReleaseEvent const& event)
+    {
+        return ost << "KeyReleaseEvent[" << event.key << "]";
+    }
+
+    template <typename C>
+    std::basic_ostream<C>& operator<<(std::basic_ostream<C>& ost, RockHopper::KeyRepeatEvent const& event)
+    {
+        return ost << "KeyRepeatEvent[" << event.key << "]";
+    }
+
+} // namespace std
 
 #endif /* __HH_ROCKHOPPER_INPUT_KEYBOARD_EVENTS_ */
