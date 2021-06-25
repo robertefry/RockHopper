@@ -2,6 +2,9 @@
 namespace RockHopper
 {
 
+    template <typename T_EventListenable, typename T_Event>
+    class EventFunctionListener;
+
     template <typename T_EventListenable>
     class EventWaitListener;
 

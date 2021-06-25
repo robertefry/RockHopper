@@ -54,6 +54,10 @@ namespace RockHopper
     concept IsEventListenable = std::is_base_of<
         I_EventListenable<typename T_EventListenable::EventSet>,T_EventListenable >::value;
 
+    template <typename T_EventListenable, typename T_Event>
+    concept IsSubEventListenable = IsEventListenable<T_EventListenable>
+        && std::is_base_of<T_EventListenable,T_Event>::value;
+
 } // namespace RockHopper
 
 #endif /* __HH_ROCKHOPPER_EVENT_ */

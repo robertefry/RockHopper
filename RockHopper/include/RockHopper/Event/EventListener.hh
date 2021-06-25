@@ -4,11 +4,30 @@
 
 #include "RockHopper/Event/Event.hh"
 
+#include <functional>
 #include <mutex>
 #include <condition_variable>
 
 namespace RockHopper
 {
+
+    template <typename T_EventListenable, typename T_Event>
+        requires IsSubEventListenable<T_EventListenable,T_Event>
+    class EventFunctionListener
+        : public T_EventListenable::ListenerType
+    {
+        using Function = std::function<void(T_Event const&)>;
+    public:
+        explicit EventFunctionListener(Function const& func)
+            : m_OnEventFunction{func}
+        {}
+        virtual void on_event(T_Event const& event) override
+        {
+            m_OnEventFunction(event);
+        }
+    private:
+        Function m_OnEventFunction;
+    };
 
     template <typename T_EventListenable>
         requires IsEventListenable<T_EventListenable>
