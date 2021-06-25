@@ -120,6 +120,8 @@ namespace RockHopper
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwSwapBuffers(m_WindowHandle);
+
+        if (m_KeyboardHandle) m_KeyboardHandle->tick();
         glfwPollEvents();
     }
 
