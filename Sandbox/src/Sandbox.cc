@@ -36,15 +36,11 @@ void Sandbox::run()
 
     struct BackgroundChanger : KeyEvent::ListenerType
     {
-    public:
-        explicit BackgroundChanger(RockHopper::Window& window)
-            : m_Window{window}
-        {}
         void on_event(KeyReleaseEvent const& event) override
         {
             if (event.key == KeyCode::KEY_SPACE)
             {
-                m_Window.insert_task([]()
+                event.keyboard->window()->insert_task([]()
                 {
                     float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
                     float g = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
@@ -53,10 +49,8 @@ void Sandbox::run()
                 });
             }
         }
-    private:
-        RockHopper::Window& m_Window;
     };
-    BackgroundChanger background_changer {m_Window};
+    BackgroundChanger background_changer;
     m_Window.keyboard()->KeyEventHandler::insert_event_listener(&background_changer);
 
     EventWaitListener<EngineTerminationEvent> termination_event_listener;

@@ -25,6 +25,16 @@ namespace RockHopper
         return m_KeyMap.at(keycode);
     }
 
+    auto Keyboard::window() const -> Window const*
+    {
+        return m_WindowHandle;
+    }
+
+    auto Keyboard::window() -> Window*
+    {
+        return m_WindowHandle;
+    }
+
     void Keyboard::tick()
     {
         for (auto& [code,key] : m_KeyMap)

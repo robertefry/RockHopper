@@ -21,6 +21,9 @@ namespace RockHopper
 
         auto key(KeyCode keycode) const -> Key const&;
 
+        auto window() const -> Window const*;
+        auto window() -> Window*;
+
     protected:
         void tick();
 

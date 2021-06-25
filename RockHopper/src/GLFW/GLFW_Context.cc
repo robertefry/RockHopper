@@ -193,7 +193,7 @@ namespace RockHopper
                     event.mods = mods;
                     event.scancode = scancode;
 
-                    Keyboard const* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
+                    Keyboard* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
                     event.keyboard = keyboard;
                     keyboard->dispatch_event(event);
                 }
@@ -205,7 +205,7 @@ namespace RockHopper
                     event.mods = mods;
                     event.scancode = scancode;
 
-                    Keyboard const* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
+                    Keyboard* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
                     event.keyboard = keyboard;
                     keyboard->dispatch_event(event);
                 }
@@ -217,7 +217,7 @@ namespace RockHopper
                     event.mods = mods;
                     event.scancode = scancode;
 
-                    Keyboard const* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
+                    Keyboard* keyboard = ((Window*)glfwGetWindowUserPointer(handle))->keyboard();
                     event.keyboard = keyboard;
                     keyboard->dispatch_event(event);
                 }
