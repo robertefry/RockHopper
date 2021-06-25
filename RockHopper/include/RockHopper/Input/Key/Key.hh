@@ -20,10 +20,10 @@ namespace RockHopper
         auto name() const -> std::string;
         auto scan() const -> int;
 
-        inline bool is_down() const { return m_IsDown; }
-        inline bool is_repeat() const { return m_IsRepeat; }
-        inline bool is_just_down() const { return m_IsJustDown; }
-        inline bool is_just_up() const { return m_IsJustUp; }
+        inline bool down() const { return m_IsDown; }
+        inline bool repeat() const { return m_IsRepeat; }
+        inline bool just_down() const { return m_IsJustDown; }
+        inline bool just_up() const { return m_IsJustUp; }
 
         void tick();
         void press();
