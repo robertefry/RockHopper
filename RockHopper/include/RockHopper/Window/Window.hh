@@ -35,8 +35,8 @@ namespace RockHopper
         void set_details(WindowDetails const&);
         auto get_details() const -> WindowDetails const&;
 
-        inline auto keyboard() const -> Keyboard const* { return m_KeyboardHandle; }
         inline auto keyboard() -> Keyboard* { return m_KeyboardHandle; }
+        inline auto keyboard() const -> Keyboard const* { return m_KeyboardHandle; }
         void attach(Keyboard*);
         void detach(Keyboard*);
 
