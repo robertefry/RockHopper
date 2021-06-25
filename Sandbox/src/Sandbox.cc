@@ -3,6 +3,7 @@
 
 #include "RockHopper/Logging/Logger.hh"
 #include "RockHopper/Input/Keyboard/KeyEvents.hh"
+#include "RockHopper/Input/Mouse/MouseEvents.hh"
 #include "RockHopper/Event/EventListener.hh"
 
 #include <GLFW/glfw3.h>
@@ -21,6 +22,7 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
 Sandbox::Sandbox()
     : m_Window{GetInitialWindowDetails()}
     , m_Keyboard{}
+    , m_Mouse{}
 {
     using namespace RockHopper;
 
@@ -42,7 +44,24 @@ Sandbox::Sandbox()
         }
     }});
 
+    m_Mouse.persist_event_listener(EventFunctionListener<MouseEvent,MouseDragEvent>{[](MouseDragEvent const& event)
+    {
+        WindowDetails details = event.mouse->window()->get_details();
+        float r = event.x / details.width;
+        float g = 0.5f;
+        float b = event.y / details.height;
+        glClearColor(r,g,b,1);
+    }});
+    m_Mouse.persist_event_listener(EventFunctionListener<MouseEvent,MousePressEvent>{[](MousePressEvent const& event)
+    {
+        if (event.button == MouseCode::BUTTON_RIGHT)
+        {
+            ROCKHOPPER_LOG_DEBUG("Querying the state of BUTTON_LEFT - {}.",(event.mouse->key(MouseCode::BUTTON_LEFT).down() ? "down" : "up"));
+        }
+    }});
+
     m_Window.attach(&m_Keyboard);
+    m_Window.attach(&m_Mouse);
     m_Window.start();
 }
 

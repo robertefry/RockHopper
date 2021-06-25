@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class Mouse;
+
+} // namespace RockHopper

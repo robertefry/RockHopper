@@ -4,6 +4,7 @@
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
+#include "RockHopper/Input/Mouse/Mouse.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -224,6 +225,134 @@ namespace RockHopper
                 break;
                 default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an unknown GLFW key event!");
             }
+        });
+    }
+
+} // namespace RockHopper
+
+/* ************************************************************************** */
+// [Definition] RockHopper::SetKeyboardGLFWCallbacks
+/* ************************************************************************** */
+
+namespace RockHopper
+{
+
+    template <>
+    void SetMouseGLFWCallbacks<false>(GLFWwindow* handle)
+    {
+        glfwSetCursorPosCallback(handle,[](GLFWwindow* handle, double x, double y)
+        {
+        });
+        glfwSetCursorEnterCallback(handle,[](GLFWwindow* handle, int entered)
+        {
+        });
+        glfwSetMouseButtonCallback(handle,[](GLFWwindow* handle, int button, int action, int mods)
+        {
+        });
+        glfwSetScrollCallback(handle,[](GLFWwindow* handle, double offset_x, double offset_y)
+        {
+        });
+    }
+
+    template <>
+    void SetMouseGLFWCallbacks<true>(GLFWwindow* handle)
+    {
+        glfwSetCursorPosCallback(handle,[](GLFWwindow* handle, double x, double y)
+        {
+            Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+
+            if (mouse->key(MouseCode::BUTTON_LEFT).down())
+            {
+                MouseDragEvent event;
+                event.x = x;
+                event.y = y;
+
+                event.mouse = mouse;
+                mouse->dispatch_event(event);
+            }
+            else
+            {
+                MouseMoveEvent event;
+                event.x = x;
+                event.y = y;
+
+                event.mouse = mouse;
+                mouse->dispatch_event(event);
+            }
+        });
+        glfwSetCursorEnterCallback(handle,[](GLFWwindow* handle, int entered)
+        {
+            switch (entered)
+            {
+                case GLFW_TRUE:
+                {
+                    MouseEnterEvent event;
+
+                    Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+                    event.mouse = mouse;
+                    mouse->dispatch_event(event);
+                }
+                break;
+                case GLFW_FALSE:
+                {
+                    MouseExitEvent event;
+
+                    Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+                    event.mouse = mouse;
+                    mouse->dispatch_event(event);
+                }
+                break;
+                default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
+            }
+        });
+        glfwSetMouseButtonCallback(handle,[](GLFWwindow* handle, int button, int action, int mods)
+        {
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    MousePressEvent event;
+                    event.button = static_cast<MouseCode>(button);
+                    event.mods = mods;
+
+                    Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+                    event.mouse = mouse;
+                    mouse->dispatch_event(event);
+                }
+                break;
+                case GLFW_RELEASE:
+                {
+                    MouseReleaseEvent event;
+                    event.button = static_cast<MouseCode>(button);
+                    event.mods = mods;
+
+                    Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+                    event.mouse = mouse;
+                    mouse->dispatch_event(event);
+                }
+                break;
+                case GLFW_REPEAT:
+                {
+                    MouseRepeatEvent event;
+                    event.button = static_cast<MouseCode>(button);
+                    event.mods = mods;
+
+                    Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+                    event.mouse = mouse;
+                    mouse->dispatch_event(event);
+                }
+                default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
+            }
+        });
+        glfwSetScrollCallback(handle,[](GLFWwindow* handle, double offset_x, double offset_y)
+        {
+            MouseScrollEvent event;
+            event.offset_x = offset_x;
+            event.offset_y = offset_y;
+
+            Mouse* mouse = ((Window*)glfwGetWindowUserPointer(handle))->mouse();
+            event.mouse = mouse;
+            mouse->dispatch_event(event);
         });
     }
 

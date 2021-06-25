@@ -1,0 +1,29 @@
+
+#include "RockHopper/Event/Event.fwd"
+
+namespace RockHopper
+{
+
+    struct MouseEvent;
+    struct MouseMoveEvent;
+    struct MouseDragEvent;
+    struct MouseEnterEvent;
+    struct MouseExitEvent;
+    struct MousePressEvent;
+    struct MouseReleaseEvent;
+    struct MouseRepeatEvent;
+    struct MouseScrollEvent;
+
+    using MouseEventSet = EventSet<
+        MouseMoveEvent,
+        MouseDragEvent,
+        MouseEnterEvent,
+        MouseExitEvent,
+        MousePressEvent,
+        MouseReleaseEvent,
+        MouseRepeatEvent,
+        MouseScrollEvent >;
+
+    struct MouseEventHandler;
+
+} // namespace RockHopper

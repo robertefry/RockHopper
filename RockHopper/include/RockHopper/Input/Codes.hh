@@ -140,6 +140,24 @@ namespace RockHopper
         KEY_LAST                = KEY_MENU
     };
 
+    enum class MouseCode
+    {
+        BUTTON_0        = 0,
+        BUTTON_1        = 1,
+        BUTTON_2        = 2,
+        BUTTON_3        = 3,
+        BUTTON_4        = 4,
+        BUTTON_5        = 5,
+        BUTTON_6        = 6,
+        BUTTON_7        = 7,
+
+        BUTTON_LEFT     = BUTTON_0,
+        BUTTON_RIGHT    = BUTTON_1,
+        BUTTON_MID      = BUTTON_2,
+
+        BUTTON_LAST     = BUTTON_7
+    };
+
     enum class KeyMod
     {
         SHIFT           = 0x0001,
@@ -157,6 +175,12 @@ namespace std
 
     template <typename C = char>
     std::basic_ostream<C>& operator<<(std::basic_ostream<C>& ost, RockHopper::KeyCode keycode)
+    {
+        return ost << (size_t)keycode;
+    }
+
+    template <typename C = char>
+    std::basic_ostream<C>& operator<<(std::basic_ostream<C>& ost, RockHopper::MouseCode keycode)
     {
         return ost << (size_t)keycode;
     }

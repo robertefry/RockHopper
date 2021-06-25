@@ -22,6 +22,9 @@ namespace RockHopper
     template <bool>
     void SetKeyboardGLFWCallbacks(GLFWwindow* handle);
 
+    template <bool>
+    void SetMouseGLFWCallbacks(GLFWwindow* handle);
+
 } // namespace RockHopper
 
 #endif /* __HH_ROCKHOPPER_GLFW_CONTEXT_ */

@@ -3,6 +3,7 @@
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
+#include "RockHopper/Input/Mouse/Mouse.hh"
 
 #include "GLFW/GLFW_Context.hh"
 
@@ -89,6 +90,25 @@ namespace RockHopper
         SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
         keyboard->m_WindowHandle = nullptr;
         m_KeyboardHandle = nullptr;
+    }
+
+    void Window::attach(Mouse* mouse)
+    {
+        if (m_MouseHandle != nullptr)
+        {
+            ROCKHOPPER_INTERNAL_LOG_ERROR("Window already has a mouse attached!");
+            return;
+        }
+        m_MouseHandle = mouse;
+        mouse->m_WindowHandle = this;
+        SetMouseGLFWCallbacks<true>(m_WindowHandle);
+    }
+
+    void Window::detach(Mouse* mouse)
+    {
+        SetMouseGLFWCallbacks<false>(m_WindowHandle);
+        mouse->m_WindowHandle = nullptr;
+        m_MouseHandle = nullptr;
     }
 
     void Window::init()
