@@ -72,16 +72,6 @@ namespace RockHopper
         return m_Details;
     }
 
-    auto Window::keyboard() const -> Keyboard const*
-    {
-        return m_KeyboardHandle;
-    }
-
-    auto Window::keyboard() -> Keyboard*
-    {
-        return m_KeyboardHandle;
-    }
-
     void Window::attach(Keyboard* keyboard)
     {
         if (m_KeyboardHandle != nullptr)

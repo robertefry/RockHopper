@@ -18,8 +18,8 @@ namespace RockHopper
         virtual ~Keyboard();
         explicit Keyboard();
 
-        auto window() const -> Window const*;
-        auto window() -> Window*;
+        inline auto window() -> Window* { return m_WindowHandle; }
+        inline auto window() const -> Window const* { return m_WindowHandle; }
 
     private:
         Window* m_WindowHandle{};
