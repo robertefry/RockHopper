@@ -2,8 +2,8 @@
 #ifndef __HH_ROCKHOPPER_INPUT_KEYBOARD_
 #define __HH_ROCKHOPPER_INPUT_KEYBOARD_
 
-#include "RockHopper/Input/Key.hh"
-#include "RockHopper/Input/KeyEvents.hh"
+#include "RockHopper/Input/Keyboard/Key.hh"
+#include "RockHopper/Input/Keyboard/KeyEvents.hh"
 #include "RockHopper/Window/Window.fwd"
 
 #include <unordered_map>

@@ -3,7 +3,7 @@
 #define __HH_ROCKHOPPER_INPUT_KEY_
 
 #include "RockHopper/Input/Codes.hh"
-#include "RockHopper/Input/Keyboard.fwd"
+#include "RockHopper/Input/Keyboard/Keyboard.fwd"
 
 #include <string>
 #include <iosfwd>

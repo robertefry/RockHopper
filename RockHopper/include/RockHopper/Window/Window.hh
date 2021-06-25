@@ -4,7 +4,7 @@
 
 #include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Window/WindowEvents.hh"
-#include "RockHopper/Input/Keyboard.fwd"
+#include "RockHopper/Input/Keyboard/Keyboard.fwd"
 
 class GLFWwindow;
 

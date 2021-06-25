@@ -1,5 +1,5 @@
 
-#include "RockHopper/Input/Key.hh"
+#include "RockHopper/Input/Keyboard/Key.hh"
 
 #include <GLFW/glfw3.h>
 

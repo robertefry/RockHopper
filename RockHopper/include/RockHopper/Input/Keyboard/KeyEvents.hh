@@ -2,8 +2,8 @@
 #ifndef __HH_ROCKHOPPER_INPUT_KEYBOARD_EVENTS_
 #define __HH_ROCKHOPPER_INPUT_KEYBOARD_EVENTS_
 
-#include "RockHopper/Input/Keyboard.fwd"
-#include "RockHopper/Input/KeyEvents.fwd"
+#include "RockHopper/Input/Keyboard/Keyboard.fwd"
+#include "RockHopper/Input/Keyboard/KeyEvents.fwd"
 #include "RockHopper/Input/Codes.hh"
 
 #include "RockHopper/Event/Event.hh"

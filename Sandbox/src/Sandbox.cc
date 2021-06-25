@@ -2,7 +2,7 @@
 #include "Sandbox.hh"
 
 #include "RockHopper/Logging/Logger.hh"
-#include "RockHopper/Input/KeyEvents.hh"
+#include "RockHopper/Input/Keyboard/KeyEvents.hh"
 #include "RockHopper/Event/EventListener.hh"
 
 #include <GLFW/glfw3.h>

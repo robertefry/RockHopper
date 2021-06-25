@@ -3,7 +3,7 @@
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Window/Window.hh"
-#include "RockHopper/Input/Keyboard.hh"
+#include "RockHopper/Input/Keyboard/Keyboard.hh"
 
 #include <GLFW/glfw3.h>
 

@@ -1,5 +1,5 @@
 
-#include "RockHopper/Input/Keyboard.hh"
+#include "RockHopper/Input/Keyboard/Keyboard.hh"
 
 #include "RockHopper/Window/Window.hh"
 
