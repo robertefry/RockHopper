@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class KeyManager;
+
+} // namespace RockHopper

@@ -1,29 +1,29 @@
 
-#include "RockHopper/Input/Keyboard/Key.hh"
+#include "RockHopper/Input/Key/Key.hh"
 
 #include <GLFW/glfw3.h>
 
 namespace RockHopper
 {
 
-    Key::Key(KeyCode keycode)
-        : m_KeyCode{keycode}
+    Key::Key(int enumcode)
+        : m_EnumCode{enumcode}
     {}
 
-    auto Key::code() const -> KeyCode
+    auto Key::code() const -> int
     {
-        return m_KeyCode;
+        return m_EnumCode;
     }
 
     auto Key::name() const -> std::string
     {
-        char const* name = glfwGetKeyName((int)code(),(int)scan());
+        char const* name = glfwGetKeyName(code(),scan());
         return std::string(name);
     }
 
     auto Key::scan() const -> int
     {
-        return glfwGetKeyScancode((int)m_KeyCode);
+        return glfwGetKeyScancode(m_EnumCode);
     }
 
     void Key::tick()
