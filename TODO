@@ -1,8 +1,9 @@
 
 [Code Quality]
 EventHandler:   move/copy constructor/assignment
-Keyboard:       allow only move constructor/assignment
-Mouse:          allow only move constructor/assignment
+Keyboard/Mouse: allow only move constructor/assignment
+Keyboard/Mouse: use magic_enum library to only add keys that are enumerated
+Events:         add virtual `char* name() const` function for debug
 
 [Build]
 Fix build warnings
