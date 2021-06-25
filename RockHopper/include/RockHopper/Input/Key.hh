@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_INPUT_KEY_
 #define __HH_ROCKHOPPER_INPUT_KEY_
 
-#include "RockHopper/Input/Keys.hh"
+#include "RockHopper/Input/Codes.hh"
 #include "RockHopper/Input/Keyboard.fwd"
 
 #include <string>

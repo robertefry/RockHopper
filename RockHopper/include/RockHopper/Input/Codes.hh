@@ -1,6 +1,6 @@
 
-#ifndef __HH_ROCKHOPPER_INPUT_KEYS_
-#define __HH_ROCKHOPPER_INPUT_KEYS_
+#ifndef __HH_ROCKHOPPER_INPUT_CODES_
+#define __HH_ROCKHOPPER_INPUT_CODES_
 
 #include <cstddef>
 #include <iosfwd>
@@ -169,4 +169,4 @@ namespace std
 
 } // namespace std
 
-#endif /* __HH_ROCKHOPPER_INPUT_KEYS_ */
+#endif /* __HH_ROCKHOPPER_INPUT_CODES_ */

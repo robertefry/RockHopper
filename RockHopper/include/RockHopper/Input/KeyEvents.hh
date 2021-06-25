@@ -4,7 +4,7 @@
 
 #include "RockHopper/Input/Keyboard.fwd"
 #include "RockHopper/Input/KeyEvents.fwd"
-#include "RockHopper/Input/Keys.hh"
+#include "RockHopper/Input/Codes.hh"
 
 #include "RockHopper/Event/Event.hh"
 #include "RockHopper/Event/EventHandler.hh"
