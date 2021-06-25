@@ -1,0 +1,3 @@
+
+EventHandler:   move/copy constructor/assignment
+Keyboard:       allow only move constructor/assignment
