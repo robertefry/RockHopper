@@ -1,3 +1,12 @@
 
+[Code Quality]
 EventHandler:   move/copy constructor/assignment
 Keyboard:       allow only move constructor/assignment
+Mouse:          allow only move constructor/assignment
+
+[Build]
+Fix build warnings
+
+[Feature]
+Add `KeyHoldEvent` event triggered if more than one `KeyPressEvent` dispatched successively.
+Add `MouseHoldEvent` event triggered if more than one `MousePressEvent` dispatched successively.
