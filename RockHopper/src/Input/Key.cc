@@ -10,6 +10,15 @@ namespace RockHopper
         : m_EnumCode{enumcode}
     {}
 
+    Key::Key(Key const& other)
+        : m_EnumCode{other.m_EnumCode}
+        , m_IsDown{other.down()}
+        , m_IsRepeat{other.repeat()}
+        , m_IsJustDown{other.just_down()}
+        , m_IsJustUp{other.just_up()}
+    {
+    }
+
     auto Key::code() const -> int
     {
         return m_EnumCode;

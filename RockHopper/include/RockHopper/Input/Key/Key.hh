@@ -4,6 +4,7 @@
 
 #include "RockHopper/Input/Codes.hh"
 
+#include <atomic>
 #include <string>
 #include <iosfwd>
 
@@ -15,6 +16,8 @@ namespace RockHopper
     public:
         ~Key() = default;
         explicit Key(int enumcode);
+
+        Key(Key const&);
 
         auto code() const -> int;
         auto name() const -> std::string;
@@ -32,8 +35,8 @@ namespace RockHopper
 
     private:
         int const m_EnumCode;
-        bool m_IsDown{}, m_IsRepeat{};
-        bool m_IsJustDown{}, m_IsJustUp{};
+        std::atomic<bool> m_IsDown{}, m_IsRepeat{};
+        std::atomic<bool> m_IsJustDown{}, m_IsJustUp{};
     };
 
 } // namespace RockHopper

@@ -20,10 +20,12 @@ namespace RockHopper
         virtual ~KeyManager() = default;
 
         inline auto size() const { return m_KeyMap.size(); }
-        inline auto operator[](T_EnumCode enumcode) { return m_KeyMap.at(enumcode); }
-        inline auto operator[](T_EnumCode enumcode) const { return m_KeyMap.at(enumcode); }
-        inline auto key(T_EnumCode enumcode) { return m_KeyMap.at(enumcode); }
-        inline auto key(T_EnumCode enumcode) const { return m_KeyMap.at(enumcode); }
+
+        inline Key& operator[](T_EnumCode enumcode) { return m_KeyMap.at(enumcode); }
+        inline Key& key(T_EnumCode enumcode) { return m_KeyMap.at(enumcode); }
+
+        inline Key const& operator[](T_EnumCode enumcode) const { return m_KeyMap.at(enumcode); }
+        inline Key const& key(T_EnumCode enumcode) const { return m_KeyMap.at(enumcode); }
 
         inline auto begin() { return m_KeyMap.begin(); }
         inline auto begin() const { return m_KeyMap.begin(); }
