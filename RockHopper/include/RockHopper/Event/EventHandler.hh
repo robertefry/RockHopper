@@ -6,6 +6,7 @@
 #include "RockHopper/Logging/Logger.hh"
 
 #include <unordered_set>
+#include <memory>
 #include <mutex>
 #include <typeinfo>
 
@@ -21,6 +22,15 @@ namespace RockHopper
         explicit EventHandler() = default;
         virtual ~EventHandler() = default;
     public:
+        template <typename DerrivedType>
+        void persist_event_listener(DerrivedType&& listener)
+        {
+            std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+            auto owned = std::make_unique<DerrivedType>(std::move(listener));
+            m_EventListeners.insert(owned.get());
+            m_OwnedEventListeners.insert(std::move(owned));
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("persisting an event listener for events of type '{}'",typeid(T_EventListenable).name());
+        }
         void insert_event_listener(ListenerType* listener)
         {
             std::lock_guard<std::mutex> guard {m_EventListenersMutex};
@@ -44,6 +54,7 @@ namespace RockHopper
             ROCKHOPPER_INTERNAL_LOG_TRACE("dispatched an event of type '{}'",typeid(T_EventListenable).name());
         }
     private:
+        std::unordered_set<std::unique_ptr<ListenerType>> m_OwnedEventListeners{};
         std::unordered_set<ListenerType*> m_EventListeners{};
         mutable std::mutex m_EventListenersMutex{};
     };
