@@ -12,24 +12,6 @@ namespace RockHopper
         if (m_WindowHandle) m_WindowHandle->detach(this);
     }
 
-    Mouse::Mouse(Mouse&& other)
-    {
-        *this = std::move(other);
-    }
-
-    Mouse& Mouse::operator=(Mouse&& other)
-    {
-        m_WindowHandle = other.m_WindowHandle;
-        other.m_WindowHandle = nullptr;
-
-        if (m_WindowHandle)
-        {
-            m_WindowHandle->detach(&other);
-            m_WindowHandle->attach(this);
-        }
-        return *this;
-    }
-
     Mouse::Mouse()
     {
         for (int i = 0; i < (int)MouseCode::BUTTON_LAST; ++i)
@@ -66,6 +48,24 @@ namespace RockHopper
         {
             event.mouse->key(event.button).repeat();
         }});
+    }
+
+    Mouse::Mouse(Mouse&& other)
+    {
+        *this = std::move(other);
+    }
+
+    Mouse& Mouse::operator=(Mouse&& other)
+    {
+        m_WindowHandle = other.m_WindowHandle;
+        other.m_WindowHandle = nullptr;
+
+        if (m_WindowHandle)
+        {
+            m_WindowHandle->detach(&other);
+            m_WindowHandle->attach(this);
+        }
+        return *this;
     }
 
 } // namespace RockHopper
