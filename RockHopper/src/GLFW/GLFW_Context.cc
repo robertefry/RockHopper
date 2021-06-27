@@ -17,21 +17,23 @@ namespace RockHopper
 
     void GLFW_Context::Register()
     {
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL((not m_Registered),"Trying to initialize GLFW more than once!");
-
-        int status = glfwInit();
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL((status == GLFW_TRUE),"Failed to initialize GLFW!");
-        ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLFW.");
-        m_Registered = true;
+        if (m_Registered == 0)
+        {
+            int status = glfwInit();
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL((status == GLFW_TRUE),"Failed to initialize GLFW!");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLFW.");
+        }
+        m_Registered += 1;
     }
 
     void GLFW_Context::Deregister()
     {
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_Registered,"Trying to terminate non-existent GLFW!");
-
-        glfwTerminate();
-        ROCKHOPPER_INTERNAL_LOG_INFO("Terminated GLFW.");
-        m_Registered = false;
+        if (m_Registered == 1)
+        {
+            glfwTerminate();
+            ROCKHOPPER_INTERNAL_LOG_INFO("Terminated GLFW.");
+        }
+        m_Registered -= 1;
     }
 
 } // namespace RockHopper
@@ -44,7 +46,7 @@ namespace RockHopper
 {
 
     template <>
-    void SetWindowGLFWCallbacks<false>(GLFWwindow* handle)
+    void GLFW_Context::SetWindowGLFWCallbacks<false>(GLFWwindow* handle)
     {
         glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
         {
@@ -76,7 +78,7 @@ namespace RockHopper
     }
 
     template <>
-    void SetWindowGLFWCallbacks<true>(GLFWwindow* handle)
+    void GLFW_Context::SetWindowGLFWCallbacks<true>(GLFWwindow* handle)
     {
         glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
         {
@@ -173,7 +175,7 @@ namespace RockHopper
 {
 
     template <>
-    void SetKeyboardGLFWCallbacks<false>(GLFWwindow* handle)
+    void GLFW_Context::SetKeyboardGLFWCallbacks<false>(GLFWwindow* handle)
     {
         glfwSetKeyCallback(handle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
         {
@@ -181,7 +183,7 @@ namespace RockHopper
     }
 
     template <>
-    void SetKeyboardGLFWCallbacks<true>(GLFWwindow* handle)
+    void GLFW_Context::SetKeyboardGLFWCallbacks<true>(GLFWwindow* handle)
     {
         glfwSetKeyCallback(handle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
         {
@@ -238,7 +240,7 @@ namespace RockHopper
 {
 
     template <>
-    void SetMouseGLFWCallbacks<false>(GLFWwindow* handle)
+    void GLFW_Context::SetMouseGLFWCallbacks<false>(GLFWwindow* handle)
     {
         glfwSetCursorPosCallback(handle,[](GLFWwindow* handle, double x, double y)
         {
@@ -255,7 +257,7 @@ namespace RockHopper
     }
 
     template <>
-    void SetMouseGLFWCallbacks<true>(GLFWwindow* handle)
+    void GLFW_Context::SetMouseGLFWCallbacks<true>(GLFWwindow* handle)
     {
         glfwSetCursorPosCallback(handle,[](GLFWwindow* handle, double x, double y)
         {

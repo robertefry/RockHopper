@@ -76,12 +76,12 @@ namespace RockHopper
         }
         m_KeyboardHandle = keyboard;
         keyboard->m_WindowHandle = this;
-        SetKeyboardGLFWCallbacks<true>(m_WindowHandle);
+        GLFW_Context::SetKeyboardGLFWCallbacks<true>(m_WindowHandle);
     }
 
     void Window::detach(Keyboard* keyboard)
     {
-        SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
+        GLFW_Context::SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
         keyboard->m_WindowHandle = nullptr;
         m_KeyboardHandle = nullptr;
     }
@@ -100,12 +100,12 @@ namespace RockHopper
         }
         m_MouseHandle = mouse;
         mouse->m_WindowHandle = this;
-        SetMouseGLFWCallbacks<true>(m_WindowHandle);
+        GLFW_Context::SetMouseGLFWCallbacks<true>(m_WindowHandle);
     }
 
     void Window::detach(Mouse* mouse)
     {
-        SetMouseGLFWCallbacks<false>(m_WindowHandle);
+        GLFW_Context::SetMouseGLFWCallbacks<false>(m_WindowHandle);
         mouse->m_WindowHandle = nullptr;
         m_MouseHandle = nullptr;
     }
@@ -113,7 +113,7 @@ namespace RockHopper
     void Window::init()
     {
         // Set GLFW callbacks
-        SetWindowGLFWCallbacks<true>(m_WindowHandle);
+        GLFW_Context::SetWindowGLFWCallbacks<true>(m_WindowHandle);
 
         // Make the window's context current
         glfwMakeContextCurrent(m_WindowHandle);
@@ -137,7 +137,7 @@ namespace RockHopper
     void Window::dispose()
     {
         // Set GLFW callbacks
-        SetWindowGLFWCallbacks<false>(m_WindowHandle);
+        GLFW_Context::SetWindowGLFWCallbacks<false>(m_WindowHandle);
     }
 
 } // namespace RockHopper

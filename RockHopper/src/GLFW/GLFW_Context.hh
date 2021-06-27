@@ -12,18 +12,19 @@ namespace RockHopper
     public:
         static void Register();
         static void Deregister();
+
+        template <bool>
+        static void SetWindowGLFWCallbacks(GLFWwindow* handle);
+
+        template <bool>
+        static void SetKeyboardGLFWCallbacks(GLFWwindow* handle);
+
+        template <bool>
+        static void SetMouseGLFWCallbacks(GLFWwindow* handle);
+
     private:
-        inline static bool m_Registered = 0;
+        inline static unsigned m_Registered = 0;
     };
-
-    template <bool>
-    void SetWindowGLFWCallbacks(GLFWwindow* handle);
-
-    template <bool>
-    void SetKeyboardGLFWCallbacks(GLFWwindow* handle);
-
-    template <bool>
-    void SetMouseGLFWCallbacks(GLFWwindow* handle);
 
 } // namespace RockHopper
 
