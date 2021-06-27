@@ -27,6 +27,8 @@ namespace RockHopper
         virtual ~EventHandler() = default;
         explicit EventHandler() = default;
 
+        explicit EventHandler(EventHandler&&);
+
     public:
         template <typename T_Derrived>
         void persist_event_listener(T_Derrived&& listener);
@@ -50,6 +52,20 @@ namespace RockHopper
 
 namespace RockHopper
 {
+
+    template <typename T_EventListenable>
+    EventHandler<T_EventListenable>::EventHandler(EventHandler&& other)
+    {
+        std::unique_lock lock_1 {m_EventListenersMutex,std::defer_lock};
+        std::unique_lock lock_2 {other.m_EventListenersMutex,std::defer_lock};
+        std::lock(lock_1,lock_2);
+
+        m_OwnedEventListeners = std::move(other.m_OwnedEventListeners);
+        other.m_OwnedEventListeners.clear();
+
+        m_EventListeners = std::move(other.m_EventListeners);
+        other.m_EventListeners.clear();
+    }
 
     template <typename T_EventListenable>
     void EventHandler<T_EventListenable>::insert_event_listener(ListenerType* listener)
