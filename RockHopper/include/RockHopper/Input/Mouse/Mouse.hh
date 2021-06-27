@@ -7,6 +7,7 @@
 #include "RockHopper/Window/Window.fwd"
 
 #include <atomic>
+#include <array>
 
 namespace RockHopper
 {
@@ -20,8 +21,14 @@ namespace RockHopper
         virtual ~Mouse();
         explicit Mouse();
 
+        explicit Mouse(Mouse const&) = delete;
+        Mouse& operator=(Mouse const&) = delete;
+
+        explicit Mouse(Mouse&&);
+        Mouse& operator=(Mouse&&);
+
         inline void set_position(double x, double y) { m_PosX = x; m_PosY = y; }
-        inline auto get_position() const { return std::initializer_list<double>{m_PosX,m_PosY}; }
+        inline auto get_position() const { return std::array<double,2>{m_PosX,m_PosY}; }
 
         inline void set_in_window(bool in_window) { m_IsInWindow = in_window; }
         inline bool get_in_window() const { return m_IsInWindow; }
