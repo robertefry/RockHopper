@@ -15,7 +15,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC "include")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
 # Define compiler configuration
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -pedantic)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-parameter -Wno-unused-variable)
 
 # Use threads
 find_package(Threads)

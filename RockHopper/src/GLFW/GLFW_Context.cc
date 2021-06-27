@@ -341,6 +341,7 @@ namespace RockHopper
                     event.mouse = mouse;
                     mouse->dispatch_event(event);
                 }
+                break;
                 default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
             }
         });

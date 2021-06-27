@@ -15,17 +15,17 @@ namespace RockHopper
     struct MouseEvent
         : I_EventListenable<MouseEventSet>
     {
-        Mouse* mouse;
+        Mouse* mouse{};
     };
 
     struct MouseMoveEvent : EventListenable<MouseMoveEvent,MouseEvent>
     {
-        double x, y;
+        double x{}, y{};
     };
 
     struct MouseDragEvent : EventListenable<MouseDragEvent,MouseEvent>
     {
-        double x, y;
+        double x{}, y{};
     };
 
     struct MouseEnterEvent : EventListenable<MouseEnterEvent,MouseEvent>
@@ -38,25 +38,25 @@ namespace RockHopper
 
     struct MousePressEvent : EventListenable<MousePressEvent,MouseEvent>
     {
-        MouseCode button;
-        int mods;
+        MouseCode button{};
+        int mods{};
     };
 
     struct MouseReleaseEvent : EventListenable<MouseReleaseEvent,MouseEvent>
     {
-        MouseCode button;
-        int mods;
+        MouseCode button{};
+        int mods{};
     };
 
     struct MouseRepeatEvent : EventListenable<MouseRepeatEvent,MouseEvent>
     {
-        MouseCode button;
-        int mods;
+        MouseCode button{};
+        int mods{};
     };
 
     struct MouseScrollEvent : EventListenable<MouseScrollEvent,MouseEvent>
     {
-        double offset_x, offset_y;
+        double offset_x{}, offset_y{};
     };
 
     struct MouseEventHandler

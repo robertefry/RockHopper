@@ -17,28 +17,28 @@ namespace RockHopper
     struct KeyEvent
         : I_EventListenable<KeyEventSet>
     {
-        Keyboard* keyboard;
+        Keyboard* keyboard{};
     };
 
     struct KeyPressEvent : EventListenable<KeyPressEvent,KeyEvent>
     {
-        KeyCode key;
-        int mods;
-        int scancode;
+        KeyCode key{};
+        int mods{};
+        int scancode{};
     };
 
     struct KeyReleaseEvent : EventListenable<KeyReleaseEvent,KeyEvent>
     {
-        KeyCode key;
-        int mods;
-        int scancode;
+        KeyCode key{};
+        int mods{};
+        int scancode{};
     };
 
     struct KeyRepeatEvent : EventListenable<KeyRepeatEvent,KeyEvent>
     {
-        KeyCode key;
-        int mods;
-        int scancode;
+        KeyCode key{};
+        int mods{};
+        int scancode{};
     };
 
     struct KeyEventHandler
