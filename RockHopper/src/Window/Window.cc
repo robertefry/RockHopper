@@ -41,20 +41,6 @@ namespace RockHopper
         GLFW_Context::Deregister();
     }
 
-    Window::Window(Window&& other)
-        : m_WindowHandle{}
-        , m_Details{other.m_Details}
-    {
-        std::swap(m_WindowHandle,other.m_WindowHandle);
-    }
-
-    Window& Window::operator=(Window&& other)
-    {
-        std::swap(m_WindowHandle,other.m_WindowHandle);
-        std::swap(m_Details,other.m_Details);
-        return *this;
-    }
-
     void Window::set_details(WindowDetails const& details)
     {
         m_Details = details;

@@ -30,8 +30,8 @@ namespace RockHopper
         explicit Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
 
-        explicit Window(Window&&);
-        Window& operator=(Window&&);
+        explicit Window(Window&&) = delete;
+        Window& operator=(Window&&) = delete;
 
         void set_details(WindowDetails const&);
         auto get_details() const -> WindowDetails const&;
