@@ -14,6 +14,21 @@
 namespace RockHopper
 {
 
+    Window::~Window()
+    {
+        if (m_WindowHandle)
+        {
+            // Remove the GLFW user pointer
+            glfwSetWindowUserPointer(m_WindowHandle,nullptr);
+
+            // Destroy the GLFW window
+            glfwDestroyWindow(m_WindowHandle);
+
+            // Uninitialize the GLFW context
+            GLFW_Context::Deregister();
+        }
+    }
+
     Window::Window(WindowDetails const& details)
         : m_WindowHandle{}
         , m_Details{details}
@@ -27,18 +42,6 @@ namespace RockHopper
 
         // Set the GLFW user pointer to this window
         glfwSetWindowUserPointer(m_WindowHandle,this);
-    }
-
-    Window::~Window()
-    {
-        // Remove the GLFW user pointer
-        glfwSetWindowUserPointer(m_WindowHandle,nullptr);
-
-        // Destroy the GLFW window
-        glfwDestroyWindow(m_WindowHandle);
-
-        // Uninitialize the GLFW context
-        GLFW_Context::Deregister();
     }
 
     void Window::set_details(WindowDetails const& details)
@@ -63,7 +66,12 @@ namespace RockHopper
     {
         if (m_KeyboardHandle != nullptr)
         {
-            ROCKHOPPER_INTERNAL_LOG_ERROR("Window already has a keyboard attached!");
+            ROCKHOPPER_INTERNAL_LOG_ERROR("A `Keyboard` is already attached to this `Window`!");
+            return;
+        }
+        if (keyboard->m_WindowHandle != nullptr)
+        {
+            ROCKHOPPER_INTERNAL_LOG_ERROR("A `Window` is already attached to this `Keyboard`!");
             return;
         }
         m_KeyboardHandle = keyboard;
@@ -82,7 +90,12 @@ namespace RockHopper
     {
         if (m_MouseHandle != nullptr)
         {
-            ROCKHOPPER_INTERNAL_LOG_ERROR("Window already has a mouse attached!");
+            ROCKHOPPER_INTERNAL_LOG_ERROR("A `Mouse` is already attached to this `Window`!");
+            return;
+        }
+        if (mouse->m_WindowHandle != nullptr)
+        {
+            ROCKHOPPER_INTERNAL_LOG_ERROR("A `Window` is already attached to this `Mouse`!");
             return;
         }
         m_MouseHandle = mouse;

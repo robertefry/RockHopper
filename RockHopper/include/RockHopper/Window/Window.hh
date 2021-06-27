@@ -24,8 +24,8 @@ namespace RockHopper
         , public WindowEventHandler
     {
     public:
-        explicit Window(WindowDetails const&);
         virtual ~Window();
+        explicit Window(WindowDetails const&);
 
         explicit Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
