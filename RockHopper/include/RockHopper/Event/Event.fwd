@@ -12,9 +12,9 @@ namespace RockHopper
     struct EventSet;
 
     template <typename T_EventSet>
-    struct I_EventListenable;
+    struct EventCategory;
 
-    template <typename T_Event, typename T_EventListenable>
+    template <typename T_Event, typename T_EventCategory>
     struct EventListenable;
 
 } // namespace RockHopper

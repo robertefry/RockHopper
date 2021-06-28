@@ -15,7 +15,7 @@ namespace RockHopper
 {
 
     struct KeyEvent
-        : I_EventListenable<KeyEventSet>
+        : EventCategory<KeyEventSet>
     {
         Keyboard* keyboard{};
     };

@@ -11,10 +11,10 @@
 namespace RockHopper
 {
 
-    template <typename T_EventListenable, typename T_Event>
-        requires IsSubEventListenable<T_EventListenable,T_Event>
+    template <typename T_EventCategory, typename T_Event>
+        requires IsEventListenable<T_EventCategory,T_Event>
     class EventFunctionListener
-        : public T_EventListenable::ListenerType
+        : public T_EventCategory::ListenerType
     {
         using Function = std::function<void(T_Event const&)>;
     public:
@@ -29,17 +29,17 @@ namespace RockHopper
         Function m_OnEventFunction;
     };
 
-    template <typename T_EventListenable>
-        requires IsEventListenable<T_EventListenable>
+    template <typename T_EventCategory>
+        requires IsEventCategory<T_EventCategory>
     class EventWaitListener
-        : public T_EventListenable::ListenerType
+        : public T_EventCategory::ListenerType
     {
     public:
         enum EventNotifyType { NOTIFY_ALL, NOTIFY_ONE, NOTIFY_NONE };
         explicit EventWaitListener() = default;
         virtual ~EventWaitListener() = default;
     public:
-        virtual EventNotifyType get_notify_type(T_EventListenable const&)
+        virtual EventNotifyType get_notify_type(T_EventCategory const&)
         {
             return NOTIFY_ALL;
         }
@@ -49,7 +49,7 @@ namespace RockHopper
             m_NotifyVariable.wait(lock);
         }
     private:
-        virtual void on_event(T_EventListenable const& event) override final
+        virtual void on_event(T_EventCategory const& event) override final
         {
             std::unique_lock<std::mutex> lock {m_Mutex};
             switch (get_notify_type(event))

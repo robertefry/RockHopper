@@ -12,7 +12,7 @@ namespace RockHopper
 {
 
     struct EngineEvent
-        : I_EventListenable<EngineEventSet>
+        : EventCategory<EngineEventSet>
     {
         Engine* engine{};
     };

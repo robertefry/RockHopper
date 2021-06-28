@@ -13,7 +13,7 @@ namespace RockHopper
 {
 
     struct MouseEvent
-        : I_EventListenable<MouseEventSet>
+        : EventCategory<MouseEventSet>
     {
         Mouse* mouse{};
     };

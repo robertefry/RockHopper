@@ -12,7 +12,7 @@ namespace RockHopper
 {
 
     struct WindowEvent
-        : I_EventListenable<WindowEventSet>
+        : EventCategory<WindowEventSet>
     {
         Window* window{};
     };
