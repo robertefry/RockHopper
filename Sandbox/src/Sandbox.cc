@@ -4,7 +4,7 @@
 #include "RockHopper/Logging/Logger.hh"
 #include "RockHopper/Input/Keyboard/KeyEvents.hh"
 #include "RockHopper/Input/Mouse/MouseEvents.hh"
-#include "RockHopper/Event/EventListener.hh"
+#include "RockHopper/Event/EventListeners.hh"
 
 #include <GLFW/glfw3.h>
 
