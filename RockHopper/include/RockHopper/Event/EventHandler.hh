@@ -68,6 +68,17 @@ namespace RockHopper
     }
 
     template <typename T_EventCategory>
+    template <typename T_Derrived>
+    void EventHandler<T_EventCategory>::persist_event_listener(T_Derrived&& listener)
+    {
+        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        auto owned = std::make_unique<T_Derrived>(std::move(listener));
+        m_EventListeners.insert(owned.get());
+        m_OwnedEventListeners.insert(std::move(owned));
+        ROCKHOPPER_INTERNAL_LOG_DEBUG("persisting an event listener for events of type '{}'",typeid(T_EventCategory).name());
+    }
+
+    template <typename T_EventCategory>
     void EventHandler<T_EventCategory>::insert_event_listener(ListenerType* listener)
     {
         std::lock_guard<std::mutex> guard {m_EventListenersMutex};
@@ -81,17 +92,6 @@ namespace RockHopper
         std::lock_guard<std::mutex> guard {m_EventListenersMutex};
         m_EventListeners.erase(listener);
         ROCKHOPPER_INTERNAL_LOG_DEBUG("removed an event listener for events of type '{}'",typeid(T_EventCategory).name());
-    }
-
-    template <typename T_EventCategory>
-    template <typename T_Derrived>
-    void EventHandler<T_EventCategory>::persist_event_listener(T_Derrived&& listener)
-    {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
-        auto owned = std::make_unique<T_Derrived>(std::move(listener));
-        m_EventListeners.insert(owned.get());
-        m_OwnedEventListeners.insert(std::move(owned));
-        ROCKHOPPER_INTERNAL_LOG_DEBUG("persisting an event listener for events of type '{}'",typeid(T_EventCategory).name());
     }
 
     template <typename T_EventCategory>
