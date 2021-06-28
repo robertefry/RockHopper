@@ -20,15 +20,15 @@ namespace RockHopper
             m_KeyMap.emplace(keycode,Key{i});
         }
 
-        persist_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
+        give_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
         {
             event.keyboard->key(event.key).press();
         }});
-        persist_event_listener(EventFunctionListener<KeyReleaseEvent>{[](KeyReleaseEvent const& event)
+        give_event_listener(EventFunctionListener<KeyReleaseEvent>{[](KeyReleaseEvent const& event)
         {
             event.keyboard->key(event.key).release();
         }});
-        persist_event_listener(EventFunctionListener<KeyRepeatEvent>{[](KeyRepeatEvent const& event)
+        give_event_listener(EventFunctionListener<KeyRepeatEvent>{[](KeyRepeatEvent const& event)
         {
             event.keyboard->key(event.key).repeat();
         }});

@@ -20,31 +20,31 @@ namespace RockHopper
             m_KeyMap.emplace(keycode,Key{i});
         }
 
-        persist_event_listener(EventFunctionListener<MouseMoveEvent>{[](MouseMoveEvent const& event)
+        give_event_listener(EventFunctionListener<MouseMoveEvent>{[](MouseMoveEvent const& event)
         {
             event.mouse->set_position(event.x,event.y);
         }});
-        persist_event_listener(EventFunctionListener<MouseDragEvent>{[](MouseDragEvent const& event)
+        give_event_listener(EventFunctionListener<MouseDragEvent>{[](MouseDragEvent const& event)
         {
             event.mouse->set_position(event.x,event.y);
         }});
-        persist_event_listener(EventFunctionListener<MouseEnterEvent>{[](MouseEnterEvent const& event)
+        give_event_listener(EventFunctionListener<MouseEnterEvent>{[](MouseEnterEvent const& event)
         {
             event.mouse->set_in_window(true);
         }});
-        persist_event_listener(EventFunctionListener<MouseExitEvent>{[](MouseExitEvent const& event)
+        give_event_listener(EventFunctionListener<MouseExitEvent>{[](MouseExitEvent const& event)
         {
             event.mouse->set_in_window(false);
         }});
-        persist_event_listener(EventFunctionListener<MousePressEvent>{[](MousePressEvent const& event)
+        give_event_listener(EventFunctionListener<MousePressEvent>{[](MousePressEvent const& event)
         {
             event.mouse->key(event.button).press();
         }});
-        persist_event_listener(EventFunctionListener<MouseReleaseEvent>{[](MouseReleaseEvent const& event)
+        give_event_listener(EventFunctionListener<MouseReleaseEvent>{[](MouseReleaseEvent const& event)
         {
             event.mouse->key(event.button).release();
         }});
-        persist_event_listener(EventFunctionListener<MouseRepeatEvent>{[](MouseRepeatEvent const& event)
+        give_event_listener(EventFunctionListener<MouseRepeatEvent>{[](MouseRepeatEvent const& event)
         {
             event.mouse->key(event.button).repeat();
         }});

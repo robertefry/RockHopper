@@ -26,7 +26,7 @@ Sandbox::Sandbox()
 {
     using namespace RockHopper;
 
-    m_Keyboard.persist_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
+    m_Keyboard.give_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
     {
         if (event.key == KeyCode::KEY_SPACE)
         {
@@ -36,7 +36,7 @@ Sandbox::Sandbox()
             glClearColor(r,g,b,1);
         }
     }});
-    m_Keyboard.persist_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
+    m_Keyboard.give_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
     {
         if (event.key == KeyCode::KEY_Q)
         {
@@ -44,7 +44,7 @@ Sandbox::Sandbox()
         }
     }});
 
-    m_Mouse.persist_event_listener(EventFunctionListener<MouseDragEvent>{[](MouseDragEvent const& event)
+    m_Mouse.give_event_listener(EventFunctionListener<MouseDragEvent>{[](MouseDragEvent const& event)
     {
         WindowDetails details = event.mouse->window()->get_details();
         float r = event.x / details.width;
@@ -52,7 +52,7 @@ Sandbox::Sandbox()
         float b = event.y / details.height;
         glClearColor(r,g,b,1);
     }});
-    m_Mouse.persist_event_listener(EventFunctionListener<MousePressEvent>{[](MousePressEvent const& event)
+    m_Mouse.give_event_listener(EventFunctionListener<MousePressEvent>{[](MousePressEvent const& event)
     {
         if (event.button == MouseCode::BUTTON_RIGHT)
         {
