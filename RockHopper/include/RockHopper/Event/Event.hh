@@ -38,8 +38,8 @@ namespace RockHopper
     template <typename T_Event, typename T_EventCategory>
     struct EventListenable : virtual T_EventCategory
     {
-        using EventSet = typename T_EventCategory::EventSet;
-        using ListenerType = typename T_EventCategory::ListenerType;
+        using EventCategory = T_EventCategory;
+        using ListenerType = T_EventCategory::ListenerType;
 
         virtual ~EventListenable() = default;
 
@@ -54,7 +54,7 @@ namespace RockHopper
     concept IsEventCategory = std::is_base_of<
         EventCategory<typename T_EventCategory::EventSet>,T_EventCategory >::value;
 
-    template <typename T_EventCategory, typename T_Event>
+    template <typename T_Event, typename T_EventCategory = T_Event::EventCategory>
     concept IsEventListenable = IsEventCategory<T_EventCategory>
         && std::is_base_of<T_EventCategory,T_Event>::value;
 
