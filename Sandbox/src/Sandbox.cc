@@ -5,6 +5,7 @@
 #include "RockHopper/Input/Keyboard/KeyEvents.hh"
 #include "RockHopper/Input/Mouse/MouseEvents.hh"
 #include "RockHopper/Event/EventListeners.hh"
+#include "RockHopper/Layer/Layer.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -72,6 +73,28 @@ Sandbox::~Sandbox()
 void Sandbox::run()
 {
     using namespace RockHopper;
+
+    Layer<KeyEvent,MouseEvent> layer;
+    layer.handler<KeyEvent>(1).give_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
+    {
+        if (event.key == KeyCode::KEY_S)
+        {
+            ROCKHOPPER_LOG_INFO("Detected KEY_S pressed on layer 1!");
+        }
+    }});
+    layer.handler<KeyEvent>(2).give_event_listener(EventFunctionListener<KeyPressEvent>{[](KeyPressEvent const& event)
+    {
+        if (event.key == KeyCode::KEY_S)
+        {
+            ROCKHOPPER_LOG_INFO("Detected KEY_S pressed on layer 2!");
+        }
+    }});
+    layer.handler<MouseEvent>(2).give_event_listener(EventFunctionListener<MousePressEvent>{[](MousePressEvent const& event)
+    {
+        ROCKHOPPER_LOG_INFO("Detected a MOUSE_PRESS event on layer 2");
+    }});
+    m_Keyboard.insert_event_listener(&layer);
+    m_Mouse.insert_event_listener(&layer);
 
     EventWaitListener<EngineTerminationEvent> termination_event_listener;
     m_Window.Engine::insert_event_listener(&termination_event_listener);

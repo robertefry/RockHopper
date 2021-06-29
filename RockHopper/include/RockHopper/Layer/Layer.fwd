@@ -1,0 +1,11 @@
+
+namespace RockHopper
+{
+
+    template <typename T_EventCategory>
+    class Layer_Base;
+
+    template <typename... T_EventCategories>
+    class Layer;
+
+} // namespace RockHopper
