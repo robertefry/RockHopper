@@ -15,7 +15,7 @@ namespace RockHopper
     struct WindowScaleEvent;
     struct WindowBufferSizeEvent;
 
-    using WindowEventSet = EventSet<
+    using WindowEventSet = EventSet<WindowEvent,
         WindowPositionEvent,
         WindowSizeEvent,
         WindowCloseEvent,

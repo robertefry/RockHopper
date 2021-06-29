@@ -9,7 +9,7 @@ namespace RockHopper
     struct KeyReleaseEvent;
     struct KeyRepeatEvent;
 
-    using KeyEventSet = EventSet<
+    using KeyEventSet = EventSet<KeyEvent,
         KeyPressEvent,
         KeyReleaseEvent,
         KeyRepeatEvent >;

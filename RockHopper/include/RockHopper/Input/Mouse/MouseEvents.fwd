@@ -14,7 +14,7 @@ namespace RockHopper
     struct MouseRepeatEvent;
     struct MouseScrollEvent;
 
-    using MouseEventSet = EventSet<
+    using MouseEventSet = EventSet<MouseEvent,
         MouseMoveEvent,
         MouseDragEvent,
         MouseEnterEvent,

@@ -8,7 +8,9 @@ namespace RockHopper
     struct EngineInitializationEvent;
     struct EngineTerminationEvent;
 
-    using EngineEventSet = EventSet<EngineInitializationEvent,EngineTerminationEvent>;
+    using EngineEventSet = EventSet<EngineEvent,
+        EngineInitializationEvent,
+        EngineTerminationEvent >;
 
     struct EngineEventHandler;
 
