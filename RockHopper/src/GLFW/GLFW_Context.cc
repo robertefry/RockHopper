@@ -48,16 +48,10 @@ namespace RockHopper
     template <>
     void GLFW_Context::SetWindowGLFWCallbacks<false>(GLFWwindow* handle)
     {
-        glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
-        {
-        });
-        glfwSetWindowSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
+        glfwSetWindowRefreshCallback(handle,[](GLFWwindow* handle)
         {
         });
         glfwSetWindowCloseCallback(handle,[](GLFWwindow* handle)
-        {
-        });
-        glfwSetWindowRefreshCallback(handle,[](GLFWwindow* handle)
         {
         });
         glfwSetWindowFocusCallback(handle,[](GLFWwindow* handle, int focus)
@@ -67,6 +61,12 @@ namespace RockHopper
         {
         });
         glfwSetWindowMaximizeCallback(handle,[](GLFWwindow* handle, int maximized)
+        {
+        });
+        glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
+        {
+        });
+        glfwSetWindowSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
         {
         });
         glfwSetWindowContentScaleCallback(handle,[](GLFWwindow* handle, float scale_x, float scale_y)
@@ -80,21 +80,9 @@ namespace RockHopper
     template <>
     void GLFW_Context::SetWindowGLFWCallbacks<true>(GLFWwindow* handle)
     {
-        glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
+        glfwSetWindowRefreshCallback(handle,[](GLFWwindow* handle)
         {
-            WindowPositionEvent event;
-            event.x = x;
-            event.y = y;
-
-            Window* window = (Window*)glfwGetWindowUserPointer(handle);
-            event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
-        });
-        glfwSetWindowSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
-        {
-            WindowSizeEvent event;
-            event.width = width;
-            event.height = height;
+            WindowRefreshEvent event;
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
@@ -103,14 +91,6 @@ namespace RockHopper
         glfwSetWindowCloseCallback(handle,[](GLFWwindow* handle)
         {
             WindowCloseEvent event;
-
-            Window* window = (Window*)glfwGetWindowUserPointer(handle);
-            event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
-        });
-        glfwSetWindowRefreshCallback(handle,[](GLFWwindow* handle)
-        {
-            WindowRefreshEvent event;
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
@@ -138,6 +118,26 @@ namespace RockHopper
         {
             WindowMaximizedEvent event;
             event.maximized = maximized;
+
+            Window* window = (Window*)glfwGetWindowUserPointer(handle);
+            event.window = window;
+            window->WindowEventHandler::dispatch_event(event);
+        });
+        glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
+        {
+            WindowMoveEvent event;
+            event.x = x;
+            event.y = y;
+
+            Window* window = (Window*)glfwGetWindowUserPointer(handle);
+            event.window = window;
+            window->WindowEventHandler::dispatch_event(event);
+        });
+        glfwSetWindowSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
+        {
+            WindowSizeEvent event;
+            event.width = width;
+            event.height = height;
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;

@@ -17,21 +17,11 @@ namespace RockHopper
         Window* window{};
     };
 
-    struct WindowPositionEvent : EventListenable<WindowPositionEvent,WindowEvent>
+    struct WindowRefreshEvent : EventListenable<WindowRefreshEvent,WindowEvent>
     {
-        int x{}, y{};
-    };
-
-    struct WindowSizeEvent : EventListenable<WindowSizeEvent,WindowEvent>
-    {
-        int width{}, height{};
     };
 
     struct WindowCloseEvent : EventListenable<WindowCloseEvent,WindowEvent>
-    {
-    };
-
-    struct WindowRefreshEvent : EventListenable<WindowRefreshEvent,WindowEvent>
     {
     };
 
@@ -48,6 +38,16 @@ namespace RockHopper
     struct WindowMaximizedEvent : EventListenable<WindowMaximizedEvent,WindowEvent>
     {
         int maximized{};
+    };
+
+    struct WindowMoveEvent : EventListenable<WindowMoveEvent,WindowEvent>
+    {
+        int x{}, y{};
+    };
+
+    struct WindowSizeEvent : EventListenable<WindowSizeEvent,WindowEvent>
+    {
+        int width{}, height{};
     };
 
     struct WindowScaleEvent : EventListenable<WindowScaleEvent,WindowEvent>
