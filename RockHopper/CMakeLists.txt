@@ -27,9 +27,13 @@ find_package(fmt)
 target_link_libraries(${PROJECT_NAME} fmt::fmt)
 
 # Use spdlog
-target_include_directories(${PROJECT_NAME} PRIVATE "spdlog/include")
+add_subdirectory("vendor/spdlog")
+target_link_libraries(${PROJECT_NAME} spdlog)
+target_include_directories(${PROJECT_NAME} PRIVATE "vendor/spdlog/include")
+set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Use glfw
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/glfw)
+add_subdirectory("vendor/glfw")
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} OpenGL ${OPENGL_glu_LIBRARY})
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/glfw/include)
+target_include_directories(${PROJECT_NAME} PUBLIC "vendor/glfw/include")
+set_target_properties(glfw PROPERTIES POSITION_INDEPENDENT_CODE ON)
