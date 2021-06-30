@@ -5,12 +5,14 @@ namespace RockHopper
 {
 
     struct EngineEvent;
-    struct EngineInitializationEvent;
-    struct EngineTerminationEvent;
+    struct EngineInitEvent;
+    struct EngineDisposeEvent;
+    struct EngineTickEvent;
 
     using EngineEventSet = EventSet<EngineEvent,
-        EngineInitializationEvent,
-        EngineTerminationEvent >;
+        EngineInitEvent,
+        EngineDisposeEvent,
+        EngineTickEvent >;
 
     struct EngineEventHandler;
 

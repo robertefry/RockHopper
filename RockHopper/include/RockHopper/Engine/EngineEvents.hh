@@ -17,10 +17,13 @@ namespace RockHopper
         Engine* engine{};
     };
 
-    struct EngineInitializationEvent : EventListenable<EngineInitializationEvent,EngineEvent>
+    struct EngineInitEvent : EventListenable<EngineInitEvent,EngineEvent>
     {};
 
-    struct EngineTerminationEvent : EventListenable<EngineTerminationEvent,EngineEvent>
+    struct EngineDisposeEvent : EventListenable<EngineDisposeEvent,EngineEvent>
+    {};
+
+    struct EngineTickEvent : EventListenable<EngineTickEvent,EngineEvent>
     {};
 
     struct EngineEventHandler

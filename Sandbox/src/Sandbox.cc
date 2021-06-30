@@ -96,9 +96,9 @@ void Sandbox::run()
     m_Keyboard.insert_event_listener(&layer);
     m_Mouse.insert_event_listener(&layer);
 
-    EventWaitListener<EngineTerminationEvent> termination_event_listener;
-    m_Window.Engine::insert_event_listener(&termination_event_listener);
-    termination_event_listener.wait();
+    EventWaitListener<EngineDisposeEvent> eol_listener;
+    m_Window.Engine::insert_event_listener(&eol_listener);
+    eol_listener.wait();
 
     // m_Window will destruct here
 }
