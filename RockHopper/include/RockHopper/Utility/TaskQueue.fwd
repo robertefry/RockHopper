@@ -2,6 +2,7 @@
 namespace RockHopper
 {
 
+    template <typename T_Signature>
     class TaskQueue;
 
 } // namespace RockHopper

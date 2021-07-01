@@ -88,14 +88,14 @@ namespace RockHopper
 namespace RockHopper
 {
 
-    void Engine::insert_task(TaskQueue::TaskFunc const& task)
+    std::future<void> Engine::insert_task(TaskQueue<void(void)>::TaskFunc const& task)
     {
-        m_TaskQueue.give(task);
+        return m_TaskQueue.push(task);
     }
 
-    void Engine::insert_task(TaskQueue::TaskFunc&& task)
+    std::future<void> Engine::insert_task(TaskQueue<void(void)>::TaskFunc&& task)
     {
-        m_TaskQueue.give(std::move(task));
+        return m_TaskQueue.push(std::move(task));
     }
 
     void Engine::run()
