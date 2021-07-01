@@ -131,6 +131,7 @@ namespace RockHopper
         glfwSwapBuffers(m_WindowHandle);
 
         if (m_KeyboardHandle) m_KeyboardHandle->tick();
+        if (m_MouseHandle) m_MouseHandle->tick();
         glfwPollEvents();
     }
 
