@@ -123,6 +123,7 @@ namespace RockHopper
         while (not m_IsStopRequested)
         {
             m_Timing.tick();
+            m_TaskQueue.execute_all();
 
             if (m_Timing.triggered())
             {
@@ -133,7 +134,6 @@ namespace RockHopper
                 event.engine = this;
                 dispatch_event(event);
             }
-            m_TaskQueue.execute_all();
         }
 
         dispose();
