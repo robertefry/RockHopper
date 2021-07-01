@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class GLFW_Context;
+
+} // namespace RockHopper

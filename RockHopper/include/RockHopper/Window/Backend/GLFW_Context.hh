@@ -1,6 +1,6 @@
 
-#ifndef __HH_ROCKHOPPER_GLFW_CONTEXT_
-#define __HH_ROCKHOPPER_GLFW_CONTEXT_
+#ifndef __HH_ROCKHOPPER_WINDOW_BACKEND_GLFW_CONTEXT_
+#define __HH_ROCKHOPPER_WINDOW_BACKEND_GLFW_CONTEXT_
 
 class GLFWwindow;
 
@@ -28,4 +28,4 @@ namespace RockHopper
 
 } // namespace RockHopper
 
-#endif /* __HH_ROCKHOPPER_GLFW_CONTEXT_ */
+#endif /* __HH_ROCKHOPPER_WINDOW_BACKEND_GLFW_CONTEXT_ */
