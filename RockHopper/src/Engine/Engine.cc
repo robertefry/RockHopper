@@ -90,12 +90,24 @@ namespace RockHopper
 
     std::future<void> Engine::insert_task(TaskQueue<void(void)>::TaskFunc const& task)
     {
-        return m_TaskQueue.push(task);
+        std::future<void> future = m_TaskQueue.push(task);
+
+        if (std::this_thread::get_id() == m_Thread.get_id())
+        {
+            m_TaskQueue.execute_all();
+        }
+        return future;
     }
 
     std::future<void> Engine::insert_task(TaskQueue<void(void)>::TaskFunc&& task)
     {
-        return m_TaskQueue.push(std::move(task));
+        std::future<void> future = m_TaskQueue.push(std::move(task));
+
+        if (std::this_thread::get_id() == m_Thread.get_id())
+        {
+            m_TaskQueue.execute_all();
+        }
+        return future;
     }
 
     void Engine::run()

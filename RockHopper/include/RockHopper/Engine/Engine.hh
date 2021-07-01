@@ -29,10 +29,8 @@ namespace RockHopper
     protected:
         virtual void run() = 0;
 
-    private:
-        std::thread m_Thread;
-
     protected:
+        std::thread m_Thread;
         std::atomic<bool> m_IsStopRequested, m_IsAlive;
     };
 
