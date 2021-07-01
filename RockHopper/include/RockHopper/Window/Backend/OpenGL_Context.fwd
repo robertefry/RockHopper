@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class OpenGL_Context;
+
+} // namespace RockHopper

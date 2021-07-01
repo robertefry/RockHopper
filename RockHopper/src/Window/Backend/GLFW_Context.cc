@@ -29,8 +29,12 @@ namespace RockHopper
 
             // Initialize GLFW
             int status = glfwInit();
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(status, "Failed to initialize GLFW!");
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(status,"Failed to initialize GLFW!");
             ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLFW.");
+
+            // Setup GLFW Window Hints
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,ROCKHOPPER_GLFW_VERSION_MAJOR);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,ROCKHOPPER_GLFW_VERSION_MINOR);
         }
         m_Registered += 1;
     }

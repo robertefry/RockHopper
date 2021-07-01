@@ -1,6 +1,7 @@
 
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Window/Backend/GLFW_Context.hh"
+#include "RockHopper/Window/Backend/OpenGL_Context.hh"
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
@@ -112,12 +113,13 @@ namespace RockHopper
 
     void Window::init()
     {
-        // Initialise GLFW
+        // Register a GLFW context
         GLFW_Context::Register();
 
         // Create a GLFW windowed-mode window handle and it's OpenGL context
         m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
         ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle!");
+        ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window.");
 
         // Set the GLFW user pointer to this window
         glfwSetWindowUserPointer(m_WindowHandle,this);
@@ -127,6 +129,9 @@ namespace RockHopper
 
         // Make the window's context current
         glfwMakeContextCurrent(m_WindowHandle);
+
+        // Register an OpenGL context
+        OpenGL_Context::Register();
     }
 
     void Window::tick()
@@ -147,6 +152,9 @@ namespace RockHopper
 
     void Window::dispose()
     {
+        // Deregister an OpenGL context
+        OpenGL_Context::Deregister();
+
         // Set GLFW callbacks
         GLFW_Context::SetWindowGLFWCallbacks<false>(m_WindowHandle);
 
@@ -156,7 +164,7 @@ namespace RockHopper
         // Destroy the GLFW window
         glfwDestroyWindow(m_WindowHandle);
 
-        // Uninitialize the GLFW context
+        // Deregister an GLFW context
         GLFW_Context::Deregister();
     }
 

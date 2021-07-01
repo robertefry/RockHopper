@@ -32,7 +32,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC ROCKHOPPER_LOG_LEVEL=${ROCKHOP
 
 # Define compiler configuration
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
-target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-parameter -Wno-unused-variable)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused)
 
 # Use threads
 find_package(Threads)
@@ -53,3 +53,9 @@ add_subdirectory("vendor/glfw")
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} OpenGL ${OPENGL_glu_LIBRARY})
 target_include_directories(${PROJECT_NAME} PUBLIC "vendor/glfw/include")
 set_target_properties(glfw PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Use glad
+add_subdirectory("vendor/glad")
+target_link_libraries(${PROJECT_NAME} glad)
+target_include_directories(${PROJECT_NAME} PUBLIC "vendor/glad/include")
+set_target_properties(glad PROPERTIES POSITION_INDEPENDENT_CODE ON)
