@@ -63,6 +63,7 @@ namespace RockHopper
             m_KeyboardHandle = keyboard;
             keyboard->m_WindowHandle = this;
             GLFW_Context::SetKeyboardGLFWCallbacks<true>(m_WindowHandle);
+            ROCKHOPPER_INTERNAL_LOG_INFO("Attached a `Keyboard` to a `Window`.");
         });
     }
 
@@ -73,6 +74,7 @@ namespace RockHopper
             GLFW_Context::SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
             keyboard->m_WindowHandle = nullptr;
             m_KeyboardHandle = nullptr;
+            ROCKHOPPER_INTERNAL_LOG_INFO("Detached a `Keyboard` to a `Window`.");
         });
     }
 
@@ -93,6 +95,7 @@ namespace RockHopper
             m_MouseHandle = mouse;
             mouse->m_WindowHandle = this;
             GLFW_Context::SetMouseGLFWCallbacks<true>(m_WindowHandle);
+            ROCKHOPPER_INTERNAL_LOG_INFO("Attached a `Mouse` to a `Window`.");
         });
     }
 
@@ -103,6 +106,7 @@ namespace RockHopper
             GLFW_Context::SetMouseGLFWCallbacks<false>(m_WindowHandle);
             mouse->m_WindowHandle = nullptr;
             m_MouseHandle = nullptr;
+            ROCKHOPPER_INTERNAL_LOG_INFO("Detached a `Mouse` to a `Window`.");
         });
     }
 
