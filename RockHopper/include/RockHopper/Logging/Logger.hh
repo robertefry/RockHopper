@@ -33,21 +33,64 @@ namespace RockHopper
 
 } // namespace RockHopper
 
-// Client logger macros
-#define ROCKHOPPER_LOG_TRACE(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::TRACE, __VA_ARGS__)
-#define ROCKHOPPER_LOG_DEBUG(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::DEBUG, __VA_ARGS__)
-#define ROCKHOPPER_LOG_INFO(...)  RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::INFO,  __VA_ARGS__)
-#define ROCKHOPPER_LOG_WARN(...)  RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::WARN,  __VA_ARGS__)
-#define ROCKHOPPER_LOG_ERROR(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::ERROR, __VA_ARGS__)
-#define ROCKHOPPER_LOG_FATAL(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::FATAL, __VA_ARGS__)
+// Define default value for ROCKHOPPER_LOG_LEVEL
+#ifndef ROCKHOPPER_LOG_LEVEL
+#define ROCKHOPPER_LOG_LEVEL 4
+#elif ROCKHOPPER_LOG_LEVEL < 0
+#error "ROCKHOPPER_LOG_LEVEL must be a positive integer!"
+#endif
 
-// Internal logger macros
+// Define default log macros
+#define ROCKHOPPER_LOG_TRACE(...)
+#define ROCKHOPPER_LOG_DEBUG(...)
+#define ROCKHOPPER_LOG_INFO(...)
+#define ROCKHOPPER_LOG_WARN(...)
+#define ROCKHOPPER_LOG_ERROR(...)
+#define ROCKHOPPER_LOG_FATAL(...)
+#define ROCKHOPPER_INTERNAL_LOG_TRACE(...)
+#define ROCKHOPPER_INTERNAL_LOG_DEBUG(...)
+#define ROCKHOPPER_INTERNAL_LOG_INFO(...)
+#define ROCKHOPPER_INTERNAL_LOG_WARN(...)
+#define ROCKHOPPER_INTERNAL_LOG_ERROR(...)
+#define ROCKHOPPER_INTERNAL_LOG_FATAL(...)
+
+// Redefine log macros based on log level
+#if ROCKHOPPER_LOG_LEVEL >= 5
+#undef ROCKHOPPER_LOG_TRACE
+#undef ROCKHOPPER_INTERNAL_LOG_TRACE
+#define ROCKHOPPER_LOG_TRACE(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::TRACE, __VA_ARGS__)
 #define ROCKHOPPER_INTERNAL_LOG_TRACE(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::TRACE, __VA_ARGS__)
+#endif
+#if ROCKHOPPER_LOG_LEVEL >= 4
+#undef ROCKHOPPER_LOG_DEBUG
+#undef ROCKHOPPER_INTERNAL_LOG_DEBUG
+#define ROCKHOPPER_LOG_DEBUG(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::DEBUG, __VA_ARGS__)
 #define ROCKHOPPER_INTERNAL_LOG_DEBUG(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::DEBUG, __VA_ARGS__)
+#endif
+#if ROCKHOPPER_LOG_LEVEL >= 3
+#undef ROCKHOPPER_LOG_INFO
+#undef ROCKHOPPER_INTERNAL_LOG_INFO
+#define ROCKHOPPER_LOG_INFO(...)  RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::INFO,  __VA_ARGS__)
 #define ROCKHOPPER_INTERNAL_LOG_INFO(...)  RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::INFO,  __VA_ARGS__)
+#endif
+#if ROCKHOPPER_LOG_LEVEL >= 2
+#undef ROCKHOPPER_LOG_WARN
+#undef ROCKHOPPER_INTERNAL_LOG_WARN
+#define ROCKHOPPER_LOG_WARN(...)  RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::WARN,  __VA_ARGS__)
 #define ROCKHOPPER_INTERNAL_LOG_WARN(...)  RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::WARN,  __VA_ARGS__)
+#endif
+#if ROCKHOPPER_LOG_LEVEL >= 1
+#undef ROCKHOPPER_LOG_ERROR
+#undef ROCKHOPPER_INTERNAL_LOG_ERROR
+#define ROCKHOPPER_LOG_ERROR(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::ERROR, __VA_ARGS__)
 #define ROCKHOPPER_INTERNAL_LOG_ERROR(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::ERROR, __VA_ARGS__)
+#endif
+#if ROCKHOPPER_LOG_LEVEL >= 0
+#undef ROCKHOPPER_LOG_FATAL
+#undef ROCKHOPPER_INTERNAL_LOG_FATAL
+#define ROCKHOPPER_LOG_FATAL(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::ClientLogger, RockHopper::Logger::LogLevel::FATAL, __VA_ARGS__)
 #define ROCKHOPPER_INTERNAL_LOG_FATAL(...) RockHopper::Logger::Log(RockHopper::Logger::Instance::InternalLogger, RockHopper::Logger::LogLevel::FATAL, __VA_ARGS__)
+#endif
 
 /* ************************************************************************** */
 // [Implementation] RockHopper::Logger

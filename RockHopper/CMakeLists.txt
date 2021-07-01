@@ -14,6 +14,22 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC "include")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
+# Define ROCKHOPPER_LOG_LEVEL
+if(NOT DEFINED ROCKHOPPER_LOG_LEVEL)
+    if (${CMAKE_BUILD_TYPE} STREQUAL "MinSizeRel")
+        set(ROCKHOPPER_LOG_LEVEL 1)
+    elseif (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        set(ROCKHOPPER_LOG_LEVEL 2)
+    elseif (${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+        set(ROCKHOPPER_LOG_LEVEL 3)
+    elseif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        set(ROCKHOPPER_LOG_LEVEL 4)
+    else()
+        set(ROCKHOPPER_LOG_LEVEL 4)
+    endif()
+endif()
+target_compile_definitions(${PROJECT_NAME} PUBLIC ROCKHOPPER_LOG_LEVEL=${ROCKHOPPER_LOG_LEVEL})
+
 # Define compiler configuration
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-parameter -Wno-unused-variable)
