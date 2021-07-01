@@ -15,12 +15,21 @@
 namespace RockHopper
 {
 
+    static void GLFW_ErrorCallback(int error, const char* description)
+    {
+        ROCKHOPPER_INTERNAL_LOG_ERROR("GLFW Error {}: {}", error, description);
+    }
+
     void GLFW_Context::Register()
     {
         if (m_Registered == 0)
         {
+            // Setup GLFW Error Callback
+            glfwSetErrorCallback(GLFW_ErrorCallback);
+
+            // Initialize GLFW
             int status = glfwInit();
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL((status == GLFW_TRUE),"Failed to initialize GLFW!");
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(status, "Failed to initialize GLFW!");
             ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLFW.");
         }
         m_Registered += 1;
