@@ -1,6 +1,3 @@
-[submodule "RockHopper/vendor/spdlog"]
-	path = RockHopper/vendor/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "RockHopper/vendor/glfw"]
-	path = RockHopper/vendor/glfw
-	url = https://github.com/glfw/glfw
+[submodule "RockHopper/vcpkg"]
+	path = RockHopper/vcpkg
+	url = https://github.com/Microsoft/vcpkg.git

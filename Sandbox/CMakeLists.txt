@@ -4,22 +4,24 @@ cmake_minimum_required(VERSION 3.0)
 # Define project
 project("RockHopper_Sandbox" LANGUAGES CXX VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD "20")
+add_executable(${PROJECT_NAME} "")
 enable_testing()
 
-# Define flags
-set(CMAKE_CXX_FLAGS_DEBUG_INIT   "-Wall -Wextra -Weffc++ -pedantic -pthread -std=c++20 -ggdb")
-set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -Wextra -Weffc++ -pedantic -pthread -std=c++20")
+# Define compiler configuration
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused)
 
-# Glob sources
+# Define include directories
+target_include_directories(${PROJECT_NAME} PUBLIC "include")
+target_include_directories(${PROJECT_NAME} PRIVATE "src")
+
+# Define build sources
 file(GLOB_RECURSE SOURCES
     "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
 )
-
-# Add build target
-add_executable(${PROJECT_NAME} ${SOURCES})
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 
 # Use RockHopper
-# add_subdirectory(RockHopper)
 target_link_libraries(${PROJECT_NAME} PRIVATE RockHopper)
 
 # Add launch target
