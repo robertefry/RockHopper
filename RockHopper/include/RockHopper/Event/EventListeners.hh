@@ -60,8 +60,8 @@ namespace RockHopper
             }
         }
     private:
-        mutable std::mutex m_Mutex;
-        mutable std::condition_variable m_NotifyVariable;
+        mutable std::mutex m_Mutex{};
+        mutable std::condition_variable m_NotifyVariable{};
     };
 
 } // namespace RockHopper
