@@ -141,13 +141,14 @@ namespace RockHopper
             stop();
         }
 
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(m_WindowHandle);
-
+        // Poll window events
         if (m_KeyboardHandle) m_KeyboardHandle->tick();
         if (m_MouseHandle) m_MouseHandle->tick();
         glfwPollEvents();
+
+        // Draw the last frame
+        glfwSwapBuffers(m_WindowHandle);
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     void Window::dispose()
