@@ -99,7 +99,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowCloseCallback(handle,[](GLFWwindow* handle)
         {
@@ -107,7 +107,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowFocusCallback(handle,[](GLFWwindow* handle, int focus)
         {
@@ -116,7 +116,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowIconifyCallback(handle,[](GLFWwindow* handle, int iconified)
         {
@@ -125,7 +125,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowMaximizeCallback(handle,[](GLFWwindow* handle, int maximized)
         {
@@ -134,7 +134,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowPosCallback(handle,[](GLFWwindow* handle, int x, int y)
         {
@@ -144,7 +144,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
         {
@@ -154,7 +154,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetWindowContentScaleCallback(handle,[](GLFWwindow* handle, float scale_x, float scale_y)
         {
@@ -164,7 +164,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
         glfwSetFramebufferSizeCallback(handle,[](GLFWwindow* handle, int width, int height)
         {
@@ -174,7 +174,7 @@ namespace RockHopper
 
             Window* window = (Window*)glfwGetWindowUserPointer(handle);
             event.window = window;
-            window->WindowEventHandler::dispatch_event(event);
+            window->dispatch_event(event);
         });
     }
 

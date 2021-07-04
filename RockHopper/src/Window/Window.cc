@@ -137,7 +137,7 @@ namespace RockHopper
         {
             WindowInitEvent event;
             event.window = this;
-            EventHandler<WindowEvent>::dispatch_event(event);
+            dispatch_event(event);
         }
     }
 
@@ -161,7 +161,7 @@ namespace RockHopper
         {
             WindowRefreshEvent event;
             event.window = this;
-            EventHandler<WindowEvent>::dispatch_event(event);
+            dispatch_event(event);
         }
     }
 
@@ -171,7 +171,7 @@ namespace RockHopper
         {
             WindowDisposeEvent event;
             event.window = this;
-            EventHandler<WindowEvent>::dispatch_event(event);
+            dispatch_event(event);
         }
 
         // Deregister an OpenGL context

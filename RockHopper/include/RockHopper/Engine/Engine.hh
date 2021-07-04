@@ -2,7 +2,6 @@
 #ifndef __HH_ROCKHOPPER_ENGINE_
 #define __HH_ROCKHOPPER_ENGINE_
 
-#include "RockHopper/Engine/EngineEvents.hh"
 #include "RockHopper/Utility/TaskQueue.hh"
 
 #include <thread>
@@ -74,9 +73,7 @@ namespace RockHopper
 namespace RockHopper
 {
 
-    class Engine
-        : public EngineThread
-        , public EngineEventHandler
+    class Engine : public EngineThread
     {
     public:
         explicit Engine() = default;
@@ -103,9 +100,3 @@ namespace RockHopper
 } // namespace RockHopper
 
 #endif /* __HH_ROCKHOPPER_ENGINE_ */
-
-/**
- * @author Robert Fry
- * @date create 19-Jun-2021
- * @date modify 19-Jun-2021
- */

@@ -112,14 +112,9 @@ namespace RockHopper
 
     void Engine::run()
     {
-        {
-            EngineInitEvent event;
-            event.engine = this;
-            dispatch_event(event);
-        }
         init();
-        m_Timing.init();
 
+        m_Timing.init();
         while (not m_IsStopRequested)
         {
             m_Timing.tick();
@@ -129,19 +124,10 @@ namespace RockHopper
             {
                 m_Timing.reduce();
                 tick();
-
-                EngineTickEvent event;
-                event.engine = this;
-                dispatch_event(event);
             }
         }
 
         dispose();
-        {
-            EngineDisposeEvent event;
-            event.engine = this;
-            dispatch_event(event);
-        }
     }
 
 } // namespace RockHopper

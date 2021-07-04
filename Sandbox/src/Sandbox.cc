@@ -95,8 +95,8 @@ void Sandbox::run()
 {
     using namespace RockHopper;
 
-    EventWaitListener<EngineDisposeEvent> eol_listener;
-    m_Window.Engine::insert_event_listener(&eol_listener);
+    EventWaitListener<WindowDisposeEvent> eol_listener;
+    m_Window.insert_event_listener(&eol_listener);
 
     m_Window.start();
     eol_listener.wait();
