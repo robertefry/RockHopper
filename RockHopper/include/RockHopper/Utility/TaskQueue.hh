@@ -40,8 +40,10 @@ namespace RockHopper
         virtual ~TaskQueue() = default;
         explicit TaskQueue() = default;
 
-        std::future<T_Res> push(TaskFunc const& func);
-        std::future<T_Res> push(TaskFunc&& func);
+        explicit TaskQueue(TaskQueue&&);
+
+        std::future<T_Res> push_task(TaskFunc const& func);
+        std::future<T_Res> push_task(TaskFunc&& func);
 
         size_t size() const;
         void execute_one(T_Args...);
@@ -95,7 +97,17 @@ namespace RockHopper
     }
 
     template <typename T_Res, typename... T_Args>
-    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::push(TaskFunc const& func)
+    TaskQueue<T_Res(T_Args...)>::TaskQueue(TaskQueue&& other)
+    {
+        std::lock_guard<std::mutex> lock_1 {m_TaskQueueMutex,std::defer_lock};
+        std::lock_guard<std::mutex> lock_2 {other.m_TaskQueueMutex,std::defer_lock};
+        std::lock(lock_1,lock_2);
+
+        m_TaskQueue = std::move(other.m_TaskQueue);
+    }
+
+    template <typename T_Res, typename... T_Args>
+    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc const& func)
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.emplace(func);
@@ -103,7 +115,7 @@ namespace RockHopper
     }
 
     template <typename T_Res, typename... T_Args>
-    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::push(TaskFunc&& func)
+    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc&& func)
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.emplace(std::move(func));
