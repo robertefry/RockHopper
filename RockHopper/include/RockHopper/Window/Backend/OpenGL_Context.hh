@@ -2,6 +2,8 @@
 #ifndef __HH_ROCKHOPPER_WINDOW_BACKEND_OPENGL_CONTEXT_
 #define __HH_ROCKHOPPER_WINDOW_BACKEND_OPENGL_CONTEXT_
 
+#include <atomic>
+
 #define ROCKHOPPER_GLSL_VERSION "#version 130"
 
 namespace RockHopper
@@ -14,7 +16,7 @@ namespace RockHopper
         static void Deregister();
 
     private:
-        inline static unsigned m_Registered = 0;
+        inline static std::atomic<unsigned> m_Registered = 0;
     };
 
 } // namespace RockHopper

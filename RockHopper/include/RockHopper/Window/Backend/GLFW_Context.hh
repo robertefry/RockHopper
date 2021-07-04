@@ -2,6 +2,8 @@
 #ifndef __HH_ROCKHOPPER_WINDOW_BACKEND_GLFW_CONTEXT_
 #define __HH_ROCKHOPPER_WINDOW_BACKEND_GLFW_CONTEXT_
 
+#include <atomic>
+
 #define ROCKHOPPER_GLFW_VERSION_MAJOR 3
 #define ROCKHOPPER_GLFW_VERSION_MINOR 0
 
@@ -26,7 +28,7 @@ namespace RockHopper
         static void SetMouseGLFWCallbacks(GLFWwindow* handle);
 
     private:
-        inline static unsigned m_Registered = 0;
+        inline static std::atomic<unsigned> m_Registered = 0;
     };
 
 } // namespace RockHopper
