@@ -7,3 +7,6 @@ Log Errors:     make errors more verbose, and include __PRETTY_FUNCTION__
 [Feature]
 Add `KeyHoldEvent` event triggered if more than one `KeyPressEvent` dispatched successively.
 Add `MouseHoldEvent` event triggered if more than one `MousePressEvent` dispatched successively.
+
+Move `Window` and graphics tasks to a dedicated `Graphics` thread.
+Promote `EventHandler`s to `Layer`s
