@@ -17,6 +17,14 @@ namespace RockHopper
         Window* window{};
     };
 
+    struct WindowInitEvent : EventListenable<WindowInitEvent,WindowEvent>
+    {
+    };
+
+    struct WindowDisposeEvent : EventListenable<WindowDisposeEvent,WindowEvent>
+    {
+    };
+
     struct WindowRefreshEvent : EventListenable<WindowRefreshEvent,WindowEvent>
     {
     };

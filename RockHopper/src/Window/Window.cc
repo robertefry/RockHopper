@@ -132,6 +132,13 @@ namespace RockHopper
 
         // Register an OpenGL context
         OpenGL_Context::Register();
+
+        // Dispatch a `WindowInitEvent` event
+        {
+            WindowInitEvent event;
+            event.window = this;
+            EventHandler<WindowEvent>::dispatch_event(event);
+        }
     }
 
     void Window::tick()
@@ -149,10 +156,24 @@ namespace RockHopper
         // Draw the last frame
         glfwSwapBuffers(m_WindowHandle);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // Dispatch a `WindowRefreshEvent` event
+        {
+            WindowRefreshEvent event;
+            event.window = this;
+            EventHandler<WindowEvent>::dispatch_event(event);
+        }
     }
 
     void Window::dispose()
     {
+        // Dispatch a `WindowDisposeEvent` event
+        {
+            WindowDisposeEvent event;
+            event.window = this;
+            EventHandler<WindowEvent>::dispatch_event(event);
+        }
+
         // Deregister an OpenGL context
         OpenGL_Context::Deregister();
 
