@@ -22,13 +22,14 @@ namespace RockHopper
         class FutureExecutor
         {
         public:
+            using ReturnType = std::future<T_Res>;
             using TaskFunc = std::function<T_Res(T_Args...)>;
 
-            explicit FutureExecutor(TaskFunc const& func);
-            explicit FutureExecutor(TaskFunc&& func);
+            explicit FutureExecutor(TaskFunc const& task);
+            explicit FutureExecutor(TaskFunc&& task);
 
             void operator()(T_Args... args);
-            std::future<T_Res> future();
+            ReturnType future();
 
         private:
             TaskFunc m_Function;
@@ -36,14 +37,19 @@ namespace RockHopper
         };
 
     public:
+        using ReturnType = FutureExecutor::ReturnType;
         using TaskFunc = FutureExecutor::TaskFunc;
+
         virtual ~TaskQueue() = default;
         explicit TaskQueue() = default;
 
         explicit TaskQueue(TaskQueue&&);
 
-        std::future<T_Res> push_task(TaskFunc const& func);
-        std::future<T_Res> push_task(TaskFunc&& func);
+        ReturnType push_task(TaskFunc const& task);
+        ReturnType push_task(TaskFunc&& task);
+
+        inline void wait_task(TaskFunc const& task) { push_task(task).wait(); }
+        inline void wait_task(TaskFunc&& task) { push_task(std::move(task)).wait(); }
 
         size_t size() const;
         void execute_one(T_Args...);
@@ -64,14 +70,14 @@ namespace RockHopper
 {
 
     template <typename T_Res, typename... T_Args>
-    TaskQueue<T_Res(T_Args...)>::FutureExecutor::FutureExecutor(TaskFunc const& func)
-        : m_Function{func}
+    TaskQueue<T_Res(T_Args...)>::FutureExecutor::FutureExecutor(TaskFunc const& task)
+        : m_Function{task}
     {
     }
 
     template <typename T_Res, typename... T_Args>
-    TaskQueue<T_Res(T_Args...)>::FutureExecutor::FutureExecutor(TaskFunc&& func)
-        : m_Function{std::move(func)}
+    TaskQueue<T_Res(T_Args...)>::FutureExecutor::FutureExecutor(TaskFunc&& task)
+        : m_Function{std::move(task)}
     {
     }
 
@@ -91,7 +97,8 @@ namespace RockHopper
     }
 
     template <typename T_Res, typename... T_Args>
-    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::FutureExecutor::future()
+    auto TaskQueue<T_Res(T_Args...)>::FutureExecutor::future()
+        -> TaskQueue<T_Res(T_Args...)>::FutureExecutor::ReturnType
     {
         return m_Promise.get_future();
     }
@@ -107,18 +114,20 @@ namespace RockHopper
     }
 
     template <typename T_Res, typename... T_Args>
-    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc const& func)
+    auto TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc const& task)
+        -> TaskQueue<T_Res(T_Args...)>::ReturnType
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueue.emplace(func);
+        m_TaskQueue.emplace(task);
         return m_TaskQueue.back().future();
     }
 
     template <typename T_Res, typename... T_Args>
-    std::future<T_Res> TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc&& func)
+    auto TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc&& task)
+        -> TaskQueue<T_Res(T_Args...)>::ReturnType
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueue.emplace(std::move(func));
+        m_TaskQueue.emplace(std::move(task));
         return m_TaskQueue.back().future();
     }
 
