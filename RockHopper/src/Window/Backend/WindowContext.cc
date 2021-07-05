@@ -145,6 +145,7 @@ namespace RockHopper
 
     WindowContext& WindowContext::operator=(WindowContext const& other)
     {
+        m_GraphicsThread = other.m_GraphicsThread;
         m_Handle = other.m_Handle;
         return *this;
     }
