@@ -141,20 +141,18 @@ namespace RockHopper
     template <typename T_Res, typename... T_Args>
     void TaskQueue<T_Res(T_Args...)>::execute_one(T_Args... args)
     {
-        std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.front()(args...);
+
+        std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.pop();
     }
 
     template <typename T_Res, typename... T_Args>
     void TaskQueue<T_Res(T_Args...)>::execute_all(T_Args... args)
     {
-        std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-
         while (m_TaskQueue.size())
         {
-            m_TaskQueue.front()(args...);
-            m_TaskQueue.pop();
+            execute_one();
         }
     }
 
