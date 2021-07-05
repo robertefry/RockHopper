@@ -12,17 +12,17 @@
 namespace RockHopper
 {
 
-    EngineThread::EngineThread()
-        : m_Thread{}
+    EngineThread::~EngineThread()
+    {
+        if (not m_IsStopRequested) stop();
+        if (m_Thread.joinable()) m_Thread.join();
+    }
+
+    EngineThread::EngineThread(std::string const& name)
+        : m_DebugName{"EngineThread",name}
         , m_IsStopRequested{false}
         , m_IsAlive{false}
     {
-    }
-
-    EngineThread::~EngineThread()
-    {
-        stop();
-        if (m_Thread.joinable()) m_Thread.join();
     }
 
     WaitVariable const& EngineThread::start()
@@ -30,12 +30,12 @@ namespace RockHopper
         if (not m_IsAlive)
         {
             m_Thread = std::thread([&](){
-                ROCKHOPPER_INTERNAL_LOG_INFO("Starting an EngineThread.");
+                ROCKHOPPER_INTERNAL_LOG_INFO("Starting {}.", m_DebugName);
                 m_IsAlive = true;
                 this->run();
                 m_IsAlive = false;
                 m_StopNotifier.notify_all();
-                ROCKHOPPER_INTERNAL_LOG_INFO("Stopped an EngineThread.");
+                ROCKHOPPER_INTERNAL_LOG_INFO("Stopped {}.", m_DebugName);
             });
         }
         return m_StopNotifier;
@@ -43,7 +43,7 @@ namespace RockHopper
 
     WaitVariable const& EngineThread::stop()
     {
-        ROCKHOPPER_INTERNAL_LOG_DEBUG("requesting an EngineThread stop");
+        ROCKHOPPER_INTERNAL_LOG_DEBUG("Requesting stop {}.", m_DebugName);
         m_IsStopRequested = true;
         return m_StopNotifier;
     }
@@ -92,6 +92,11 @@ namespace RockHopper
 namespace RockHopper
 {
 
+    Engine::Engine(std::string const& name)
+        : EngineThread{name}
+    {
+    }
+
     std::future<void> Engine::insert_task(TaskQueue<void(void)>::TaskFunc const& task)
     {
         std::future<void> future = m_TaskQueue.push_task(task);
@@ -135,9 +140,3 @@ namespace RockHopper
     }
 
 } // namespace RockHopper
-
-/**
- * @author Robert Fry
- * @date create 19-Jun-2021
- * @date modify 19-Jun-2021
- */

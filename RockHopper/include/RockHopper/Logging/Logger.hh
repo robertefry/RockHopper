@@ -3,6 +3,7 @@
 #define __HH_ROCKHOPPER_LOGGER_
 
 #include <fmt/core.h>
+#include <spdlog/fmt/ostr.h>
 
 /* ************************************************************************** */
 // [Definition] RockHopper::Logger

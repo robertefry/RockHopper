@@ -18,8 +18,8 @@ namespace RockHopper
 
     struct WindowDetails
     {
-        int width, height;
         std::string title;
+        int width, height;
         int64_t frametime;
     };
 

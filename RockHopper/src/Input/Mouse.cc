@@ -12,7 +12,8 @@ namespace RockHopper
         if (m_WindowHandle) m_WindowHandle->detach(this);
     }
 
-    Mouse::Mouse()
+    Mouse::Mouse(std::string const& name)
+        : m_DebugName{"Mouse",name}
     {
         for (int i = 0; i < (int)MouseCode::BUTTON_LAST; ++i)
         {
@@ -51,6 +52,7 @@ namespace RockHopper
     }
 
     Mouse::Mouse(Mouse&& other)
+        : m_DebugName{other.m_DebugName}
     {
         *this = std::move(other);
     }

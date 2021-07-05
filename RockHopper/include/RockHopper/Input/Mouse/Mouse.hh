@@ -2,10 +2,12 @@
 #ifndef __HH_ROCKHOPPER_INPUT_MOUSE_
 #define __HH_ROCKHOPPER_INPUT_MOUSE_
 
+#include "RockHopper/Debug.hh"
 #include "RockHopper/Input/Key/KeyManager.hh"
 #include "RockHopper/Input/Mouse/MouseEvents.hh"
 #include "RockHopper/Window/Window.fwd"
 
+#include <string>
 #include <atomic>
 #include <array>
 
@@ -19,7 +21,7 @@ namespace RockHopper
         friend Window;
     public:
         virtual ~Mouse();
-        explicit Mouse();
+        explicit Mouse(std::string const& name);
 
         explicit Mouse(Mouse const&) = delete;
         Mouse& operator=(Mouse const&) = delete;
@@ -37,6 +39,7 @@ namespace RockHopper
         inline auto window() const -> Window const* { return m_WindowHandle; }
 
     private:
+        DebugName m_DebugName;
         std::atomic<double> m_PosX{}, m_PosY{};
         std::atomic<bool> m_IsInWindow{};
         Window* m_WindowHandle{};

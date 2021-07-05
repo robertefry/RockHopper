@@ -2,9 +2,12 @@
 #ifndef __HH_ROCKHOPPER_INPUT_KEYBOARD_
 #define __HH_ROCKHOPPER_INPUT_KEYBOARD_
 
+#include "RockHopper/Debug.hh"
 #include "RockHopper/Input/Key/KeyManager.hh"
 #include "RockHopper/Input/Keyboard/KeyEvents.hh"
 #include "RockHopper/Window/Window.fwd"
+
+#include <string>
 
 namespace RockHopper
 {
@@ -16,7 +19,7 @@ namespace RockHopper
         friend Window;
     public:
         virtual ~Keyboard();
-        explicit Keyboard();
+        explicit Keyboard(std::string const& name);
 
         explicit Keyboard(Keyboard const&) = delete;
         Keyboard& operator=(Keyboard const&) = delete;
@@ -28,6 +31,7 @@ namespace RockHopper
         inline auto window() const -> Window const* { return m_WindowHandle; }
 
     private:
+        DebugName m_DebugName;
         Window* m_WindowHandle{};
     };
 

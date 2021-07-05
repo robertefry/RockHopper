@@ -14,6 +14,10 @@ namespace RockHopper
     {
         class Instance : public EngineThread, public TaskQueue<void(void)>
         {
+        public:
+            virtual ~Instance() = default;
+            explicit Instance() : EngineThread{"GraphicsThread::Instance"} {}
+        private:
             virtual void run() override;
         };
 

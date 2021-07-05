@@ -2,6 +2,7 @@
 #ifndef __HH_ROCKHOPPER_ENGINE_
 #define __HH_ROCKHOPPER_ENGINE_
 
+#include "RockHopper/Debug.hh"
 #include "RockHopper/Utility/TaskQueue.hh"
 #include "RockHopper/Utility/WaitVariable.hh"
 
@@ -18,8 +19,8 @@ namespace RockHopper
     class EngineThread
     {
     public:
-        explicit EngineThread();
         virtual ~EngineThread();
+        explicit EngineThread(std::string const& name);
 
         virtual WaitVariable const& start();
         virtual WaitVariable const& stop();
@@ -30,7 +31,8 @@ namespace RockHopper
         virtual void run() = 0;
 
     protected:
-        std::thread m_Thread;
+        DebugName m_DebugName;
+        std::thread m_Thread{};
         std::atomic<bool> m_IsStopRequested, m_IsAlive;
         WaitVariable m_StopNotifier{};
     };
@@ -78,8 +80,8 @@ namespace RockHopper
     class Engine : public EngineThread
     {
     public:
-        explicit Engine() = default;
         virtual ~Engine() = default;
+        explicit Engine(std::string const& name);
 
         inline auto timing() -> EngineTiming& { return m_Timing; }
 

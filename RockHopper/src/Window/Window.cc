@@ -19,9 +19,12 @@ namespace RockHopper
     }
 
     Window::Window(WindowDetails const& details)
-        : m_WindowHandle{}
+        : Engine{details.title}
+        , m_WindowHandle{}
         , m_Details{details}
     {
+        m_DebugName.set_type("Window");
+        set_details(details);
     }
 
     void Window::set_details(WindowDetails const& details)
@@ -31,7 +34,7 @@ namespace RockHopper
             std::lock_guard<std::mutex> lock {m_WindowMutex};
             m_Timing.set_omega(details.frametime);
 
-            ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for a window.");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for {}.", m_DebugName);
             if (m_WindowHandle)
             {
                 glfwSetWindowSize(m_WindowHandle,details.width,details.height);
@@ -53,18 +56,18 @@ namespace RockHopper
         {
             if (m_KeyboardHandle != nullptr)
             {
-                ROCKHOPPER_INTERNAL_LOG_ERROR("A `Keyboard` is already attached to this `Window`!");
+                ROCKHOPPER_INTERNAL_LOG_ERROR("The Keyboard {} is already attached to the Window {}!", keyboard->m_DebugName, m_DebugName);
                 return;
             }
             if (keyboard->m_WindowHandle != nullptr)
             {
-                ROCKHOPPER_INTERNAL_LOG_ERROR("A `Window` is already attached to this `Keyboard`!");
+                ROCKHOPPER_INTERNAL_LOG_ERROR("The Window {} is already attached to the Keyboard {}!", m_DebugName, keyboard->m_DebugName);
                 return;
             }
             m_KeyboardHandle = keyboard;
             keyboard->m_WindowHandle = this;
             GLFW_Context::SetKeyboardGLFWCallbacks<true>(m_WindowHandle);
-            ROCKHOPPER_INTERNAL_LOG_INFO("Attached a `Keyboard` to a `Window`.");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Attached the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
         }); });
     }
 
@@ -75,7 +78,7 @@ namespace RockHopper
             GLFW_Context::SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
             keyboard->m_WindowHandle = nullptr;
             m_KeyboardHandle = nullptr;
-            ROCKHOPPER_INTERNAL_LOG_INFO("Detached a `Keyboard` to a `Window`.");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
         }); });
     }
 
@@ -85,18 +88,18 @@ namespace RockHopper
         {
             if (m_MouseHandle != nullptr)
             {
-                ROCKHOPPER_INTERNAL_LOG_ERROR("A `Mouse` is already attached to this `Window`!");
+                ROCKHOPPER_INTERNAL_LOG_ERROR("The Mouse {} is already attached to the Window {}!", mouse->m_DebugName, m_DebugName);
                 return;
             }
             if (mouse->m_WindowHandle != nullptr)
             {
-                ROCKHOPPER_INTERNAL_LOG_ERROR("A `Window` is already attached to this `Mouse`!");
+                ROCKHOPPER_INTERNAL_LOG_ERROR("The Window {} is already attached to the Mouse {}!", m_DebugName, mouse->m_DebugName);
                 return;
             }
             m_MouseHandle = mouse;
             mouse->m_WindowHandle = this;
             GLFW_Context::SetMouseGLFWCallbacks<true>(m_WindowHandle);
-            ROCKHOPPER_INTERNAL_LOG_INFO("Attached a `Mouse` to a `Window`.");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Attached the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
         }); });
     }
 
@@ -107,7 +110,7 @@ namespace RockHopper
             GLFW_Context::SetMouseGLFWCallbacks<false>(m_WindowHandle);
             mouse->m_WindowHandle = nullptr;
             m_MouseHandle = nullptr;
-            ROCKHOPPER_INTERNAL_LOG_INFO("Detached a `Mouse` to a `Window`.");
+            ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
         }); });
     }
 
@@ -120,8 +123,8 @@ namespace RockHopper
 
             // Create a GLFW windowed-mode window handle and it's OpenGL context
             m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle!");
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window.");
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle! {}", m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window. {}", m_DebugName);
 
             // Set the GLFW user pointer to this window
             glfwSetWindowUserPointer(m_WindowHandle,this);

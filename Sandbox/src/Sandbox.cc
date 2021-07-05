@@ -12,17 +12,16 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
 {
     return RockHopper::WindowDetails
     {
-        .width = 800,
-        .height = 600,
         .title = "RockHopper Client",
+        .width = 800, .height = 600,
         .frametime = 1'000'000'000 / 60,
     };
 }
 
 Sandbox::Sandbox()
     : m_Window{GetInitialWindowDetails()}
-    , m_Keyboard{}
-    , m_Mouse{}
+    , m_Keyboard{"default"}
+    , m_Mouse{"default"}
 {
     using namespace RockHopper;
 

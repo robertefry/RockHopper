@@ -12,7 +12,8 @@ namespace RockHopper
         if (m_WindowHandle) m_WindowHandle->detach(this);
     }
 
-    Keyboard::Keyboard()
+    Keyboard::Keyboard(std::string const& name)
+        : m_DebugName{"Keyboard",name}
     {
         for (int i = 0; i < (int)KeyCode::KEY_LAST; ++i)
         {
@@ -35,6 +36,7 @@ namespace RockHopper
     }
 
     Keyboard::Keyboard(Keyboard&& other)
+        : m_DebugName{other.m_DebugName}
     {
         *this = std::move(other);
     }
