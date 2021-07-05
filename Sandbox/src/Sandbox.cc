@@ -95,11 +95,8 @@ void Sandbox::run()
 {
     using namespace RockHopper;
 
-    EventWaitListener<WindowDisposeEvent> eol_listener;
-    m_Window.insert_event_listener(&eol_listener);
-
-    m_Window.start();
-    eol_listener.wait();
+    auto& stop = m_Window.start();
+    stop.wait();
 
     // m_Window will destruct here
 }

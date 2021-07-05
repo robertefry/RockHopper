@@ -3,9 +3,10 @@
 #define __HH_ROCKHOPPER_ENGINE_
 
 #include "RockHopper/Utility/TaskQueue.hh"
+#include "RockHopper/Utility/WaitVariable.hh"
 
-#include <thread>
 #include <atomic>
+#include <thread>
 
 /* ************************************************************************** */
 // [Definition] RockHopper::EngineThread
@@ -20,8 +21,8 @@ namespace RockHopper
         explicit EngineThread();
         virtual ~EngineThread();
 
-        virtual void start();
-        virtual void stop();
+        virtual WaitVariable const& start();
+        virtual WaitVariable const& stop();
 
         bool alive() const;
 
@@ -31,6 +32,7 @@ namespace RockHopper
     protected:
         std::thread m_Thread;
         std::atomic<bool> m_IsStopRequested, m_IsAlive;
+        WaitVariable m_StopNotifier{};
     };
 
 } // namespace RockHopper

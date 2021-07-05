@@ -25,23 +25,27 @@ namespace RockHopper
         if (m_Thread.joinable()) m_Thread.join();
     }
 
-    void EngineThread::start()
+    WaitVariable const& EngineThread::start()
     {
-        if (m_IsAlive) return;
-        m_Thread = std::thread([&](){
-            ROCKHOPPER_INTERNAL_LOG_INFO("Starting an EngineThread.");
-            m_IsAlive = true;
-            this->run();
-            m_IsAlive = false;
-            ROCKHOPPER_INTERNAL_LOG_INFO("Stopped an EngineThread.");
-        });
-        m_IsAlive = true; // ensure m_IsAlive is set before returning.
+        if (not m_IsAlive)
+        {
+            m_Thread = std::thread([&](){
+                ROCKHOPPER_INTERNAL_LOG_INFO("Starting an EngineThread.");
+                m_IsAlive = true;
+                this->run();
+                m_IsAlive = false;
+                m_StopNotifier.notify_all();
+                ROCKHOPPER_INTERNAL_LOG_INFO("Stopped an EngineThread.");
+            });
+        }
+        return m_StopNotifier;
     }
 
-    void EngineThread::stop()
+    WaitVariable const& EngineThread::stop()
     {
         ROCKHOPPER_INTERNAL_LOG_DEBUG("requesting an EngineThread stop");
         m_IsStopRequested = true;
+        return m_StopNotifier;
     }
 
     bool EngineThread::alive() const
