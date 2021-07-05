@@ -1,6 +1,5 @@
 
 #include "RockHopper/Window/Window.hh"
-#include "RockHopper/Window/Backend/GLFW_Context.hh"
 #include "RockHopper/Window/Backend/OpenGL_Context.hh"
 
 #include "RockHopper/Debug.hh"
@@ -20,6 +19,8 @@ namespace RockHopper
 
     Window::Window(WindowDetails const& details)
         : Engine{details.title}
+        , m_GraphicsThread{}
+        , m_WindowContext{m_GraphicsThread,(void**)&m_WindowHandle}
         , m_WindowHandle{}
         , m_Details{details}
     {
@@ -54,6 +55,7 @@ namespace RockHopper
     {
         insert_task([this,keyboard]() { m_GraphicsThread.wait_task([this,keyboard]()
         {
+            ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
             if (m_KeyboardHandle != nullptr)
             {
                 ROCKHOPPER_INTERNAL_LOG_ERROR("The Keyboard {} is already attached to the Window {}!", keyboard->m_DebugName, m_DebugName);
@@ -66,8 +68,7 @@ namespace RockHopper
             }
             m_KeyboardHandle = keyboard;
             keyboard->m_WindowHandle = this;
-            GLFW_Context::SetKeyboardGLFWCallbacks<true>(m_WindowHandle);
-            ROCKHOPPER_INTERNAL_LOG_INFO("Attached the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
+            m_WindowContext.set_callbacks<Keyboard,true>(keyboard);
         }); });
     }
 
@@ -75,10 +76,10 @@ namespace RockHopper
     {
         insert_task([this,keyboard]() { m_GraphicsThread.wait_task([this,keyboard]()
         {
-            GLFW_Context::SetKeyboardGLFWCallbacks<false>(m_WindowHandle);
+            ROCKHOPPER_INTERNAL_LOG_INFO("Detaching the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
+            m_WindowContext.set_callbacks<Keyboard,false>(keyboard);
             keyboard->m_WindowHandle = nullptr;
             m_KeyboardHandle = nullptr;
-            ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
         }); });
     }
 
@@ -86,6 +87,7 @@ namespace RockHopper
     {
         insert_task([this,mouse]() { m_GraphicsThread.wait_task([this,mouse]()
         {
+            ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
             if (m_MouseHandle != nullptr)
             {
                 ROCKHOPPER_INTERNAL_LOG_ERROR("The Mouse {} is already attached to the Window {}!", mouse->m_DebugName, m_DebugName);
@@ -98,8 +100,7 @@ namespace RockHopper
             }
             m_MouseHandle = mouse;
             mouse->m_WindowHandle = this;
-            GLFW_Context::SetMouseGLFWCallbacks<true>(m_WindowHandle);
-            ROCKHOPPER_INTERNAL_LOG_INFO("Attached the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
+            m_WindowContext.set_callbacks<Mouse,true>(mouse);
         }); });
     }
 
@@ -107,10 +108,10 @@ namespace RockHopper
     {
         insert_task([this,mouse]() { m_GraphicsThread.wait_task([this,mouse]()
         {
-            GLFW_Context::SetMouseGLFWCallbacks<false>(m_WindowHandle);
+            ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
+            m_WindowContext.set_callbacks<Mouse,false>(mouse);
             mouse->m_WindowHandle = nullptr;
             m_MouseHandle = nullptr;
-            ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
         }); });
     }
 
@@ -118,19 +119,16 @@ namespace RockHopper
     {
         m_GraphicsThread.wait_task([this]()
         {
-            // Register a GLFW context
-            GLFW_Context::Register();
-
             // Create a GLFW windowed-mode window handle and it's OpenGL context
             m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
             ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle! {}", m_DebugName);
             ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window. {}", m_DebugName);
 
+            // Set GLFW callbacks
+            m_WindowContext.set_callbacks<Window,true>(this);
+
             // Set the GLFW user pointer to this window
             glfwSetWindowUserPointer(m_WindowHandle,this);
-
-            // Set GLFW callbacks
-            GLFW_Context::SetWindowGLFWCallbacks<true>(m_WindowHandle);
 
             // Make the window's context current
             glfwMakeContextCurrent(m_WindowHandle);
@@ -188,17 +186,13 @@ namespace RockHopper
             // Deregister an OpenGL context
             OpenGL_Context::Deregister();
 
-            // Set GLFW callbacks
-            GLFW_Context::SetWindowGLFWCallbacks<false>(m_WindowHandle);
-
             // Remove the GLFW user pointer
             glfwSetWindowUserPointer(m_WindowHandle,nullptr);
 
+            m_WindowContext.set_callbacks<Window,false>(this);
+
             // Destroy the GLFW window
             glfwDestroyWindow(m_WindowHandle);
-
-            // Deregister an GLFW context
-            GLFW_Context::Deregister();
         });
     }
 

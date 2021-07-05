@@ -4,6 +4,7 @@
 
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Window/Backend/GraphicsThread.hh"
+#include "RockHopper/Window/Backend/WindowContext.hh"
 
 #include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
@@ -56,14 +57,15 @@ namespace RockHopper
         virtual void dispose() override;
 
     private:
+        GraphicsThread m_GraphicsThread;
+        WindowContext m_WindowContext;
+
         GLFWwindow* m_WindowHandle;
         WindowDetails m_Details;
         mutable std::mutex m_WindowMutex{};
 
         Keyboard* m_KeyboardHandle{};
         Mouse* m_MouseHandle{};
-
-        GraphicsThread m_GraphicsThread{};
     };
 
 } // namespace RockHopper
