@@ -13,7 +13,7 @@ namespace RockHopper
         while (not m_IsStopRequested)
         {
             execute_all();
-            std::this_thread::sleep_for(std::chrono::nanoseconds{1});
+            wait_for(std::chrono::seconds{1});
         }
     }
 
