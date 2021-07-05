@@ -5,8 +5,9 @@
 #include "TaskQueue.fwd"
 
 #include <functional>
-#include <future>
 #include <queue>
+#include <future>
+#include <condition_variable>
 #include <mutex>
 
 /* ************************************************************************** */
@@ -45,6 +46,12 @@ namespace RockHopper
 
         explicit TaskQueue(TaskQueue&&);
 
+        void wait();
+        template <typename T_Rep, typename T_Period>
+        std::cv_status wait_for(std::chrono::duration<T_Rep,T_Period> const& rtime);
+        template <typename T_Clock, typename T_Duration>
+        std::cv_status wait_until(std::chrono::time_point<T_Clock,T_Duration> const& atime);
+
         ReturnType push_task(TaskFunc const& task);
         ReturnType push_task(TaskFunc&& task);
 
@@ -57,6 +64,7 @@ namespace RockHopper
 
     private:
         std::queue<FutureExecutor> m_TaskQueue{};
+        std::condition_variable m_TaskQueueNotifier{};
         std::mutex m_TaskQueueMutex{};
     };
 
@@ -114,11 +122,35 @@ namespace RockHopper
     }
 
     template <typename T_Res, typename... T_Args>
+    void TaskQueue<T_Res(T_Args...)>::wait()
+    {
+        std::unique_lock<std::mutex> lock {m_TaskQueueMutex};
+        m_TaskQueueNotifier.wait(lock);
+    }
+
+    template <typename T_Res, typename... T_Args>
+    template <typename T_Rep, typename T_Period>
+    std::cv_status TaskQueue<T_Res(T_Args...)>::wait_for(std::chrono::duration<T_Rep,T_Period> const& rtime)
+    {
+        std::unique_lock<std::mutex> lock {m_TaskQueueMutex};
+        return m_TaskQueueNotifier.wait_for(lock,rtime);
+    }
+
+    template <typename T_Res, typename... T_Args>
+    template <typename T_Clock, typename T_Duration>
+    std::cv_status TaskQueue<T_Res(T_Args...)>::wait_until(std::chrono::time_point<T_Clock,T_Duration> const& atime)
+    {
+        std::unique_lock<std::mutex> lock {m_TaskQueueMutex};
+        return m_TaskQueueNotifier.wait_until(lock,atime);
+    }
+
+    template <typename T_Res, typename... T_Args>
     auto TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc const& task)
         -> TaskQueue<T_Res(T_Args...)>::ReturnType
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.emplace(task);
+        m_TaskQueueNotifier.notify_all();
         return m_TaskQueue.back().future();
     }
 
@@ -128,6 +160,7 @@ namespace RockHopper
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.emplace(std::move(task));
+        m_TaskQueueNotifier.notify_all();
         return m_TaskQueue.back().future();
     }
 
