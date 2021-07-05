@@ -2,8 +2,10 @@
 #ifndef __HH_ROCKHOPPER_WINDOW_
 #define __HH_ROCKHOPPER_WINDOW_
 
-#include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Window/WindowEvents.hh"
+#include "RockHopper/Window/Backend/GraphicsThread.hh"
+
+#include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
 
@@ -60,6 +62,8 @@ namespace RockHopper
 
         Keyboard* m_KeyboardHandle{};
         Mouse* m_MouseHandle{};
+
+        GraphicsThread m_GraphicsThread{};
     };
 
 } // namespace RockHopper
