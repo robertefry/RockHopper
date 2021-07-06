@@ -4,8 +4,12 @@
 
 #include "TaskQueue.fwd"
 
+#include "RockHopper/Utility/WaitVariable.hh"
+
 #include <functional>
+#include <tuple>
 #include <queue>
+#include <memory>
 #include <future>
 #include <condition_variable>
 #include <mutex>
@@ -17,55 +21,63 @@
 namespace RockHopper
 {
 
-    template <typename T_Res, typename... T_Args>
-    class TaskQueue<T_Res(T_Args...)>
+    class TaskQueue
     {
-        class FutureExecutor
+        struct I_Executor
+        {
+            virtual ~I_Executor() = default;
+            virtual void operator()() = 0;
+        };
+
+        template <typename T_Signature>
+        class Executor;
+
+        template <typename T_Ret, typename... T_Args>
+        class Executor<T_Ret(T_Args...)> : public I_Executor
         {
         public:
-            using ReturnType = std::future<T_Res>;
-            using TaskFunc = std::function<T_Res(T_Args...)>;
-
-            explicit FutureExecutor(TaskFunc const& task);
-            explicit FutureExecutor(TaskFunc&& task);
-
-            void operator()(T_Args... args);
-            ReturnType future();
-
+            explicit Executor(std::function<T_Ret(T_Args...)> const& task, T_Args&&... args)
+                : m_PackagedTask{task}, m_PackagedArgs{std::forward<T_Args>(args)...}
+            {}
+            explicit Executor(std::function<T_Ret(T_Args...)>&& task, T_Args&&... args)
+                : m_PackagedTask{std::move(task)}, m_PackagedArgs{std::forward<T_Args>(args)...}
+            {}
+            std::future<T_Ret> get_future()
+            {
+                return m_PackagedTask.get_future();
+            }
+            virtual void operator()() override
+            {
+                std::apply(m_PackagedTask,m_PackagedArgs);
+            }
         private:
-            TaskFunc m_Function;
-            std::promise<T_Res> m_Promise{};
+            std::packaged_task<T_Ret(T_Args...)> m_PackagedTask;
+            std::tuple<T_Args...> m_PackagedArgs;
         };
 
     public:
-        using ReturnType = FutureExecutor::ReturnType;
-        using TaskFunc = FutureExecutor::TaskFunc;
-
         virtual ~TaskQueue() = default;
         explicit TaskQueue() = default;
 
-        explicit TaskQueue(TaskQueue&&);
+        inline explicit TaskQueue(TaskQueue&&);
 
-        void wait();
-        template <typename T_Rep, typename T_Period>
-        std::cv_status wait_for(std::chrono::duration<T_Rep,T_Period> const& rtime);
-        template <typename T_Clock, typename T_Duration>
-        std::cv_status wait_until(std::chrono::time_point<T_Clock,T_Duration> const& atime);
+        template <typename T_Func, typename... T_Args>
+        auto push_task(T_Func&& func, T_Args&&... args)
+            -> std::future<typename std::invoke_result<T_Func,T_Args...>::type>;
+        template <typename T_Func, typename... T_Args>
+        auto wait_task(T_Func&& func, T_Args&&... args)
+            -> std::invoke_result<T_Func,T_Args...>::type;
 
-        ReturnType push_task(TaskFunc const& task);
-        ReturnType push_task(TaskFunc&& task);
+        inline auto& insert_notifier() const { return m_InsertNotifier; }
 
-        inline void wait_task(TaskFunc const& task) { push_task(task).wait(); }
-        inline void wait_task(TaskFunc&& task) { push_task(std::move(task)).wait(); }
-
-        size_t size() const;
-        void execute_one(T_Args...);
-        void execute_all(T_Args...);
+        inline size_t size() const;
+        inline void execute_one();
+        inline void execute_all();
 
     private:
-        std::queue<FutureExecutor> m_TaskQueue{};
-        std::condition_variable m_TaskQueueNotifier{};
-        std::mutex m_TaskQueueMutex{};
+        std::queue<std::unique_ptr<I_Executor>> m_TaskQueue{};
+        WaitVariable m_InsertNotifier{};
+        mutable std::mutex m_TaskQueueMutex{};
     };
 
 } // namespace RockHopper
@@ -77,113 +89,60 @@ namespace RockHopper
 namespace RockHopper
 {
 
-    template <typename T_Res, typename... T_Args>
-    TaskQueue<T_Res(T_Args...)>::FutureExecutor::FutureExecutor(TaskFunc const& task)
-        : m_Function{task}
+    TaskQueue::TaskQueue(TaskQueue&& other)
     {
-    }
-
-    template <typename T_Res, typename... T_Args>
-    TaskQueue<T_Res(T_Args...)>::FutureExecutor::FutureExecutor(TaskFunc&& task)
-        : m_Function{std::move(task)}
-    {
-    }
-
-    template <typename T_Res, typename... T_Args>
-    void TaskQueue<T_Res(T_Args...)>::FutureExecutor::operator()(T_Args... args)
-    {
-        if constexpr (std::is_same<T_Res,void>::value)
-        {
-            m_Function(args...);
-            m_Promise.set_value();
-        }
-        else
-        {
-            T_Res result = m_Function(args...);
-            m_Promise.set_value(std::move(result));
-        }
-    }
-
-    template <typename T_Res, typename... T_Args>
-    auto TaskQueue<T_Res(T_Args...)>::FutureExecutor::future()
-        -> TaskQueue<T_Res(T_Args...)>::FutureExecutor::ReturnType
-    {
-        return m_Promise.get_future();
-    }
-
-    template <typename T_Res, typename... T_Args>
-    TaskQueue<T_Res(T_Args...)>::TaskQueue(TaskQueue&& other)
-    {
-        std::lock_guard<std::mutex> lock_1 {m_TaskQueueMutex,std::defer_lock};
-        std::lock_guard<std::mutex> lock_2 {other.m_TaskQueueMutex,std::defer_lock};
-        std::lock(lock_1,lock_2);
-
+        std::scoped_lock<std::mutex,std::mutex> lock {m_TaskQueueMutex,other.m_TaskQueueMutex};
         m_TaskQueue = std::move(other.m_TaskQueue);
     }
 
-    template <typename T_Res, typename... T_Args>
-    void TaskQueue<T_Res(T_Args...)>::wait()
+    template <typename T_Func, typename... T_Args>
+    auto TaskQueue::push_task(T_Func&& func, T_Args&&... args)
+        -> std::future<typename std::invoke_result<T_Func,T_Args...>::type>
     {
-        std::unique_lock<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueueNotifier.wait(lock);
-    }
+        using T_Ret = std::invoke_result<T_Func,T_Args...>::type;
+        using T_Executor = Executor<T_Ret(T_Args...)>;
 
-    template <typename T_Res, typename... T_Args>
-    template <typename T_Rep, typename T_Period>
-    std::cv_status TaskQueue<T_Res(T_Args...)>::wait_for(std::chrono::duration<T_Rep,T_Period> const& rtime)
-    {
-        std::unique_lock<std::mutex> lock {m_TaskQueueMutex};
-        return m_TaskQueueNotifier.wait_for(lock,rtime);
-    }
+        std::unique_ptr<T_Executor> executor = std::make_unique<T_Executor>(
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...
+        );
+        std::future<T_Ret> future = executor->get_future();
 
-    template <typename T_Res, typename... T_Args>
-    template <typename T_Clock, typename T_Duration>
-    std::cv_status TaskQueue<T_Res(T_Args...)>::wait_until(std::chrono::time_point<T_Clock,T_Duration> const& atime)
-    {
-        std::unique_lock<std::mutex> lock {m_TaskQueueMutex};
-        return m_TaskQueueNotifier.wait_until(lock,atime);
-    }
-
-    template <typename T_Res, typename... T_Args>
-    auto TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc const& task)
-        -> TaskQueue<T_Res(T_Args...)>::ReturnType
-    {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueue.emplace(task);
-        m_TaskQueueNotifier.notify_all();
-        return m_TaskQueue.back().future();
+        m_TaskQueue.push(std::move(executor));
+        m_InsertNotifier.notify_all();
+        return future;
     }
 
-    template <typename T_Res, typename... T_Args>
-    auto TaskQueue<T_Res(T_Args...)>::push_task(TaskFunc&& task)
-        -> TaskQueue<T_Res(T_Args...)>::ReturnType
+    template <typename T_Func, typename... T_Args>
+    auto TaskQueue::wait_task(T_Func&& func, T_Args&&... args)
+        -> std::invoke_result<T_Func,T_Args...>::type
     {
-        std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueue.emplace(std::move(task));
-        m_TaskQueueNotifier.notify_all();
-        return m_TaskQueue.back().future();
+        using T_Ret = std::invoke_result<T_Func,T_Args...>::type;
+
+        std::future<T_Ret> future = push_task(
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...
+        );
+        future.wait();
+        return future.get();
     }
 
-    template <typename T_Res, typename... T_Args>
-    size_t TaskQueue<T_Res(T_Args...)>::size() const
+    size_t TaskQueue::size() const
     {
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         return m_TaskQueue.size();
     }
 
-    template <typename T_Res, typename... T_Args>
-    void TaskQueue<T_Res(T_Args...)>::execute_one(T_Args... args)
+    void TaskQueue::execute_one()
     {
-        m_TaskQueue.front()(args...);
+        m_TaskQueue.front()->operator()();
 
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.pop();
     }
 
-    template <typename T_Res, typename... T_Args>
-    void TaskQueue<T_Res(T_Args...)>::execute_all(T_Args... args)
+    void TaskQueue::execute_all()
     {
-        while (m_TaskQueue.size())
+        while (size())
         {
             execute_one();
         }

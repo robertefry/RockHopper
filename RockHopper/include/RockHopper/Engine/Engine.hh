@@ -85,8 +85,8 @@ namespace RockHopper
 
         inline auto timing() -> EngineTiming& { return m_Timing; }
 
-        std::future<void> insert_task(TaskQueue<void(void)>::TaskFunc const&);
-        std::future<void> insert_task(TaskQueue<void(void)>::TaskFunc&&);
+        template <typename T_Func, typename... T_Args>
+        auto insert_task(T_Func&& func, T_Args&&... args);
 
     protected:
         virtual void init() = 0;
@@ -98,8 +98,16 @@ namespace RockHopper
 
     protected:
         EngineTiming m_Timing{};
-        TaskQueue<void(void)> m_TaskQueue{};
+        TaskQueue m_TaskQueue{};
     };
+
+    template <typename T_Func, typename... T_Args>
+    auto Engine::insert_task(T_Func&& func, T_Args&&... args)
+    {
+        return m_TaskQueue.push_task(
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...
+        );
+    }
 
 } // namespace RockHopper
 

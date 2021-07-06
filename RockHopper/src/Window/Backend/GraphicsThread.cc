@@ -13,7 +13,7 @@ namespace RockHopper
         while (not m_IsStopRequested)
         {
             execute_all();
-            wait_for(std::chrono::seconds{1});
+            insert_notifier().wait_for(std::chrono::seconds{1});
         }
     }
 
