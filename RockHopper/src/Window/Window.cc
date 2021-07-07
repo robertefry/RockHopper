@@ -20,8 +20,7 @@ namespace RockHopper
     Window::Window(WindowDetails const& details)
         : Engine{details.title}
         , m_GraphicsThread{}
-        , m_WindowContext{m_GraphicsThread,&m_WindowHandle}
-        , m_WindowHandle{}
+        , m_WindowContext{m_GraphicsThread}
         , m_Details{details}
     {
         m_DebugName.set_type("Window");
@@ -32,14 +31,14 @@ namespace RockHopper
     {
         insert_task([this,details]() { m_GraphicsThread.push_task([this,details]()
         {
-            std::lock_guard<std::mutex> lock {m_WindowMutex};
             m_Timing.set_omega(details.frametime);
 
             ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for {}.", m_DebugName);
-            if (m_WindowHandle)
+            GLFWwindow* handle = m_WindowContext.get_window();
+            if (handle)
             {
-                glfwSetWindowSize(m_WindowHandle,details.width,details.height);
-                glfwSetWindowTitle(m_WindowHandle,details.title.c_str());
+                glfwSetWindowSize(handle,details.width,details.height);
+                glfwSetWindowTitle(handle,details.title.c_str());
             }
             m_Details = details;
         }); });
@@ -47,7 +46,6 @@ namespace RockHopper
 
     auto Window::get_details() const -> WindowDetails const&
     {
-        std::lock_guard<std::mutex> lock {m_WindowMutex};
         return m_Details;
     }
 
@@ -120,36 +118,42 @@ namespace RockHopper
         m_GraphicsThread.wait_task([this]()
         {
             // Create a GLFW windowed-mode window handle and it's OpenGL context
-            m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle! {}", m_DebugName);
+            GLFWwindow* handle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(handle,"Failed to create a GLFW window handle! {}", m_DebugName);
             ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window. {}", m_DebugName);
-
-            // Set GLFW callbacks
-            m_WindowContext.set_callbacks<Window,true>(this);
+            m_WindowContext.set_window(handle);
 
             // Set the GLFW user pointer to this window
-            glfwSetWindowUserPointer(m_WindowHandle,this);
+            glfwSetWindowUserPointer(m_WindowContext.get_window(),this);
+        });
 
+        // Set GLFW callbacks
+        m_WindowContext.set_callbacks<Window,true>(this);
+
+        m_GraphicsThread.wait_task([this]()
+        {
             // Make the window's context current
-            glfwMakeContextCurrent(m_WindowHandle);
+            glfwMakeContextCurrent(m_WindowContext.get_window());
 
             // Register an OpenGL context
             OpenGL_Context::Register();
-
-            // Dispatch a `WindowInitEvent` event
-            {
-                WindowInitEvent event;
-                event.window = this;
-                dispatch_event(event);
-            }
         });
+
+        // Dispatch a `WindowInitEvent` event
+        {
+            WindowInitEvent event;
+            event.window = this;
+            dispatch_event(event);
+        }
     }
 
     void Window::tick()
     {
         m_GraphicsThread.wait_task([this]()
         {
-            if (glfwWindowShouldClose(m_WindowHandle))
+            GLFWwindow* handle = m_WindowContext.get_window();
+
+            if (glfwWindowShouldClose(handle))
             {
                 stop();
             }
@@ -160,7 +164,7 @@ namespace RockHopper
             glfwPollEvents();
 
             // Draw the last frame
-            glfwSwapBuffers(m_WindowHandle);
+            glfwSwapBuffers(handle);
             glClear(GL_COLOR_BUFFER_BIT);
 
             // Dispatch a `WindowRefreshEvent` event
@@ -174,25 +178,30 @@ namespace RockHopper
 
     void Window::dispose()
     {
+        // Dispatch a `WindowDisposeEvent` event
+        {
+            WindowDisposeEvent event;
+            event.window = this;
+            dispatch_event(event);
+        }
+
         m_GraphicsThread.wait_task([this]()
         {
-            // Dispatch a `WindowDisposeEvent` event
-            {
-                WindowDisposeEvent event;
-                event.window = this;
-                dispatch_event(event);
-            }
-
             // Deregister an OpenGL context
             OpenGL_Context::Deregister();
+        });
 
+        // Unset GLFW callbacks
+        m_WindowContext.set_callbacks<Window,false>(this);
+
+        m_GraphicsThread.wait_task([this]()
+        {
             // Remove the GLFW user pointer
-            glfwSetWindowUserPointer(m_WindowHandle,nullptr);
-
-            m_WindowContext.set_callbacks<Window,false>(this);
+            glfwSetWindowUserPointer(m_WindowContext.get_window(),nullptr);
 
             // Destroy the GLFW window
-            glfwDestroyWindow(m_WindowHandle);
+            glfwDestroyWindow(m_WindowContext.get_window());
+            m_WindowContext.set_window(nullptr);
         });
     }
 

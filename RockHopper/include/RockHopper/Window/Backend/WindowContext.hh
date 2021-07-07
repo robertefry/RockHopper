@@ -18,17 +18,20 @@ namespace RockHopper
     {
     public:
         virtual ~WindowContext();
-        explicit WindowContext(GraphicsThread const& thread, GLFWwindow** handle);
+        explicit WindowContext(GraphicsThread const& thread);
 
         explicit WindowContext(WindowContext const&);
         WindowContext& operator=(WindowContext const&);
 
+        inline auto get_window() -> GLFWwindow* { return m_WindowHandle; }
+        inline void set_window(GLFWwindow* handle) { m_WindowHandle = handle; }
+
         template <typename T_Device, bool T_Enable>
-        void set_callbacks(T_Device*);
+        std::future<void> set_callbacks(T_Device*);
 
     private:
         GraphicsThread m_GraphicsThread;
-        GLFWwindow** m_WindowHandle;
+        GLFWwindow* m_WindowHandle;
 
         static inline std::atomic<unsigned> s_NumInstances = 0;
     };

@@ -10,10 +10,6 @@
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
 
-#include <mutex>
-
-class GLFWwindow;
-
 namespace RockHopper
 {
 
@@ -60,9 +56,7 @@ namespace RockHopper
         GraphicsThread m_GraphicsThread;
         WindowContext m_WindowContext;
 
-        GLFWwindow* m_WindowHandle;
         WindowDetails m_Details;
-        mutable std::mutex m_WindowMutex{};
 
         Keyboard* m_KeyboardHandle{};
         Mouse* m_MouseHandle{};
