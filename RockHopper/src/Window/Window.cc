@@ -143,31 +143,29 @@ namespace RockHopper
 
     void Window::tick()
     {
-        m_GraphicsThread.wait_task([this]()
+        if (m_WindowContext.is_closed_requested())
         {
-            GLFWwindow* handle = m_WindowContext.get_window();
+            stop();
+        }
 
-            if (glfwWindowShouldClose(handle))
-            {
-                stop();
-            }
+        // Refresh the window context
+        if (m_KeyboardHandle) m_KeyboardHandle->tick();
+        if (m_MouseHandle) m_MouseHandle->tick();
+        m_WindowContext.refresh();
 
-            // Poll window events
-            if (m_KeyboardHandle) m_KeyboardHandle->tick();
-            if (m_MouseHandle) m_MouseHandle->tick();
-            glfwPollEvents();
+        // Refresh the render context
+        m_RenderContext.refresh(m_WindowContext.get_window());
 
-            // Draw the last frame
-            glfwSwapBuffers(handle);
-            glClear(GL_COLOR_BUFFER_BIT);
+        // Dispatch a `WindowRefreshEvent` event
+        {
+            WindowRefreshEvent event;
+            event.window = this;
+            dispatch_event(event);
+        }
 
-            // Dispatch a `WindowRefreshEvent` event
-            {
-                WindowRefreshEvent event;
-                event.window = this;
-                dispatch_event(event);
-            }
-        });
+        // Wait on a blank graphics task to synchronize the graphics thread
+        // with the current window thread.
+        m_GraphicsThread.wait_task([](){});
     }
 
     void Window::dispose()

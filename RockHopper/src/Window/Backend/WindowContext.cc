@@ -150,6 +150,22 @@ namespace RockHopper
         return *this;
     }
 
+    bool WindowContext::is_closed_requested()
+    {
+        return m_GraphicsThread.wait_task([&]()
+        {
+            return glfwWindowShouldClose(m_WindowHandle);
+        });
+    }
+
+    std::future<void> WindowContext::refresh()
+    {
+        return m_GraphicsThread.push_task([]()
+        {
+            glfwPollEvents();
+        });
+    }
+
     template <>
     std::future<void> WindowContext::set_callbacks<Window,false>(Window* window)
     {

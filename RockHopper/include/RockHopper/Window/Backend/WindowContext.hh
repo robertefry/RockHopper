@@ -23,6 +23,9 @@ namespace RockHopper
         explicit WindowContext(WindowContext const&);
         WindowContext& operator=(WindowContext const&);
 
+        bool is_closed_requested();
+        std::future<void> refresh();
+
         inline auto get_window() -> GLFWwindow* { return m_WindowHandle; }
         inline void set_window(GLFWwindow* handle) { m_WindowHandle = handle; }
 

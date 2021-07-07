@@ -19,6 +19,8 @@ namespace RockHopper
         virtual ~RenderContext();
         explicit RenderContext(GraphicsThread const& thread);
 
+        std::future<void> refresh(GLFWwindow*);
+
         std::future<void> initialize(GLFWwindow*);
         std::future<void> dispose(GLFWwindow*);
 

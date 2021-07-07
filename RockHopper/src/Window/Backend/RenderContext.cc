@@ -22,6 +22,15 @@ namespace RockHopper
     {
     }
 
+    std::future<void> RenderContext::refresh(GLFWwindow* handle)
+    {
+        return m_GraphicsThread.push_task([handle]()
+        {
+            glfwSwapBuffers(handle);
+            glClear(GL_COLOR_BUFFER_BIT);
+        });
+    }
+
     std::future<void> RenderContext::initialize(GLFWwindow* handle)
     {
         return m_GraphicsThread.push_task([handle]()
