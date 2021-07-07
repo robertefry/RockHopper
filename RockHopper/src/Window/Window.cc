@@ -20,7 +20,7 @@ namespace RockHopper
     Window::Window(WindowDetails const& details)
         : Engine{details.title}
         , m_GraphicsThread{}
-        , m_WindowContext{m_GraphicsThread,(void**)&m_WindowHandle}
+        , m_WindowContext{m_GraphicsThread,&m_WindowHandle}
         , m_WindowHandle{}
         , m_Details{details}
     {

@@ -20,13 +20,13 @@ namespace RockHopper
     class WindowContextData
     {
     public:
-        static void ClearUserPointers(void*);
+        static void ClearUserPointers(GLFWwindow*);
 
         template <typename T_Type>
-        static void SetUserPointer(void*, T_Type*);
+        static void SetUserPointer(GLFWwindow*, T_Type*);
 
         template <typename T_Type>
-        static T_Type* GetUserPointer(void*);
+        static T_Type* GetUserPointer(GLFWwindow*);
 
     private:
         struct MapContent
@@ -35,17 +35,17 @@ namespace RockHopper
             Keyboard* keyboard;
             Mouse* mouse;
         };
-        static inline std::unordered_map<void*,MapContent> s_ContentMap{};
+        static inline std::unordered_map<GLFWwindow*,MapContent> s_ContentMap{};
         static inline std::mutex s_ContentMapMutex{};
     };
 
-    void WindowContextData::ClearUserPointers(void* handle)
+    void WindowContextData::ClearUserPointers(GLFWwindow* handle)
     {
         s_ContentMap.erase(handle);
     }
 
     template <typename T_Type>
-    void WindowContextData::SetUserPointer(void* handle, T_Type* data)
+    void WindowContextData::SetUserPointer(GLFWwindow* handle, T_Type* data)
     {
         std::unique_lock<std::mutex> lock {s_ContentMapMutex};
 
@@ -64,7 +64,7 @@ namespace RockHopper
     }
 
     template <typename T_Type>
-    T_Type* WindowContextData::GetUserPointer(void* handle)
+    T_Type* WindowContextData::GetUserPointer(GLFWwindow* handle)
     {
         std::unique_lock<std::mutex> lock {s_ContentMapMutex};
 
@@ -113,8 +113,8 @@ namespace RockHopper
         s_NumInstances -= 1;
     }
 
-    WindowContext::WindowContext(GraphicsThread const& thread, void** handle)
-        : m_GraphicsThread{thread}, m_Handle{handle}
+    WindowContext::WindowContext(GraphicsThread const& thread, GLFWwindow** handle)
+        : m_GraphicsThread{thread}, m_WindowHandle{handle}
     {
         if (s_NumInstances == 0)
         {
@@ -138,7 +138,7 @@ namespace RockHopper
 
     WindowContext::WindowContext(WindowContext const& other)
         : m_GraphicsThread{other.m_GraphicsThread}
-        , m_Handle{other.m_Handle}
+        , m_WindowHandle{other.m_WindowHandle}
     {
         s_NumInstances += 1;
     }
@@ -146,7 +146,7 @@ namespace RockHopper
     WindowContext& WindowContext::operator=(WindowContext const& other)
     {
         m_GraphicsThread = other.m_GraphicsThread;
-        m_Handle = other.m_Handle;
+        m_WindowHandle = other.m_WindowHandle;
         return *this;
     }
 
@@ -155,33 +155,33 @@ namespace RockHopper
     {
         m_GraphicsThread.push_task([this,window]()
         {
-            WindowContextData::SetUserPointer<Window>(*m_Handle,window);
+            WindowContextData::SetUserPointer<Window>(*m_WindowHandle,window);
 
-            glfwSetWindowRefreshCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle)
+            glfwSetWindowRefreshCallback(*m_WindowHandle,[](GLFWwindow* handle)
             {
             });
-            glfwSetWindowCloseCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle)
+            glfwSetWindowCloseCallback(*m_WindowHandle,[](GLFWwindow* handle)
             {
             });
-            glfwSetWindowFocusCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int focus)
+            glfwSetWindowFocusCallback(*m_WindowHandle,[](GLFWwindow* handle, int focus)
             {
             });
-            glfwSetWindowIconifyCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int iconified)
+            glfwSetWindowIconifyCallback(*m_WindowHandle,[](GLFWwindow* handle, int iconified)
             {
             });
-            glfwSetWindowMaximizeCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int maximized)
+            glfwSetWindowMaximizeCallback(*m_WindowHandle,[](GLFWwindow* handle, int maximized)
             {
             });
-            glfwSetWindowPosCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int x, int y)
+            glfwSetWindowPosCallback(*m_WindowHandle,[](GLFWwindow* handle, int x, int y)
             {
             });
-            glfwSetWindowSizeCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int width, int height)
+            glfwSetWindowSizeCallback(*m_WindowHandle,[](GLFWwindow* handle, int width, int height)
             {
             });
-            glfwSetWindowContentScaleCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, float scale_x, float scale_y)
+            glfwSetWindowContentScaleCallback(*m_WindowHandle,[](GLFWwindow* handle, float scale_x, float scale_y)
             {
             });
-            glfwSetFramebufferSizeCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int width, int height)
+            glfwSetFramebufferSizeCallback(*m_WindowHandle,[](GLFWwindow* handle, int width, int height)
             {
             });
         });
@@ -192,9 +192,9 @@ namespace RockHopper
     {
         m_GraphicsThread.push_task([this,window]()
         {
-            WindowContextData::SetUserPointer<Window>(*m_Handle,window);
+            WindowContextData::SetUserPointer<Window>(*m_WindowHandle,window);
 
-            glfwSetWindowRefreshCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle)
+            glfwSetWindowRefreshCallback(*m_WindowHandle,[](GLFWwindow* handle)
             {
                 WindowRefreshEvent event;
 
@@ -202,7 +202,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowCloseCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle)
+            glfwSetWindowCloseCallback(*m_WindowHandle,[](GLFWwindow* handle)
             {
                 WindowCloseEvent event;
 
@@ -210,7 +210,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowFocusCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int focus)
+            glfwSetWindowFocusCallback(*m_WindowHandle,[](GLFWwindow* handle, int focus)
             {
                 WindowFocusEvent event;
                 event.focus = focus;
@@ -219,7 +219,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowIconifyCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int iconified)
+            glfwSetWindowIconifyCallback(*m_WindowHandle,[](GLFWwindow* handle, int iconified)
             {
                 WindowMinimizeEvent event;
                 event.minimized = iconified;
@@ -228,7 +228,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowMaximizeCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int maximized)
+            glfwSetWindowMaximizeCallback(*m_WindowHandle,[](GLFWwindow* handle, int maximized)
             {
                 WindowMaximizedEvent event;
                 event.maximized = maximized;
@@ -237,7 +237,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowPosCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int x, int y)
+            glfwSetWindowPosCallback(*m_WindowHandle,[](GLFWwindow* handle, int x, int y)
             {
                 WindowMoveEvent event;
                 event.x = x;
@@ -247,7 +247,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowSizeCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int width, int height)
+            glfwSetWindowSizeCallback(*m_WindowHandle,[](GLFWwindow* handle, int width, int height)
             {
                 WindowSizeEvent event;
                 event.width = width;
@@ -257,7 +257,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetWindowContentScaleCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, float scale_x, float scale_y)
+            glfwSetWindowContentScaleCallback(*m_WindowHandle,[](GLFWwindow* handle, float scale_x, float scale_y)
             {
                 WindowScaleEvent event;
                 event.scale_x = scale_x;
@@ -267,7 +267,7 @@ namespace RockHopper
                 event.window = window;
                 window->dispatch_event(event);
             });
-            glfwSetFramebufferSizeCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int width, int height)
+            glfwSetFramebufferSizeCallback(*m_WindowHandle,[](GLFWwindow* handle, int width, int height)
             {
                 WindowBufferSizeEvent event;
                 event.width = width;
@@ -285,9 +285,9 @@ namespace RockHopper
     {
         m_GraphicsThread.push_task([this,keyboard]()
         {
-            WindowContextData::SetUserPointer<Keyboard>(*m_Handle,keyboard);
+            WindowContextData::SetUserPointer<Keyboard>(*m_WindowHandle,keyboard);
 
-            glfwSetKeyCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
+            glfwSetKeyCallback(*m_WindowHandle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
             {
             });
         });
@@ -298,9 +298,9 @@ namespace RockHopper
     {
         m_GraphicsThread.push_task([this,keyboard]()
         {
-            WindowContextData::SetUserPointer<Keyboard>(*m_Handle,keyboard);
+            WindowContextData::SetUserPointer<Keyboard>(*m_WindowHandle,keyboard);
 
-            glfwSetKeyCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
+            glfwSetKeyCallback(*m_WindowHandle,[](GLFWwindow* handle, int keycode, int scancode, int action, int mods)
             {
                 switch (action)
                 {
@@ -351,18 +351,18 @@ namespace RockHopper
     {
         m_GraphicsThread.push_task([this,mouse]()
         {
-            WindowContextData::SetUserPointer<Mouse>(*m_Handle,mouse);
+            WindowContextData::SetUserPointer<Mouse>(*m_WindowHandle,mouse);
 
-            glfwSetCursorPosCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, double x, double y)
+            glfwSetCursorPosCallback(*m_WindowHandle,[](GLFWwindow* handle, double x, double y)
             {
             });
-            glfwSetCursorEnterCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int entered)
+            glfwSetCursorEnterCallback(*m_WindowHandle,[](GLFWwindow* handle, int entered)
             {
             });
-            glfwSetMouseButtonCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int button, int action, int mods)
+            glfwSetMouseButtonCallback(*m_WindowHandle,[](GLFWwindow* handle, int button, int action, int mods)
             {
             });
-            glfwSetScrollCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, double offset_x, double offset_y)
+            glfwSetScrollCallback(*m_WindowHandle,[](GLFWwindow* handle, double offset_x, double offset_y)
             {
             });
         });
@@ -373,9 +373,9 @@ namespace RockHopper
     {
         m_GraphicsThread.push_task([this,mouse]()
         {
-            WindowContextData::SetUserPointer<Mouse>(*m_Handle,mouse);
+            WindowContextData::SetUserPointer<Mouse>(*m_WindowHandle,mouse);
 
-            glfwSetCursorPosCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, double x, double y)
+            glfwSetCursorPosCallback(*m_WindowHandle,[](GLFWwindow* handle, double x, double y)
             {
                 Mouse* mouse = WindowContextData::GetUserPointer<Mouse>(handle);
 
@@ -398,7 +398,7 @@ namespace RockHopper
                     mouse->dispatch_event(event);
                 }
             });
-            glfwSetCursorEnterCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int entered)
+            glfwSetCursorEnterCallback(*m_WindowHandle,[](GLFWwindow* handle, int entered)
             {
                 switch (entered)
                 {
@@ -423,7 +423,7 @@ namespace RockHopper
                     default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
                 }
             });
-            glfwSetMouseButtonCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, int button, int action, int mods)
+            glfwSetMouseButtonCallback(*m_WindowHandle,[](GLFWwindow* handle, int button, int action, int mods)
             {
                 switch (action)
                 {
@@ -463,7 +463,7 @@ namespace RockHopper
                     default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
                 }
             });
-            glfwSetScrollCallback((GLFWwindow*)*m_Handle,[](GLFWwindow* handle, double offset_x, double offset_y)
+            glfwSetScrollCallback(*m_WindowHandle,[](GLFWwindow* handle, double offset_x, double offset_y)
             {
                 MouseScrollEvent event;
                 event.offset_x = offset_x;

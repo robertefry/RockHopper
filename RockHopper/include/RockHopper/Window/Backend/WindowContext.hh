@@ -9,6 +9,8 @@
 #define ROCKHOPPER_GLFW_VERSION_MAJOR 3
 #define ROCKHOPPER_GLFW_VERSION_MINOR 0
 
+class GLFWwindow;
+
 namespace RockHopper
 {
 
@@ -16,7 +18,7 @@ namespace RockHopper
     {
     public:
         virtual ~WindowContext();
-        explicit WindowContext(GraphicsThread const& thread, void** handle);
+        explicit WindowContext(GraphicsThread const& thread, GLFWwindow** handle);
 
         explicit WindowContext(WindowContext const&);
         WindowContext& operator=(WindowContext const&);
@@ -26,7 +28,7 @@ namespace RockHopper
 
     private:
         GraphicsThread m_GraphicsThread;
-        void** m_Handle;
+        GLFWwindow** m_WindowHandle;
 
         static inline std::atomic<unsigned> s_NumInstances = 0;
     };
