@@ -1,6 +1,5 @@
 
 #include "RockHopper/Window/Window.hh"
-#include "RockHopper/Window/Backend/OpenGL_Context.hh"
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
@@ -21,6 +20,7 @@ namespace RockHopper
         : Engine{details.title}
         , m_GraphicsThread{}
         , m_WindowContext{m_GraphicsThread}
+        , m_RenderContext{m_GraphicsThread}
         , m_Details{details}
     {
         m_DebugName.set_type("Window");
@@ -130,14 +130,8 @@ namespace RockHopper
         // Set GLFW callbacks
         m_WindowContext.set_callbacks<Window,true>(this);
 
-        m_GraphicsThread.wait_task([this]()
-        {
-            // Make the window's context current
-            glfwMakeContextCurrent(m_WindowContext.get_window());
-
-            // Register an OpenGL context
-            OpenGL_Context::Register();
-        });
+        // Initialize the render context
+        m_RenderContext.initialize(m_WindowContext.get_window());
 
         // Dispatch a `WindowInitEvent` event
         {
@@ -185,11 +179,8 @@ namespace RockHopper
             dispatch_event(event);
         }
 
-        m_GraphicsThread.wait_task([this]()
-        {
-            // Deregister an OpenGL context
-            OpenGL_Context::Deregister();
-        });
+        // Dispose the render context
+        m_RenderContext.dispose(m_WindowContext.get_window());
 
         // Unset GLFW callbacks
         m_WindowContext.set_callbacks<Window,false>(this);

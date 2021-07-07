@@ -5,6 +5,7 @@
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Window/Backend/GraphicsThread.hh"
 #include "RockHopper/Window/Backend/WindowContext.hh"
+#include "RockHopper/Window/Backend/RenderContext.hh"
 
 #include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
@@ -55,6 +56,7 @@ namespace RockHopper
     private:
         GraphicsThread m_GraphicsThread;
         WindowContext m_WindowContext;
+        RenderContext m_RenderContext;
 
         WindowDetails m_Details;
 
