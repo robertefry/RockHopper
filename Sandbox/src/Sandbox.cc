@@ -22,7 +22,6 @@ Sandbox::Sandbox()
     : m_Window{GetInitialWindowDetails()}
     , m_Keyboard{"default"}
     , m_Mouse{"default"}
-    , m_Background{}
 {
     m_Window.attach(&m_Keyboard);
     m_Window.attach(&m_Mouse);
@@ -30,10 +29,14 @@ Sandbox::Sandbox()
     m_Window.insert_event_listener(&m_Background);
     m_Keyboard.insert_event_listener(&m_Background);
     m_Mouse.insert_event_listener(&m_Background);
+
+    m_Window.insert_event_listener(&m_Triangle);
 }
 
 Sandbox::~Sandbox()
 {
+    m_Window.insert_event_listener(&m_Triangle);
+
     m_Window.remove_event_listener(&m_Background);
     m_Keyboard.remove_event_listener(&m_Background);
     m_Mouse.remove_event_listener(&m_Background);

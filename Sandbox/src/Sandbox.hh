@@ -8,6 +8,7 @@
 #include "RockHopper/Input/Mouse/Mouse.hh"
 
 #include "Examples/Background.hh"
+#include "Examples/Triangle.hh"
 
 using namespace RockHopper;
 
@@ -24,5 +25,6 @@ private:
     RockHopper::Keyboard m_Keyboard;
     RockHopper::Mouse m_Mouse;
 
-    Background m_Background;
+    Background m_Background{};
+    Triangle m_Triangle{};
 };
