@@ -134,11 +134,12 @@ namespace RockHopper
         m_RenderContext.initialize(m_WindowContext.get_window());
 
         // Dispatch a `WindowInitEvent` event
+        m_GraphicsThread.wait_task([this]()
         {
             WindowInitEvent event;
             event.window = this;
             dispatch_event(event);
-        }
+        });
     }
 
     void Window::tick()
@@ -157,11 +158,12 @@ namespace RockHopper
         m_RenderContext.refresh(m_WindowContext.get_window());
 
         // Dispatch a `WindowRefreshEvent` event
+        m_GraphicsThread.wait_task([this]()
         {
             WindowRefreshEvent event;
             event.window = this;
             dispatch_event(event);
-        }
+        });
 
         // Wait on a blank graphics task to synchronize the graphics thread
         // with the current window thread.
@@ -171,11 +173,12 @@ namespace RockHopper
     void Window::dispose()
     {
         // Dispatch a `WindowDisposeEvent` event
+        m_GraphicsThread.wait_task([this]()
         {
             WindowDisposeEvent event;
             event.window = this;
             dispatch_event(event);
-        }
+        });
 
         // Dispose the render context
         m_RenderContext.dispose(m_WindowContext.get_window());
