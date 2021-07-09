@@ -7,6 +7,8 @@
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
 #include "RockHopper/Input/Mouse/Mouse.hh"
 
+#include "Examples/Background.hh"
+
 using namespace RockHopper;
 
 class Sandbox : public RockHopper::Application
@@ -22,5 +24,5 @@ private:
     RockHopper::Keyboard m_Keyboard;
     RockHopper::Mouse m_Mouse;
 
-    RockHopper::Layer<KeyEvent,MouseEvent> m_InputLayer{};
+    Background m_Background;
 };
