@@ -15,6 +15,8 @@ namespace RockHopper
     Mouse::Mouse(std::string const& name)
         : m_DebugName{"Mouse",name}
     {
+        set_parallel_dispatch(true);
+
         for (int i = 0; i < (int)MouseCode::BUTTON_LAST; ++i)
         {
             MouseCode keycode = static_cast<MouseCode>(i);

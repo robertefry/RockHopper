@@ -7,7 +7,9 @@
 
 #include <unordered_set>
 #include <memory>
+#include <atomic>
 #include <mutex>
+#include <thread>
 #include <typeinfo>
 
 /* ************************************************************************** */
@@ -44,10 +46,15 @@ namespace RockHopper
 
         void dispatch_event(T_EventCategory const& event) const;
 
+        inline void set_parallel_dispatch(bool allow) { m_ParallelDispatch = allow; }
+        inline bool get_parallel_dispatch() const { return m_ParallelDispatch; }
+
     private:
         std::unordered_set<std::unique_ptr<ListenerType>> m_OwnedEventListeners{};
         std::unordered_set<ListenerType*> m_EventListeners{};
-        mutable std::mutex m_EventListenersMutex{};
+        mutable std::mutex m_Mutex{};
+
+        std::atomic<bool> m_ParallelDispatch = false;
     };
 
 } // namespace RockHopper
@@ -62,8 +69,8 @@ namespace RockHopper
     template <typename T_EventCategory>
     EventHandler<T_EventCategory>::EventHandler(EventHandler&& other)
     {
-        std::unique_lock lock_1 {m_EventListenersMutex,std::defer_lock};
-        std::unique_lock lock_2 {other.m_EventListenersMutex,std::defer_lock};
+        std::unique_lock lock_1 {m_Mutex,std::defer_lock};
+        std::unique_lock lock_2 {other.m_Mutex,std::defer_lock};
         std::lock(lock_1,lock_2);
 
         m_OwnedEventListeners = std::move(other.m_OwnedEventListeners);
@@ -76,7 +83,7 @@ namespace RockHopper
     template <typename T_EventCategory>
     void EventHandler<T_EventCategory>::insert_event_listener(ListenerType* listener)
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
         m_EventListeners.insert(listener);
         ROCKHOPPER_INTERNAL_LOG_TRACE("inserted an event listener for events of type '{}'",typeid(T_EventCategory).name());
     }
@@ -84,7 +91,7 @@ namespace RockHopper
     template <typename T_EventCategory>
     void EventHandler<T_EventCategory>::remove_event_listener(ListenerType* listener)
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
         m_EventListeners.erase(listener);
         ROCKHOPPER_INTERNAL_LOG_TRACE("removed an event listener for events of type '{}'",typeid(T_EventCategory).name());
     }
@@ -93,7 +100,7 @@ namespace RockHopper
     template <typename T_EventListenable, typename... Args>
     void EventHandler<T_EventCategory>::emplace_event_listener(Args const&... args)
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
         auto owned = std::make_unique<T_EventListenable>(std::forward<Args>(args)...);
         m_EventListeners.insert(owned.get());
         m_OwnedEventListeners.insert(std::move(owned));
@@ -104,7 +111,7 @@ namespace RockHopper
     template <typename T_EventListenable>
     void EventHandler<T_EventCategory>::give_event_listener(T_EventListenable&& listener)
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
         auto owned = std::make_unique<T_EventListenable>(std::move(listener));
         m_EventListeners.insert(owned.get());
         m_OwnedEventListeners.insert(std::move(owned));
@@ -115,7 +122,7 @@ namespace RockHopper
     template <typename T_EventListenable>
     void EventHandler<T_EventCategory>::give_event_listener(T_EventListenable const& listener)
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
         auto owned = std::make_unique<T_EventListenable>(listener);
         m_EventListeners.insert(owned.get());
         m_OwnedEventListeners.insert(std::move(owned));
@@ -126,7 +133,7 @@ namespace RockHopper
     template <typename T_EventListenable>
     void EventHandler<T_EventCategory>::take_event_listener(T_EventListenable const& listener)
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
         auto itr = m_OwnedEventListeners.find(listener);
         m_EventListeners.erase(itr->get());
         m_OwnedEventListeners.erase(listener);
@@ -136,13 +143,33 @@ namespace RockHopper
     template <typename T_EventCategory>
     void EventHandler<T_EventCategory>::dispatch_event(T_EventCategory const& event) const
     {
-        std::lock_guard<std::mutex> guard {m_EventListenersMutex};
+        std::lock_guard<std::mutex> guard {m_Mutex};
 
-        for (ListenerType* listener : m_EventListeners)
+        if (m_ParallelDispatch)
         {
-            event.accept(listener);
+            std::vector<std::thread> dispatch_threads;
+
+            for (ListenerType* listener : m_EventListeners)
+            {
+                dispatch_threads.emplace_back([&,listener]()
+                {
+                    event.accept(listener);
+                });
+            }
+            for (std::thread& thread : dispatch_threads)
+            {
+                thread.join();
+            }
+            ROCKHOPPER_INTERNAL_LOG_TRACE("parallel-dispatched an event of type '{}'",typeid(T_EventCategory).name());
         }
-        ROCKHOPPER_INTERNAL_LOG_TRACE("dispatched an event of type '{}'",typeid(T_EventCategory).name());
+        else
+        {
+            for (ListenerType* listener : m_EventListeners)
+            {
+                event.accept(listener);
+            }
+            ROCKHOPPER_INTERNAL_LOG_TRACE("dispatched an event of type '{}'",typeid(T_EventCategory).name());
+        }
     }
 
 } // namespace RockHopper

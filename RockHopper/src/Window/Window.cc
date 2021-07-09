@@ -23,6 +23,9 @@ namespace RockHopper
         , m_RenderContext{m_GraphicsThread}
         , m_Details{details}
     {
+        // All window events must be dispatched on the graphics thread
+        set_parallel_dispatch(false);
+
         m_DebugName.set_type("Window");
         set_details(details);
     }

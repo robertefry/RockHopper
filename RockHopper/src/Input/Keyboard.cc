@@ -15,6 +15,8 @@ namespace RockHopper
     Keyboard::Keyboard(std::string const& name)
         : m_DebugName{"Keyboard",name}
     {
+        set_parallel_dispatch(true);
+
         for (int i = 0; i < (int)KeyCode::KEY_LAST; ++i)
         {
             KeyCode keycode = static_cast<KeyCode>(i);
