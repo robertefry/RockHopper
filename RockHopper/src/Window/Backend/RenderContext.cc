@@ -6,6 +6,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <string>
+
 /* ************************************************************************** */
 // [Definition] RockHopper::OpenGL_Context
 /* ************************************************************************** */
@@ -50,6 +52,9 @@ namespace RockHopper
                 ROCKHOPPER_INTERNAL_LOG_INFO("Loading GLAD OpenGL.");
                 int status = gladLoadGL();
                 ROCKHOPPER_INTERNAL_ASSERT_FATAL(status,"GLAD failed to load OpenGL!");
+
+                std::string version = (const char*)glGetString(GL_VERSION);
+                ROCKHOPPER_INTERNAL_LOG_INFO("Initialized OpenGL {}.",version);
             }
         });
     }
