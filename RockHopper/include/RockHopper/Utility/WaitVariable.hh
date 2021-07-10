@@ -33,10 +33,12 @@ namespace RockHopper
         }
         inline void notify_one() noexcept
         {
+            std::unique_lock<std::mutex> lock {m_Mutex};
             m_Condition.notify_one();
         }
         inline void notify_all() noexcept
         {
+            std::unique_lock<std::mutex> lock {m_Mutex};
             m_Condition.notify_all();
         }
     private:
