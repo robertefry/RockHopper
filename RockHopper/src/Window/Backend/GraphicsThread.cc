@@ -21,6 +21,7 @@ namespace RockHopper
     {
         if (s_NumInstances == 1)
         {
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("Stopping the current graphics thead.");
             s_InstancePtr->stop().wait();
             delete s_InstancePtr;
         }
@@ -31,6 +32,7 @@ namespace RockHopper
     {
         if (s_NumInstances == 0)
         {
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("Starting a new graphics thead.");
             s_InstancePtr = new Instance{};
             s_InstancePtr->start();
         }
