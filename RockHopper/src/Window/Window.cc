@@ -14,6 +14,21 @@ namespace RockHopper
 
     Window::~Window()
     {
+        // Dispose the render context
+        m_RenderContext.dispose(m_WindowContext.get_window());
+
+        // Unset GLFW callbacks
+        m_WindowContext.set_callbacks<Window,false>(this);
+
+        m_GraphicsThread.wait_task([this]()
+        {
+            // Remove the GLFW user pointer
+            glfwSetWindowUserPointer(m_WindowContext.get_window(),nullptr);
+
+            // Destroy the GLFW window
+            glfwDestroyWindow(m_WindowContext.get_window());
+            m_WindowContext.set_window(nullptr);
+        });
     }
 
     Window::Window(WindowDetails const& details)
@@ -28,6 +43,24 @@ namespace RockHopper
 
         m_DebugName.set_type("Window");
         set_details(details);
+
+        m_GraphicsThread.wait_task([this]()
+        {
+            // Create a GLFW windowed-mode window handle and it's OpenGL context
+            GLFWwindow* handle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(handle,"Failed to create a GLFW window handle! {}", m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window. {}", m_DebugName);
+            m_WindowContext.set_window(handle);
+
+            // Set the GLFW user pointer to this window
+            glfwSetWindowUserPointer(m_WindowContext.get_window(),this);
+        });
+
+        // Set GLFW callbacks
+        m_WindowContext.set_callbacks<Window,true>(this);
+
+        // Initialize the render context
+        m_RenderContext.initialize(m_WindowContext.get_window());
     }
 
     void Window::set_details(WindowDetails const& details)
@@ -118,24 +151,6 @@ namespace RockHopper
 
     void Window::init()
     {
-        m_GraphicsThread.wait_task([this]()
-        {
-            // Create a GLFW windowed-mode window handle and it's OpenGL context
-            GLFWwindow* handle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(handle,"Failed to create a GLFW window handle! {}", m_DebugName);
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window. {}", m_DebugName);
-            m_WindowContext.set_window(handle);
-
-            // Set the GLFW user pointer to this window
-            glfwSetWindowUserPointer(m_WindowContext.get_window(),this);
-        });
-
-        // Set GLFW callbacks
-        m_WindowContext.set_callbacks<Window,true>(this);
-
-        // Initialize the render context
-        m_RenderContext.initialize(m_WindowContext.get_window());
-
         // Dispatch a `WindowInitEvent` event
         m_GraphicsThread.wait_task([this]()
         {
@@ -181,22 +196,6 @@ namespace RockHopper
             WindowDisposeEvent event;
             event.window = this;
             dispatch_event(event);
-        });
-
-        // Dispose the render context
-        m_RenderContext.dispose(m_WindowContext.get_window());
-
-        // Unset GLFW callbacks
-        m_WindowContext.set_callbacks<Window,false>(this);
-
-        m_GraphicsThread.wait_task([this]()
-        {
-            // Remove the GLFW user pointer
-            glfwSetWindowUserPointer(m_WindowContext.get_window(),nullptr);
-
-            // Destroy the GLFW window
-            glfwDestroyWindow(m_WindowContext.get_window());
-            m_WindowContext.set_window(nullptr);
         });
     }
 
