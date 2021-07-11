@@ -3,6 +3,7 @@
 
 #include "RockHopper/Layer/Layer.hh"
 #include "RockHopper/Window/WindowEvents.hh"
+#include "RockHopper/Window/Rendering/Shader.hh"
 
 using namespace RockHopper;
 
@@ -19,7 +20,9 @@ private:
     virtual void on_event(WindowRefreshEvent const&) override;
 
 private:
-    unsigned int m_VertexArray;
-    unsigned int m_VertexBuffer;
-    unsigned int m_IndexBuffer;
+    unsigned int m_VertexArray{};
+    unsigned int m_VertexBuffer{};
+    unsigned int m_IndexBuffer{};
+
+    Shader m_Shader{};
 };

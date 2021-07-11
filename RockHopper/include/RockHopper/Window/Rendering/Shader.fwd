@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class Shader;
+
+} // namespace RockHopper
