@@ -6,7 +6,6 @@
 #include "RockHopper/Window/WindowEvents.fwd"
 
 #include "RockHopper/Event/Event.hh"
-#include "RockHopper/Event/EventHandler.hh"
 
 namespace RockHopper
 {
@@ -67,10 +66,6 @@ namespace RockHopper
     {
         int width{}, height{};
     };
-
-    struct WindowEventHandler
-        : EventHandler<WindowEvent>
-    {};
 
 } // namespace RockHopper
 

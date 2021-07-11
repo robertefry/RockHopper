@@ -18,7 +18,6 @@ namespace RockHopper
         : public KeyManager<MouseCode>
         , public MouseEventHandler
     {
-        friend Window;
     public:
         virtual ~Mouse();
         explicit Mouse(std::string const& name);
@@ -29,6 +28,9 @@ namespace RockHopper
         explicit Mouse(Mouse&&);
         Mouse& operator=(Mouse&&);
 
+        void on_attach(Window*);
+        void on_detach(Window*);
+
         inline void set_position(double x, double y) { m_PosX = x; m_PosY = y; }
         inline auto get_position() const { return std::array<double,2>{m_PosX,m_PosY}; }
 
@@ -38,8 +40,10 @@ namespace RockHopper
         inline auto window() -> Window* { return m_WindowHandle; }
         inline auto window() const -> Window const* { return m_WindowHandle; }
 
-    private:
+    public:
         DebugName m_DebugName;
+
+    private:
         std::atomic<double> m_PosX{}, m_PosY{};
         std::atomic<bool> m_IsInWindow{};
         Window* m_WindowHandle{};

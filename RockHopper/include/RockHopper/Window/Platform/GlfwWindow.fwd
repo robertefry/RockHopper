@@ -2,6 +2,6 @@
 namespace RockHopper
 {
 
-    class WindowContext;
+    class GlfwWindow;
 
 } // namespace RockHopper

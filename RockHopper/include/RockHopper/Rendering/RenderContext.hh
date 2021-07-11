@@ -2,13 +2,7 @@
 #ifndef __HH_ROCKHOPPER_WINDOW_BACKEND_OPENGL_CONTEXT_
 #define __HH_ROCKHOPPER_WINDOW_BACKEND_OPENGL_CONTEXT_
 
-#include "RockHopper/Rendering/GraphicsThread.hh"
-
-#include <atomic>
-
 #define ROCKHOPPER_GLSL_VERSION "#version 130"
-
-class GLFWwindow;
 
 namespace RockHopper
 {
@@ -16,16 +10,10 @@ namespace RockHopper
     class RenderContext
     {
     public:
-        virtual ~RenderContext();
-        explicit RenderContext(GraphicsThread const& thread);
+        void initialize();
+        void dispose();
 
-        std::future<void> refresh(GLFWwindow*);
-
-        std::future<void> initialize(GLFWwindow*);
-        std::future<void> dispose(GLFWwindow*);
-
-    private:
-        GraphicsThread m_GraphicsThread;
+        void refresh();
     };
 
 } // namespace RockHopper

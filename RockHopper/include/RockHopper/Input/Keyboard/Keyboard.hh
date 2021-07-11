@@ -16,7 +16,6 @@ namespace RockHopper
         : public KeyManager<KeyCode>
         , public KeyEventHandler
     {
-        friend Window;
     public:
         virtual ~Keyboard();
         explicit Keyboard(std::string const& name);
@@ -27,11 +26,16 @@ namespace RockHopper
         explicit Keyboard(Keyboard&&);
         Keyboard& operator=(Keyboard&&);
 
+        void on_attach(Window*);
+        void on_detach(Window*);
+
         inline auto window() -> Window* { return m_WindowHandle; }
         inline auto window() const -> Window const* { return m_WindowHandle; }
 
-    private:
+    public:
         DebugName m_DebugName;
+
+    private:
         Window* m_WindowHandle{};
     };
 

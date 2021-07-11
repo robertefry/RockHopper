@@ -56,4 +56,19 @@ namespace RockHopper
         return *this;
     }
 
+    void Keyboard::on_attach(Window* window)
+    {
+        if (m_WindowHandle != nullptr)
+        {
+            ROCKHOPPER_INTERNAL_LOG_ERROR("The Window {} is already attached to the Keyboard {}!", m_WindowHandle->m_DebugName, m_DebugName);
+            return;
+        }
+        m_WindowHandle = window;
+    }
+
+    void Keyboard::on_detach(Window* window)
+    {
+        m_WindowHandle = nullptr;
+    }
+
 } // namespace RockHopper

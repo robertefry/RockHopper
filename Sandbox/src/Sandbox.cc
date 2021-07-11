@@ -1,10 +1,8 @@
 
 #include "Sandbox.hh"
 
-#include "RockHopper/Logging/Logger.hh"
-#include "RockHopper/Event/EventListeners.hh"
-#include "RockHopper/Input/Keyboard/KeyEvents.hh"
-#include "RockHopper/Input/Mouse/MouseEvents.hh"
+#include "RockHopper/Debug.hh"
+#include "RockHopper/Window/Platform/GlfwWindow.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -19,34 +17,34 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
 }
 
 Sandbox::Sandbox()
-    : m_Window{GetInitialWindowDetails()}
-    , m_Keyboard{"default"}
-    , m_Mouse{"default"}
+    : m_Window{std::make_unique<GlfwWindow>(RenderContext{},GetInitialWindowDetails())}
+    , m_Keyboard{std::make_unique<Keyboard>("default")}
+    , m_Mouse{std::make_unique<Mouse>("default")}
 {
-    m_Window.attach(&m_Keyboard);
-    m_Window.attach(&m_Mouse);
+    m_Window->attach(m_Keyboard.get());
+    m_Window->attach(m_Mouse.get());
 
-    m_Window.insert_event_listener(&m_Background);
-    m_Keyboard.insert_event_listener(&m_Background);
-    m_Mouse.insert_event_listener(&m_Background);
+    m_Window->insert_event_listener(&m_Background);
+    m_Keyboard->insert_event_listener(&m_Background);
+    m_Mouse->insert_event_listener(&m_Background);
 
-    m_Window.insert_event_listener(&m_Triangle);
+    m_Window->insert_event_listener(&m_Triangle);
 }
 
 Sandbox::~Sandbox()
 {
-    m_Window.insert_event_listener(&m_Triangle);
+    m_Window->insert_event_listener(&m_Triangle);
 
-    m_Window.remove_event_listener(&m_Background);
-    m_Keyboard.remove_event_listener(&m_Background);
-    m_Mouse.remove_event_listener(&m_Background);
+    m_Window->remove_event_listener(&m_Background);
+    m_Keyboard->remove_event_listener(&m_Background);
+    m_Mouse->remove_event_listener(&m_Background);
 
-    m_Window.detach(&m_Keyboard);
-    m_Window.detach(&m_Mouse);
+    m_Window->detach(m_Keyboard.get());
+    m_Window->detach(m_Mouse.get());
 }
 
 void Sandbox::run()
 {
-    auto& stop = m_Window.start();
+    auto& stop = m_Window->start();
     stop.wait();
 }

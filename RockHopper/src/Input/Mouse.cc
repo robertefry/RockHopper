@@ -72,4 +72,19 @@ namespace RockHopper
         return *this;
     }
 
+    void Mouse::on_attach(Window* window)
+    {
+        if (m_WindowHandle != nullptr)
+        {
+            ROCKHOPPER_INTERNAL_LOG_ERROR("The Window {} is already attached to the Mouse {}!", m_WindowHandle->m_DebugName, m_DebugName);
+            return;
+        }
+        m_WindowHandle = window;
+    }
+
+    void Mouse::on_detach(Window* window)
+    {
+        m_WindowHandle = nullptr;
+    }
+
 } // namespace RockHopper

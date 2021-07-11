@@ -30,8 +30,10 @@ namespace RockHopper
     protected:
         virtual void run() = 0;
 
-    protected:
+    public:
         DebugName m_DebugName;
+
+    protected:
         std::thread m_Thread{};
         std::atomic<bool> m_IsStopRequested, m_IsAlive;
         WaitVariable m_StopNotifier{};
