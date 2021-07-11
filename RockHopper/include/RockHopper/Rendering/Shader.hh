@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_RENDERING_SHADER_
 #define __HH_ROCKHOPPER_RENDERING_SHADER_
 
-#include "RockHopper/Window/Backend/GraphicsThread.hh"
+#include "RockHopper/Rendering/GraphicsThread.hh"
 
 #include <unordered_map>
 #include <optional>

@@ -3,9 +3,9 @@
 #define __HH_ROCKHOPPER_WINDOW_
 
 #include "RockHopper/Window/WindowEvents.hh"
-#include "RockHopper/Window/Backend/GraphicsThread.hh"
 #include "RockHopper/Window/Backend/WindowContext.hh"
-#include "RockHopper/Window/Backend/RenderContext.hh"
+#include "RockHopper/Rendering/GraphicsThread.hh"
+#include "RockHopper/Rendering/RenderContext.hh"
 
 #include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"

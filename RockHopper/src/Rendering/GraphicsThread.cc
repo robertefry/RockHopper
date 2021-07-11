@@ -1,5 +1,5 @@
 
-#include "RockHopper/Window/Backend/GraphicsThread.hh"
+#include "RockHopper/Rendering/GraphicsThread.hh"
 
 #include "RockHopper/Logging/Logger.hh"
 

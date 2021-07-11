@@ -1,5 +1,5 @@
 
-#include "RockHopper/Window/Backend/RenderContext.hh"
+#include "RockHopper/Rendering/RenderContext.hh"
 
 #include "RockHopper/Debug.hh"
 

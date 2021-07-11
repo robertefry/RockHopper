@@ -1,5 +1,5 @@
 
-#include "RockHopper/Window/Rendering/Shader.hh"
+#include "RockHopper/Rendering/Shader.hh"
 
 #include "RockHopper/Debug.hh"
 

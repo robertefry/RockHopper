@@ -3,7 +3,7 @@
 
 #include "RockHopper/Layer/Layer.hh"
 #include "RockHopper/Window/WindowEvents.hh"
-#include "RockHopper/Window/Rendering/Shader.hh"
+#include "RockHopper/Rendering/Shader.hh"
 
 using namespace RockHopper;
 
