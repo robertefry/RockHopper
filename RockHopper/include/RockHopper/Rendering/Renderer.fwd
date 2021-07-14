@@ -2,6 +2,6 @@
 namespace RockHopper
 {
 
-    class RenderContext;
+    class Renderer;
 
 } // namespace RockHopper

@@ -6,7 +6,7 @@
 #include "RockHopper/Window/Platform/GlfwContext.hh"
 
 #include "RockHopper/Rendering/GraphicsThread.hh"
-#include "RockHopper/Rendering/RenderContext.hh"
+#include "RockHopper/Rendering/Renderer.hh"
 
 class GLFWwindow;
 
@@ -18,7 +18,7 @@ namespace RockHopper
     {
     public:
         virtual ~GlfwWindow();
-        explicit GlfwWindow(RenderContext const&, WindowDetails const&);
+        explicit GlfwWindow(Renderer::API render_api, WindowDetails const&);
 
         explicit GlfwWindow(GlfwWindow const&) = delete;
         GlfwWindow& operator=(GlfwWindow const&) = delete;
@@ -42,7 +42,7 @@ namespace RockHopper
         GlfwContext m_GlfwContext{};
 
         GraphicsThread m_GraphicsThread{};
-        RenderContext m_RenderContext;
+        std::unique_ptr<Renderer> m_Renderer;
         WindowDetails m_Details;
     };
 

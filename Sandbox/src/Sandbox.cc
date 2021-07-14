@@ -3,6 +3,7 @@
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Window/Platform/GlfwWindow.hh"
+#include "RockHopper/Rendering/Renderer.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -17,7 +18,7 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
 }
 
 Sandbox::Sandbox()
-    : m_Window{std::make_unique<GlfwWindow>(RenderContext{},GetInitialWindowDetails())}
+    : m_Window{std::make_unique<GlfwWindow>(Renderer::API::OpenGL,GetInitialWindowDetails())}
     , m_Keyboard{std::make_unique<Keyboard>("default")}
     , m_Mouse{std::make_unique<Mouse>("default")}
 {

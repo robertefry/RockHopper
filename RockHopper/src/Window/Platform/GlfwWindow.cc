@@ -15,7 +15,7 @@ namespace RockHopper
         m_GraphicsThread.wait_task([this]()
         {
             // Dispose the render context
-            m_RenderContext.dispose();
+            m_Renderer->dispose();
         });
 
         // Unset GLFW callbacks
@@ -31,9 +31,9 @@ namespace RockHopper
         });
     }
 
-    GlfwWindow::GlfwWindow(RenderContext const& context, WindowDetails const& details)
+    GlfwWindow::GlfwWindow(Renderer::API render_api, WindowDetails const& details)
         : Window{details.title}
-        , m_RenderContext{context}
+        , m_Renderer{Renderer::Create(render_api)}
         , m_Details{details}
     {
         m_DebugName.set_type("GlfwWindow");
@@ -59,7 +59,7 @@ namespace RockHopper
             glfwMakeContextCurrent(m_WindowHandle);
 
             // Initialize the render context
-            m_RenderContext.initialize();
+            m_Renderer->initialize();
         });
     }
 
@@ -167,7 +167,7 @@ namespace RockHopper
             glfwPollEvents();
 
             glfwSwapBuffers(m_WindowHandle);
-            m_RenderContext.refresh();
+            m_Renderer->refresh();
         });
 
         m_GraphicsThread.wait_task([this]()
