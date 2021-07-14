@@ -5,6 +5,8 @@
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Rendering/Shader.hh"
 
+#include <memory>
+
 using namespace RockHopper;
 
 class Triangle
@@ -24,5 +26,5 @@ private:
     unsigned int m_VertexBuffer{};
     unsigned int m_IndexBuffer{};
 
-    Shader m_Shader{};
+    std::unique_ptr<Shader> m_Shader = Shader::Create();
 };

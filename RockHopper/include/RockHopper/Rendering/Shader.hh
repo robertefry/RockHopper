@@ -4,10 +4,7 @@
 
 #include "RockHopper/Rendering/Renderer.hh"
 
-#include <unordered_map>
-#include <optional>
-#include <string>
-#include <mutex>
+#include <memory>
 
 namespace RockHopper
 {
@@ -15,25 +12,17 @@ namespace RockHopper
     class Shader
     {
     public:
-        virtual ~Shader();
-        explicit Shader();
+        virtual ~Shader() = default;
+        explicit Shader() = default;
 
-        explicit Shader(Shader&&);
-        Shader& operator=(Shader&&);
+        static std::unique_ptr<Shader> Create();
+
+        virtual void bind() = 0;
+        virtual void unbind() = 0;
 
         enum class Type { VERTEX, GEOMETRY, FRAGMENT };
-        void source_shader(Type type, std::string const& source);
-        void make_program();
-
-        void bind() const;
-        void unbind() const;
-
-    private:
-        RenderThread m_RenderThread{};
-        uint64_t m_ShaderProgram{};
-        std::mutex m_Mutex{};
-
-        std::unordered_map<Type,std::string> m_ShaderSources{};
+        virtual void source_shader(Type type, std::string const& source) = 0;
+        virtual void make_program() = 0;
     };
 
 } // namespace RockHopper
