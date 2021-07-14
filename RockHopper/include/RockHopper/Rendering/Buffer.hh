@@ -2,8 +2,11 @@
 #ifndef __HH_ROCKHOPPER_RENDERING_BUFFER_
 #define __HH_ROCKHOPPER_RENDERING_BUFFER_
 
+#include "RockHopper/Debug.hh"
+
 #include <vector>
 #include <memory>
+#include <type_traits>
 
 namespace RockHopper
 {
@@ -12,11 +15,26 @@ namespace RockHopper
     {
     public:
         virtual ~VertexBuffer() = default;
-        explicit VertexBuffer() = default;
-
         static std::unique_ptr<VertexBuffer> Create();
 
-        virtual void upload(std::vector<float> const& data) = 0;
+        enum Type
+        {
+            BOOL, INT, FLOAT,
+        };
+        struct ElementLayout
+        {
+            Type type;
+            uint32_t count;
+            bool normalized;
+            std::string name;
+        };
+
+        struct Data
+        {
+            std::vector<float> vertices{};
+            std::vector<ElementLayout> layout{};
+        };
+        virtual void upload(Data const& data) = 0;
 
         virtual void bind() = 0;
         virtual void unbind() = 0;
@@ -26,11 +44,13 @@ namespace RockHopper
     {
     public:
         virtual ~IndexBuffer() = default;
-        explicit IndexBuffer() = default;
-
         static std::unique_ptr<IndexBuffer> Create();
 
-        virtual void upload(std::vector<uint32_t> const& data) = 0;
+        struct Data
+        {
+            std::vector<uint32_t> indices{};
+        };
+        virtual void upload(Data const& data) = 0;
 
         virtual void bind() = 0;
         virtual void unbind() = 0;

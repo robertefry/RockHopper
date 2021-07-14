@@ -13,23 +13,27 @@ Triangle::Triangle()
         #version 330 core
 
         layout(location=0) in vec3 a_Position;
+        layout(location=1) in vec4 a_Colour;
         out vec3 v_Position;
+        out vec4 v_Colour;
 
         void main()
         {
             gl_Position = vec4(a_Position,1.0);
             v_Position = a_Position;
+            v_Colour = a_Colour;
         }
     )glsl");
     m_Shader->source_shader(Shader::Type::FRAGMENT,R"glsl(
         #version 330 core
 
-        layout(location=0) out vec4 o_Colour;
         in vec3 v_Position;
+        in vec4 v_Colour;
+        layout(location=0) out vec4 o_Colour;
 
         void main()
         {
-            o_Colour = vec4(v_Position*0.5+0.5,1.0);
+            o_Colour = v_Colour;
         }
     )glsl");
 }
@@ -44,22 +48,27 @@ void Triangle::on_event(WindowInitEvent const& event)
     glBindVertexArray(m_VertexArray);
 
     // Upload the vertex buffer data
-    m_VertexBuffer->upload(std::vector<float>
+    VertexBuffer::Data vertex_data;
+    vertex_data.layout =
     {
-        -0.5f,-0.5f,+0.0f,
-        +0.5f,-0.5f,+0.0f,
-        +0.0f,+0.5f,+0.0f,
-    });
-
-    // Enable vertex attributes
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),nullptr);
+        { VertexBuffer::FLOAT, 3, false, "a_Position" },
+        { VertexBuffer::FLOAT, 4, false, "a_Colour" },
+    };
+    vertex_data.vertices =
+    {
+        -0.5f, -0.5f, +0.0f, +0.8f, +0.1f, +0.1f, +1.0f,
+        +0.5f, -0.5f, +0.0f, +0.1f, +0.8f, +0.1f, +1.0f,
+        +0.0f, +0.5f, +0.0f, +0.1f, +0.1f, +0.8f, +1.0f,
+    };
+    m_VertexBuffer->upload(vertex_data);
 
     // Upload the index buffer data
-    m_IndexBuffer->upload(std::vector<uint32_t>
+    IndexBuffer::Data index_data;
+    index_data.indices =
     {
         0, 1, 2,
-    });
+    };
+    m_IndexBuffer->upload(index_data);
 }
 
 void Triangle::on_event(WindowDisposeEvent const& event)

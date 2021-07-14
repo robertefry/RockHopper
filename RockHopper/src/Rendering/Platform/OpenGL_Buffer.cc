@@ -34,11 +34,48 @@ namespace RockHopper
         return *this;
     }
 
-    void OpenGL_VertexBuffer::upload(std::vector<float> const& data)
+    void OpenGL_VertexBuffer::upload(Data const& data)
     {
         if (not m_VertexBuffer) glGenBuffers(1,&m_VertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER,m_VertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER,sizeof(float)*data.size(),data.data(),GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,sizeof(float)*data.vertices.size(),data.vertices.data(),GL_STATIC_DRAW);
+
+        std::function const GetTypeSize = [&](Type type) -> uint32_t
+        {
+            switch (type)
+            {
+                case Type::BOOL:  return 1;
+                case Type::INT:   return 4;
+                case Type::FLOAT: return 4;
+            }
+            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown vertex data type!");
+            return 0;
+        };
+        std::function const GetTypeEnum = [&](Type type) -> GLenum
+        {
+            switch (type)
+            {
+                case Type::BOOL:  return GL_BOOL;
+                case Type::INT:   return GL_INT;
+                case Type::FLOAT: return GL_FLOAT;
+            }
+            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown vertex data type!");
+            return 0;
+        };
+
+        uint32_t total_stride = 0;
+        std::unordered_map<size_t,void*> pointer_map;
+        for (size_t i = 0; i < data.layout.size(); ++i)
+        {
+            pointer_map[i] = reinterpret_cast<void*>(total_stride);
+            total_stride += GetTypeSize(data.layout[i].type) * data.layout[i].count;
+        }
+        for (size_t i = 0; i < data.layout.size(); ++i)
+        {
+            auto const& elem = data.layout[i];
+            glEnableVertexAttribArray(i);
+            glVertexAttribPointer(i,elem.count,GetTypeEnum(elem.type),elem.normalized,total_stride,pointer_map[i]);
+        }
     }
 
     void OpenGL_VertexBuffer::bind()
@@ -84,11 +121,11 @@ namespace RockHopper
         return *this;
     }
 
-    void OpenGL_IndexBuffer::upload(std::vector<uint32_t> const& data)
+    void OpenGL_IndexBuffer::upload(Data const& data)
     {
         if (not m_IndexBuffer) glGenBuffers(1,&m_IndexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_IndexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(uint32_t)*data.size(),data.data(),GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(uint32_t)*data.indices.size(),data.indices.data(),GL_STATIC_DRAW);
     }
 
     void OpenGL_IndexBuffer::bind()

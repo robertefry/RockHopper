@@ -17,7 +17,7 @@ namespace RockHopper
         explicit OpenGL_VertexBuffer(OpenGL_VertexBuffer&&);
         OpenGL_VertexBuffer& operator=(OpenGL_VertexBuffer&&);
 
-        virtual void upload(std::vector<float> const& data) override;
+        virtual void upload(Data const& data) override;
 
         virtual void bind() override;
         virtual void unbind() override;
@@ -36,7 +36,7 @@ namespace RockHopper
         explicit OpenGL_IndexBuffer(OpenGL_IndexBuffer&&);
         OpenGL_IndexBuffer& operator=(OpenGL_IndexBuffer&&);
 
-        virtual void upload(std::vector<uint32_t> const& data) override;
+        virtual void upload(Data const& data) override;
 
         virtual void bind() override;
         virtual void unbind() override;
