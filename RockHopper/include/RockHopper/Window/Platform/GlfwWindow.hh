@@ -4,8 +4,6 @@
 
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Window/Platform/GlfwContext.hh"
-
-#include "RockHopper/Rendering/GraphicsThread.hh"
 #include "RockHopper/Rendering/Renderer.hh"
 
 class GLFWwindow;
@@ -41,7 +39,7 @@ namespace RockHopper
         GLFWwindow* m_WindowHandle{};
         GlfwContext m_GlfwContext{};
 
-        GraphicsThread m_GraphicsThread{};
+        RenderThread m_RenderThread{};
         std::unique_ptr<Renderer> m_Renderer;
         WindowDetails m_Details;
     };

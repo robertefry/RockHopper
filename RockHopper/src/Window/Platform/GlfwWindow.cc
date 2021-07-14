@@ -12,7 +12,7 @@ namespace RockHopper
 
     GlfwWindow::~GlfwWindow()
     {
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             // Dispose the render context
             m_Renderer->dispose();
@@ -21,7 +21,7 @@ namespace RockHopper
         // Unset GLFW callbacks
         m_GlfwContext.set_callbacks<Window,false>(m_WindowHandle,(Window*)this);
 
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             // Remove the GLFW user pointer
             glfwSetWindowUserPointer(m_WindowHandle,nullptr);
@@ -39,7 +39,7 @@ namespace RockHopper
         m_DebugName.set_type("GlfwWindow");
         set_details(details);
 
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             // Create a GLFW windowed-mode window handle and it's OpenGL context
             m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
@@ -53,7 +53,7 @@ namespace RockHopper
         // Set GLFW callbacks
         m_GlfwContext.set_callbacks<Window,true>(m_WindowHandle,(Window*)this);
 
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             // Make the window's context current
             glfwMakeContextCurrent(m_WindowHandle);
@@ -65,7 +65,7 @@ namespace RockHopper
 
     void GlfwWindow::set_details(WindowDetails const& details)
     {
-        insert_task([this,details]() { m_GraphicsThread.push_task([this,details]()
+        insert_task([this,details]() { m_RenderThread.push_task([this,details]()
         {
             m_Timing.set_omega(details.frametime);
 
@@ -86,7 +86,7 @@ namespace RockHopper
 
     void GlfwWindow::attach(Keyboard* keyboard)
     {
-        insert_task([this,keyboard]() { m_GraphicsThread.wait_task([this,keyboard]()
+        insert_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
             if (m_KeyboardHandle != nullptr)
@@ -103,7 +103,7 @@ namespace RockHopper
 
     void GlfwWindow::detach(Keyboard* keyboard)
     {
-        insert_task([this,keyboard]() { m_GraphicsThread.wait_task([this,keyboard]()
+        insert_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Detaching the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
             m_KeyboardHandle = nullptr;
@@ -115,7 +115,7 @@ namespace RockHopper
 
     void GlfwWindow::attach(Mouse* mouse)
     {
-        insert_task([this,mouse]() { m_GraphicsThread.wait_task([this,mouse]()
+        insert_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
             if (m_MouseHandle != nullptr)
@@ -132,7 +132,7 @@ namespace RockHopper
 
     void GlfwWindow::detach(Mouse* mouse)
     {
-        insert_task([this,mouse]() { m_GraphicsThread.wait_task([this,mouse]()
+        insert_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
             m_MouseHandle = nullptr;
@@ -144,7 +144,7 @@ namespace RockHopper
 
     void GlfwWindow::init()
     {
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             WindowInitEvent event;
             event.window = this;
@@ -162,7 +162,7 @@ namespace RockHopper
         if (m_KeyboardHandle) m_KeyboardHandle->tick();
         if (m_MouseHandle) m_MouseHandle->tick();
 
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             glfwPollEvents();
 
@@ -170,7 +170,7 @@ namespace RockHopper
             m_Renderer->refresh();
         });
 
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             WindowRefreshEvent event;
             event.window = this;
@@ -179,12 +179,12 @@ namespace RockHopper
 
         // Wait on a blank graphics task to synchronize the graphics thread
         // with the current window thread.
-        m_GraphicsThread.wait_task([](){});
+        m_RenderThread.wait_task([](){});
     }
 
     void GlfwWindow::dispose()
     {
-        m_GraphicsThread.wait_task([this]()
+        m_RenderThread.wait_task([this]()
         {
             WindowDisposeEvent event;
             event.window = this;

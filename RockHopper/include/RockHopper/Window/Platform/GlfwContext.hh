@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_WINDOW_GLFW_CONTEXT_
 #define __HH_ROCKHOPPER_WINDOW_GLFW_CONTEXT_
 
-#include "RockHopper/Rendering/GraphicsThread.hh"
+#include "RockHopper/Rendering/Renderer.hh"
 
 #include <atomic>
 
@@ -27,7 +27,7 @@ namespace RockHopper
         std::future<void> set_callbacks(GLFWwindow* handle, T_Device* device);
 
     private:
-        GraphicsThread m_GraphicsThread{};
+        RenderThread m_RenderThread{};
 
         static inline std::atomic<unsigned> s_NumInstances = 0;
     };

@@ -101,7 +101,7 @@ namespace RockHopper
     {
         if (s_NumInstances == 1)
         {
-            m_GraphicsThread.wait_task([]()
+            m_RenderThread.wait_task([]()
             {
                 ROCKHOPPER_INTERNAL_LOG_INFO("Terminating GLFW.");
                 glfwTerminate();
@@ -114,7 +114,7 @@ namespace RockHopper
     {
         if (s_NumInstances == 0)
         {
-            m_GraphicsThread.wait_task([]()
+            m_RenderThread.wait_task([]()
             {
                 ROCKHOPPER_INTERNAL_LOG_INFO("Initializing GLFW.");
                 glfwSetErrorCallback(GLFW_ErrorCallback);
@@ -144,7 +144,7 @@ namespace RockHopper
     template <>
     std::future<void> GlfwContext::set_callbacks<Window,false>(GLFWwindow* handle, Window* window)
     {
-        return m_GraphicsThread.push_task([handle,window]()
+        return m_RenderThread.push_task([handle,window]()
         {
             GlfwContextData::SetUserPointer<Window>(handle,window);
 
@@ -181,7 +181,7 @@ namespace RockHopper
     template <>
     std::future<void> GlfwContext::set_callbacks<Window,true>(GLFWwindow* handle, Window* window)
     {
-        return m_GraphicsThread.push_task([handle,window]()
+        return m_RenderThread.push_task([handle,window]()
         {
             GlfwContextData::SetUserPointer<Window>(handle,window);
 
@@ -274,7 +274,7 @@ namespace RockHopper
     template <>
     std::future<void> GlfwContext::set_callbacks<Keyboard,false>(GLFWwindow* handle, Keyboard* keyboard)
     {
-        return m_GraphicsThread.push_task([handle,keyboard]()
+        return m_RenderThread.push_task([handle,keyboard]()
         {
             GlfwContextData::SetUserPointer<Keyboard>(handle,keyboard);
 
@@ -287,7 +287,7 @@ namespace RockHopper
     template <>
     std::future<void> GlfwContext::set_callbacks<Keyboard,true>(GLFWwindow* handle, Keyboard* keyboard)
     {
-        return m_GraphicsThread.push_task([handle,keyboard]()
+        return m_RenderThread.push_task([handle,keyboard]()
         {
             GlfwContextData::SetUserPointer<Keyboard>(handle,keyboard);
 
@@ -340,7 +340,7 @@ namespace RockHopper
     template <>
     std::future<void> GlfwContext::set_callbacks<Mouse,false>(GLFWwindow* handle, Mouse* mouse)
     {
-        return m_GraphicsThread.push_task([handle,mouse]()
+        return m_RenderThread.push_task([handle,mouse]()
         {
             GlfwContextData::SetUserPointer<Mouse>(handle,mouse);
 
@@ -362,7 +362,7 @@ namespace RockHopper
     template <>
     std::future<void> GlfwContext::set_callbacks<Mouse,true>(GLFWwindow* handle, Mouse* mouse)
     {
-        return m_GraphicsThread.push_task([handle,mouse]()
+        return m_RenderThread.push_task([handle,mouse]()
         {
             GlfwContextData::SetUserPointer<Mouse>(handle,mouse);
 

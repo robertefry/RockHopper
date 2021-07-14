@@ -2,6 +2,7 @@
 namespace RockHopper
 {
 
+    class RenderThread;
     class Renderer;
 
 } // namespace RockHopper

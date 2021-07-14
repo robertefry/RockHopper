@@ -1,7 +1,0 @@
-
-namespace RockHopper
-{
-
-    class GraphicsThread;
-
-} // namespace RockHopper

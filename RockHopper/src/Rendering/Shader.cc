@@ -10,7 +10,7 @@ namespace RockHopper
 
     Shader::~Shader()
     {
-        m_GraphicsThread.wait_task([&]()
+        m_RenderThread.wait_task([&]()
         {
             if (m_ShaderProgram) glDeleteProgram(m_ShaderProgram);
         });
@@ -87,7 +87,7 @@ namespace RockHopper
 
             return shader;
         };
-        m_GraphicsThread.push_task([&,CompileShader]()
+        m_RenderThread.push_task([&,CompileShader]()
         {
             // Compile the sourced shaders
             std::vector<GLuint> shaders;

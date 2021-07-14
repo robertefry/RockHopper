@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_RENDERING_SHADER_
 #define __HH_ROCKHOPPER_RENDERING_SHADER_
 
-#include "RockHopper/Rendering/GraphicsThread.hh"
+#include "RockHopper/Rendering/Renderer.hh"
 
 #include <unordered_map>
 #include <optional>
@@ -29,7 +29,7 @@ namespace RockHopper
         void unbind() const;
 
     private:
-        GraphicsThread m_GraphicsThread{};
+        RenderThread m_RenderThread{};
         uint64_t m_ShaderProgram{};
         std::mutex m_Mutex{};
 
