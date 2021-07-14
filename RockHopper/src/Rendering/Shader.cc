@@ -2,6 +2,8 @@
 #include "RockHopper/Rendering/Shader.hh"
 #include "RockHopper/Rendering/Platform/OpenGL_Shader.hh"
 
+#include "RockHopper/Rendering/Renderer.hh"
+
 namespace RockHopper
 {
 

@@ -2,8 +2,6 @@
 #ifndef __HH_ROCKHOPPER_RENDERING_SHADER_
 #define __HH_ROCKHOPPER_RENDERING_SHADER_
 
-#include "RockHopper/Rendering/Renderer.hh"
-
 #include <memory>
 
 namespace RockHopper
