@@ -1,0 +1,8 @@
+
+namespace RockHopper
+{
+
+    class IndexBuffer;
+    class VertexBuffer;
+
+} // namespace RockHopper

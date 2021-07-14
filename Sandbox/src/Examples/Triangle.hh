@@ -3,7 +3,9 @@
 
 #include "RockHopper/Layer/Layer.hh"
 #include "RockHopper/Window/WindowEvents.hh"
+
 #include "RockHopper/Rendering/Shader.hh"
+#include "RockHopper/Rendering/Buffer.hh"
 
 #include <memory>
 
@@ -23,8 +25,10 @@ private:
 
 private:
     unsigned int m_VertexArray{};
-    unsigned int m_VertexBuffer{};
-    unsigned int m_IndexBuffer{};
+    // unsigned int m_VertexBuffer{};
+    // unsigned int m_IndexBuffer{};
 
     std::unique_ptr<Shader> m_Shader = Shader::Create();
+    std::unique_ptr<VertexBuffer> m_VertexBuffer = VertexBuffer::Create();
+    std::unique_ptr<IndexBuffer> m_IndexBuffer = IndexBuffer::Create();
 };

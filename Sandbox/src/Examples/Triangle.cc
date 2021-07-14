@@ -43,31 +43,23 @@ void Triangle::on_event(WindowInitEvent const& event)
     glGenVertexArrays(1,&m_VertexArray);
     glBindVertexArray(m_VertexArray);
 
-    // Create an OpenGL vertex buffer
-    glGenBuffers(1,&m_VertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER,m_VertexBuffer);
-
-    // Fill the vertex buffer with data
-    float vertices[] =
+    // Upload the vertex buffer data
+    m_VertexBuffer->upload(std::vector<float>
     {
         -0.5f,-0.5f,+0.0f,
         +0.5f,-0.5f,+0.0f,
         +0.0f,+0.5f,+0.0f,
-    };
-    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
+    });
+
+    // Enable vertex attributes
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),nullptr);
 
-    // Create an OpenGL index buffer
-    glGenBuffers(1,&m_IndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_IndexBuffer);
-
-    // Fill the index buffer with data
-    unsigned int indices[] =
+    // Upload the index buffer data
+    m_IndexBuffer->upload(std::vector<uint32_t>
     {
         0, 1, 2,
-    };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),indices,GL_STATIC_DRAW);
+    });
 }
 
 void Triangle::on_event(WindowDisposeEvent const& event)
@@ -77,6 +69,6 @@ void Triangle::on_event(WindowDisposeEvent const& event)
 void Triangle::on_event(WindowRefreshEvent const& event)
 {
     m_Shader->bind();
-    glBindVertexArray(m_VertexBuffer);
+    glBindVertexArray(m_VertexArray);
     glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,nullptr);
 }
