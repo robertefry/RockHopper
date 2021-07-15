@@ -9,6 +9,12 @@ Triangle::~Triangle()
 
 Triangle::Triangle()
 {
+}
+
+void Triangle::on_event(WindowInitEvent const& event)
+{
+    // Compile the shader program
+    m_Shader = Shader::Create();
     m_Shader->source_shader(Shader::Type::VERTEX,R"glsl(
         #version 330 core
 
@@ -36,11 +42,6 @@ Triangle::Triangle()
             o_Colour = v_Colour;
         }
     )glsl");
-}
-
-void Triangle::on_event(WindowInitEvent const& event)
-{
-    // Compile the shader program
     m_Shader->make_program();
 
     // Create an OpenGL vertex array
@@ -60,6 +61,7 @@ void Triangle::on_event(WindowInitEvent const& event)
         +0.5f, -0.5f, +0.0f, +0.1f, +0.8f, +0.1f, +1.0f,
         +0.0f, +0.5f, +0.0f, +0.1f, +0.1f, +0.8f, +1.0f,
     };
+    m_VertexBuffer = VertexBuffer::Create();
     m_VertexBuffer->upload(vertex_data);
 
     // Upload the index buffer data
@@ -68,11 +70,16 @@ void Triangle::on_event(WindowInitEvent const& event)
     {
         0, 1, 2,
     };
+    m_IndexBuffer = IndexBuffer::Create();
     m_IndexBuffer->upload(index_data);
 }
 
 void Triangle::on_event(WindowDisposeEvent const& event)
 {
+    glDeleteVertexArrays(1,&m_VertexArray);
+    m_VertexBuffer.reset();
+    m_IndexBuffer.reset();
+    m_Shader.reset();
 }
 
 void Triangle::on_event(WindowRefreshEvent const& event)

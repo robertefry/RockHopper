@@ -27,9 +27,7 @@ namespace RockHopper
         virtual void make_program() override;
 
     private:
-        RenderThread m_RenderThread{};
         uint32_t m_ShaderProgram{};
-
         std::unordered_map<Type,std::string> m_ShaderSources{};
     };
 

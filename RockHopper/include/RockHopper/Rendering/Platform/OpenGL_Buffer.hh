@@ -23,7 +23,6 @@ namespace RockHopper
         virtual void unbind() override;
 
     private:
-        RenderThread m_RenderingThread{};
         uint32_t m_VertexBuffer{};
     };
 
@@ -42,7 +41,6 @@ namespace RockHopper
         virtual void unbind() override;
 
     private:
-        RenderThread m_RenderingThread{};
         uint32_t m_IndexBuffer{};
     };
 

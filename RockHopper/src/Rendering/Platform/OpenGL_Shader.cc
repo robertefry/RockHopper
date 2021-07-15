@@ -10,10 +10,7 @@ namespace RockHopper
 
     OpenGL_Shader::~OpenGL_Shader()
     {
-        m_RenderThread.push_task([program=m_ShaderProgram]()
-        {
-            if (program) glDeleteProgram(program);
-        });
+        if (m_ShaderProgram) glDeleteProgram(m_ShaderProgram);
     }
 
     OpenGL_Shader::OpenGL_Shader()

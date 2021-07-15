@@ -28,7 +28,7 @@ private:
     // unsigned int m_VertexBuffer{};
     // unsigned int m_IndexBuffer{};
 
-    std::unique_ptr<Shader> m_Shader = Shader::Create();
-    std::unique_ptr<VertexBuffer> m_VertexBuffer = VertexBuffer::Create();
-    std::unique_ptr<IndexBuffer> m_IndexBuffer = IndexBuffer::Create();
+    std::unique_ptr<Shader> m_Shader{};
+    std::unique_ptr<VertexBuffer> m_VertexBuffer{};
+    std::unique_ptr<IndexBuffer> m_IndexBuffer{};
 };

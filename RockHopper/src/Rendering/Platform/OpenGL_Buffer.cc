@@ -12,14 +12,12 @@ namespace RockHopper
 
     OpenGL_VertexBuffer::~OpenGL_VertexBuffer()
     {
-        m_RenderingThread.push_task([buffer=m_VertexBuffer]()
-        {
-            if (buffer) glDeleteBuffers(1,&buffer);
-        });
+        glDeleteBuffers(1,&m_VertexBuffer);
     }
 
     OpenGL_VertexBuffer::OpenGL_VertexBuffer()
     {
+        glGenBuffers(1,&m_VertexBuffer);
     }
 
     OpenGL_VertexBuffer::OpenGL_VertexBuffer(OpenGL_VertexBuffer&& other)
@@ -35,7 +33,6 @@ namespace RockHopper
 
     void OpenGL_VertexBuffer::upload(Data const& data)
     {
-        if (not m_VertexBuffer) glGenBuffers(1,&m_VertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER,m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER,sizeof(float)*data.vertices.size(),data.vertices.data(),GL_STATIC_DRAW);
 
@@ -98,14 +95,12 @@ namespace RockHopper
 
     OpenGL_IndexBuffer::~OpenGL_IndexBuffer()
     {
-        m_RenderingThread.push_task([buffer=m_IndexBuffer]()
-        {
-            if (buffer) glDeleteBuffers(1,&buffer);
-        });
+        glDeleteBuffers(1,&m_IndexBuffer);
     }
 
     OpenGL_IndexBuffer::OpenGL_IndexBuffer()
     {
+        glGenBuffers(1,&m_IndexBuffer);
     }
 
     OpenGL_IndexBuffer::OpenGL_IndexBuffer(OpenGL_IndexBuffer&& other)
@@ -121,7 +116,6 @@ namespace RockHopper
 
     void OpenGL_IndexBuffer::upload(Data const& data)
     {
-        if (not m_IndexBuffer) glGenBuffers(1,&m_IndexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_IndexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(uint32_t)*data.indices.size(),data.indices.data(),GL_STATIC_DRAW);
     }
