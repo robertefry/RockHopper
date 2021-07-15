@@ -2,7 +2,6 @@
 namespace RockHopper
 {
 
-    class IndexBuffer;
-    class VertexBuffer;
+    class Mesh;
 
 } // namespace RockHopper

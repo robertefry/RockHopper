@@ -4,8 +4,8 @@
 #include "RockHopper/Layer/Layer.hh"
 #include "RockHopper/Window/WindowEvents.hh"
 
+#include "RockHopper/Rendering/Mesh.hh"
 #include "RockHopper/Rendering/Shader.hh"
-#include "RockHopper/Rendering/Buffer.hh"
 
 #include <memory>
 
@@ -24,11 +24,6 @@ private:
     virtual void on_event(WindowRefreshEvent const&) override;
 
 private:
-    unsigned int m_VertexArray{};
-    // unsigned int m_VertexBuffer{};
-    // unsigned int m_IndexBuffer{};
-
+    std::unique_ptr<Mesh> m_Mesh{};
     std::unique_ptr<Shader> m_Shader{};
-    std::unique_ptr<VertexBuffer> m_VertexBuffer{};
-    std::unique_ptr<IndexBuffer> m_IndexBuffer{};
 };
