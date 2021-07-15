@@ -23,9 +23,8 @@ namespace RockHopper
     }
 
     OpenGL_VertexBuffer::OpenGL_VertexBuffer(OpenGL_VertexBuffer&& other)
-        : m_VertexBuffer{other.m_VertexBuffer}
     {
-        other.m_VertexBuffer = 0;
+        *this = std::move(other);
     }
 
     OpenGL_VertexBuffer& OpenGL_VertexBuffer::operator=(OpenGL_VertexBuffer&& other)
@@ -110,9 +109,8 @@ namespace RockHopper
     }
 
     OpenGL_IndexBuffer::OpenGL_IndexBuffer(OpenGL_IndexBuffer&& other)
-        : m_IndexBuffer{other.m_IndexBuffer}
     {
-        other.m_IndexBuffer = 0;
+        *this = std::move(other);
     }
 
     OpenGL_IndexBuffer& OpenGL_IndexBuffer::operator=(OpenGL_IndexBuffer&& other)
