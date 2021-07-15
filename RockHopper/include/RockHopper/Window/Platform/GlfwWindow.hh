@@ -40,7 +40,6 @@ namespace RockHopper
         GlfwContext m_GlfwContext{};
 
         RenderThread m_RenderThread{};
-        std::unique_ptr<Renderer> m_Renderer;
         WindowDetails m_Details;
     };
 

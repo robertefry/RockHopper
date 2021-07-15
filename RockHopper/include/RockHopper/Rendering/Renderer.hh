@@ -54,20 +54,27 @@ namespace RockHopper
     class Renderer
     {
     public:
+        enum class API
+        {
+            None, OpenGL
+        };
+
+    protected:
+        explicit Renderer() = default;
+
+    public:
         virtual ~Renderer() = default;
+        static void Create(API api);
 
         virtual void initialize() = 0;
         virtual void dispose() = 0;
         virtual void refresh() = 0;
 
-        enum class API
-        {
-            None, OpenGL
-        };
-        static std::unique_ptr<Renderer> Create(API api);
+        inline static auto GetInstance() -> std::unique_ptr<Renderer>& { return s_Instance; }
         inline static auto GetAPI() -> API { return s_RenderAPI; }
 
     private:
+        static inline std::unique_ptr<Renderer> s_Instance{};
         static inline API s_RenderAPI = API::None;
     };
 
