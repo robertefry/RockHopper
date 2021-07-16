@@ -54,9 +54,9 @@ void Triangle::on_event(WindowInitEvent const& event)
         };
         mesh_data.vertices =
         {
-            -0.5f, -0.5f, +0.0f, +0.8f, +0.1f, +0.1f, +1.0f,
-            +0.5f, -0.5f, +0.0f, +0.1f, +0.8f, +0.1f, +1.0f,
-            +0.0f, +0.5f, +0.0f, +0.1f, +0.1f, +0.8f, +1.0f,
+            -0.5f, -0.5f, +0.0f, +1.0f, +0.0f, +0.0f, +1.0f,
+            +0.5f, -0.5f, +0.0f, +0.0f, +1.0f, +0.0f, +1.0f,
+            +0.0f, +0.5f, +0.0f, +0.0f, +0.0f, +1.0f, +1.0f,
         };
         mesh_data.indices =
         {

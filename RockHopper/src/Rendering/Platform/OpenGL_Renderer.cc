@@ -19,6 +19,9 @@ namespace RockHopper
         const GLubyte* version = glGetString(GL_VERSION);
         ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLAD OpenGL {}.",version);
 
+        // Enable SRGB colours
+        glEnable(GL_FRAMEBUFFER_SRGB);
+
         scene_begin();
     }
 
