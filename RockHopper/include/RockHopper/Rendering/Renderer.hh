@@ -73,6 +73,8 @@ namespace RockHopper
         virtual void dispose() = 0;
         virtual void refresh() = 0;
 
+        virtual void scene_begin() = 0;
+        virtual void scene_end() = 0;
         virtual void submit(Shader const&, Mesh const&) = 0;
 
         inline static auto GetInstance() -> std::unique_ptr<Renderer>& { return s_Instance; }

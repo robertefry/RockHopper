@@ -16,6 +16,8 @@ namespace RockHopper
         virtual void dispose() override;
         virtual void refresh() override;
 
+        virtual void scene_begin() override;
+        virtual void scene_end() override;
         virtual void submit(Shader const&, Mesh const&) override;
     };
 

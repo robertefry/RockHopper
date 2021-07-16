@@ -18,15 +18,28 @@ namespace RockHopper
 
         const GLubyte* version = glGetString(GL_VERSION);
         ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLAD OpenGL {}.",version);
+
+        scene_begin();
     }
 
     void OpenGL_Renderer::dispose()
     {
+        scene_end();
     }
 
     void OpenGL_Renderer::refresh()
     {
+        scene_end();
         glClear(GL_COLOR_BUFFER_BIT);
+        scene_begin();
+    }
+
+    void OpenGL_Renderer::scene_begin()
+    {
+    }
+
+    void OpenGL_Renderer::scene_end()
+    {
     }
 
     void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
