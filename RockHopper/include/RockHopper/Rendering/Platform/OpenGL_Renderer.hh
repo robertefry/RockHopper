@@ -15,6 +15,8 @@ namespace RockHopper
         virtual void initialize() override;
         virtual void dispose() override;
         virtual void refresh() override;
+
+        virtual void submit(Shader const&, Mesh const&) override;
     };
 
 } // namespace RockHopper

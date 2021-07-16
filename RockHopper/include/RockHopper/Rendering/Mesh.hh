@@ -14,7 +14,8 @@ namespace RockHopper
         virtual ~Mesh() = default;
         static std::unique_ptr<Mesh> Create();
 
-        virtual void render() = 0;
+        virtual void bind() const = 0;
+        virtual void unbind() const = 0;
 
         struct Data
         {

@@ -15,8 +15,8 @@ namespace RockHopper
 
         static std::unique_ptr<Shader> Create();
 
-        virtual void bind() = 0;
-        virtual void unbind() = 0;
+        virtual void bind() const = 0;
+        virtual void unbind() const = 0;
 
         enum class Type { VERTEX, GEOMETRY, FRAGMENT };
         virtual void source_shader(Type type, std::string const& source) = 0;

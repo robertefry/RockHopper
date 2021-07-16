@@ -18,7 +18,8 @@ namespace RockHopper
         explicit OpenGL_Mesh(OpenGL_Mesh&&);
         OpenGL_Mesh& operator=(OpenGL_Mesh&&);
 
-        virtual void render() override;
+        virtual void bind() const override;
+        virtual void unbind() const override;
 
         virtual void upload(Data const& data) override;
 

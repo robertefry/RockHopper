@@ -20,8 +20,8 @@ namespace RockHopper
         explicit OpenGL_Shader(OpenGL_Shader&&);
         OpenGL_Shader& operator=(OpenGL_Shader&&);
 
-        virtual void bind() override;
-        virtual void unbind() override;
+        virtual void bind() const override;
+        virtual void unbind() const override;
 
         virtual void source_shader(Type type, std::string const& source) override;
         virtual void make_program() override;

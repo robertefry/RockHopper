@@ -29,12 +29,12 @@ namespace RockHopper
         return *this;
     }
 
-    void OpenGL_Shader::bind()
+    void OpenGL_Shader::bind() const
     {
         glUseProgram(m_ShaderProgram);
     }
 
-    void OpenGL_Shader::unbind()
+    void OpenGL_Shader::unbind() const
     {
         glUseProgram(0);
     }

@@ -1,6 +1,8 @@
 
 #include "Triangle.hh"
 
+#include "RockHopper/Rendering/Renderer.hh"
+
 Triangle::~Triangle()
 {
 }
@@ -72,6 +74,5 @@ void Triangle::on_event(WindowDisposeEvent const& event)
 
 void Triangle::on_event(WindowRefreshEvent const& event)
 {
-    m_Shader->bind();
-    m_Mesh->render();
+    Renderer::GetInstance()->submit(*m_Shader,*m_Mesh);
 }

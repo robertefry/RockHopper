@@ -37,10 +37,14 @@ namespace RockHopper
         return *this;
     }
 
-    void OpenGL_Mesh::render()
+    void OpenGL_Mesh::bind() const
     {
         glBindVertexArray(m_VertexArray);
-        glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,nullptr);
+    }
+
+    void OpenGL_Mesh::unbind() const
+    {
+        glBindVertexArray(0);
     }
 
     void OpenGL_Mesh::upload(Data const& data)

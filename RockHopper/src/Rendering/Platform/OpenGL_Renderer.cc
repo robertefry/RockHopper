@@ -1,5 +1,7 @@
 
 #include "RockHopper/Rendering/Platform/OpenGL_Renderer.hh"
+#include "RockHopper/Rendering/Shader.hh"
+#include "RockHopper/Rendering/Mesh.hh"
 
 #include "RockHopper/Debug.hh"
 
@@ -25,6 +27,13 @@ namespace RockHopper
     void OpenGL_Renderer::refresh()
     {
         glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
+    {
+        shader.bind();
+        mesh.bind();
+        glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,nullptr);
     }
 
 } // namespace RockHopper
