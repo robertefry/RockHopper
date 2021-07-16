@@ -14,7 +14,7 @@ namespace RockHopper
 
     class Keyboard
         : public KeyManager<KeyCode>
-        , public KeyEventHandler
+        , public EventHandler<KeyEvent>
     {
     public:
         virtual ~Keyboard();

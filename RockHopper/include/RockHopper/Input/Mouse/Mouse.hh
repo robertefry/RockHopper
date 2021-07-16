@@ -16,7 +16,7 @@ namespace RockHopper
 
     class Mouse
         : public KeyManager<MouseCode>
-        , public MouseEventHandler
+        , public EventHandler<MouseEvent>
     {
     public:
         virtual ~Mouse();

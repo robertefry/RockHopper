@@ -59,10 +59,6 @@ namespace RockHopper
         double offset_x{}, offset_y{};
     };
 
-    struct MouseEventHandler
-        : EventHandler<MouseEvent>
-    {};
-
 } // namespace RockHopper
 
 namespace std

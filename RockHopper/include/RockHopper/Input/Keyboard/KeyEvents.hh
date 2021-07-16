@@ -41,10 +41,6 @@ namespace RockHopper
         int scancode{};
     };
 
-    struct KeyEventHandler
-        : EventHandler<KeyEvent>
-    {};
-
 } // namespace RockHopper
 
 namespace std

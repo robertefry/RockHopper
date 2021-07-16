@@ -24,6 +24,4 @@ namespace RockHopper
         MouseRepeatEvent,
         MouseScrollEvent >;
 
-    struct MouseEventHandler;
-
 } // namespace RockHopper
