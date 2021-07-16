@@ -19,6 +19,11 @@ namespace RockHopper
         const GLubyte* version = glGetString(GL_VERSION);
         ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLAD OpenGL {}.",version);
 
+        // Enable counter-clockwise face culling
+        glFrontFace(GL_CCW);
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+
         // Enable SRGB colours
         glEnable(GL_FRAMEBUFFER_SRGB);
 
