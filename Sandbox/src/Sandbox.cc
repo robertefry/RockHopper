@@ -18,7 +18,8 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
 }
 
 Sandbox::Sandbox()
-    : m_Window{std::make_unique<GlfwWindow>(Renderer::API::OpenGL,GetInitialWindowDetails())}
+    : m_Engine{std::make_unique<Engine>("default")}
+    , m_Window{std::make_unique<GlfwWindow>(Renderer::API::OpenGL,GetInitialWindowDetails())}
     , m_Keyboard{std::make_unique<Keyboard>("default")}
     , m_Mouse{std::make_unique<Mouse>("default")}
 {

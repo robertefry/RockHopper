@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class Engine;
+
+} // namespace RockHopper
