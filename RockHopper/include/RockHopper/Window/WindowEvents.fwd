@@ -30,6 +30,4 @@ namespace RockHopper
         WindowScaleEvent,
         WindowBufferSizeEvent >;
 
-    struct WindowEventHandler;
-
 } // namespace RockHopper
