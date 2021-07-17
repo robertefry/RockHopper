@@ -2,8 +2,7 @@
 namespace RockHopper
 {
 
-    class EngineThread;
     class EngineTiming;
-    class Engine;
+    class EngineThread;
 
 } // namespace RockHopper

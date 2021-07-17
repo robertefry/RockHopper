@@ -67,7 +67,7 @@ namespace RockHopper
 
     void GlfwWindow::set_details(WindowDetails const& details)
     {
-        insert_task([this,details]() { m_RenderThread.push_task([this,details]()
+        m_TaskQueue.push_task([this,details]() { m_RenderThread.push_task([this,details]()
         {
             m_Timing.set_omega(details.frametime);
 
@@ -88,7 +88,7 @@ namespace RockHopper
 
     void GlfwWindow::attach(Keyboard* keyboard)
     {
-        insert_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
+        m_TaskQueue.push_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
             if (m_KeyboardHandle != nullptr)
@@ -105,7 +105,7 @@ namespace RockHopper
 
     void GlfwWindow::detach(Keyboard* keyboard)
     {
-        insert_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
+        m_TaskQueue.push_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Detaching the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
             m_KeyboardHandle = nullptr;
@@ -117,7 +117,7 @@ namespace RockHopper
 
     void GlfwWindow::attach(Mouse* mouse)
     {
-        insert_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
+        m_TaskQueue.push_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
             if (m_MouseHandle != nullptr)
@@ -134,7 +134,7 @@ namespace RockHopper
 
     void GlfwWindow::detach(Mouse* mouse)
     {
-        insert_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
+        m_TaskQueue.push_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
             m_MouseHandle = nullptr;
@@ -160,6 +160,8 @@ namespace RockHopper
         {
             stop();
         }
+
+        m_TaskQueue.execute_all();
 
         if (m_KeyboardHandle) m_KeyboardHandle->tick();
         if (m_MouseHandle) m_MouseHandle->tick();

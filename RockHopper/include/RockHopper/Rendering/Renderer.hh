@@ -5,7 +5,7 @@
 #include "RockHopper/Rendering/Mesh.fwd"
 #include "RockHopper/Rendering/Shader.fwd"
 
-#include "RockHopper/Engine/Engine.hh"
+#include "RockHopper/Engine/EngineThread.hh"
 #include "RockHopper/Utility/TaskQueue.hh"
 
 #include <memory>
@@ -22,7 +22,9 @@ namespace RockHopper
             virtual ~Instance() = default;
             explicit Instance() : EngineThread{"RenderThread"} {}
         private:
-            virtual void run() override;
+            virtual void init() override;
+            virtual void tick() override;
+            virtual void dispose() override;
         };
 
     public:

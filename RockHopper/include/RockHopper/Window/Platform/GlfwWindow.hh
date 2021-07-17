@@ -6,6 +6,8 @@
 #include "RockHopper/Window/Platform/GlfwContext.hh"
 #include "RockHopper/Rendering/Renderer.hh"
 
+#include "RockHopper/Utility/TaskQueue.hh"
+
 class GLFWwindow;
 
 namespace RockHopper
@@ -40,6 +42,7 @@ namespace RockHopper
         GlfwContext m_GlfwContext{};
 
         RenderThread m_RenderThread{};
+        TaskQueue m_TaskQueue{};
         WindowDetails m_Details;
     };
 

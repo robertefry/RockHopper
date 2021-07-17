@@ -5,7 +5,7 @@ namespace RockHopper
 {
 
     Window::Window(std::string const& debug_name)
-        : Engine{debug_name}
+        : EngineThread{debug_name}
     {
         m_DebugName.set_type("Window");
 

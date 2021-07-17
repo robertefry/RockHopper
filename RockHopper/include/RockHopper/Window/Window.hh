@@ -4,7 +4,7 @@
 
 #include "RockHopper/Window/WindowEvents.hh"
 
-#include "RockHopper/Engine/Engine.hh"
+#include "RockHopper/Engine/EngineThread.hh"
 #include "RockHopper/Event/EventHandler.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
@@ -20,7 +20,7 @@ namespace RockHopper
     };
 
     class Window
-        : public Engine
+        : public EngineThread
         , public EventHandler<WindowEvent>
     {
     public:
