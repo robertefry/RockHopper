@@ -47,6 +47,6 @@ Sandbox::~Sandbox()
 
 void Sandbox::run()
 {
-    auto& stop = m_Window->start();
+    WaitVariable stop = m_Window->start();
     stop.wait();
 }

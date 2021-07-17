@@ -68,7 +68,7 @@ namespace RockHopper
         auto wait_task(T_Func&& func, T_Args&&... args)
             -> std::invoke_result<T_Func,T_Args...>::type;
 
-        inline auto& insert_notifier() const { return m_InsertNotifier; }
+        inline auto insert_notifier() const { return m_InsertNotifier; }
 
         inline size_t size() const;
         inline void execute_one();

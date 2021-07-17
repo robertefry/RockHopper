@@ -28,7 +28,7 @@ namespace RockHopper
         if (s_NumInstances == 1)
         {
             ROCKHOPPER_INTERNAL_LOG_DEBUG("Stopping the current render thead.");
-            WaitVariable const& stop = s_InstancePtr->stop();
+            WaitVariable stop = s_InstancePtr->stop();
             while (s_InstancePtr->alive()) { stop.wait_for(std::chrono::seconds{1}); }
             delete s_InstancePtr;
         }

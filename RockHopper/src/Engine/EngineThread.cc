@@ -54,7 +54,7 @@ namespace RockHopper
     {
     }
 
-    WaitVariable const& EngineThread::start()
+    WaitVariable EngineThread::start()
     {
         if (not m_IsAlive)
         {
@@ -71,7 +71,7 @@ namespace RockHopper
         return m_StopNotifier;
     }
 
-    WaitVariable const& EngineThread::stop()
+    WaitVariable EngineThread::stop()
     {
         ROCKHOPPER_INTERNAL_LOG_DEBUG("Requesting stop {}.", m_DebugName);
         m_IsStopRequested = true;

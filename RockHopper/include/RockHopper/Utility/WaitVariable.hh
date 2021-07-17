@@ -2,8 +2,9 @@
 #ifndef __HH_ROCKHOPPER_WAIT_VARIABLE_
 #define __HH_ROCKHOPPER_WAIT_VARIABLE_
 
-#include <mutex>
+#include <memory>
 #include <condition_variable>
+#include <mutex>
 
 namespace RockHopper
 {
@@ -16,35 +17,46 @@ namespace RockHopper
     public:
         inline void wait() const noexcept
         {
-            std::unique_lock<std::mutex> lock {m_Mutex};
-            m_Condition.wait(lock);
+            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Condition.wait(lock);
         }
         template <typename T_Duration>
         inline void wait_for(T_Duration const& duration) const
         {
-            std::unique_lock<std::mutex> lock {m_Mutex};
-            m_Condition.wait_for(lock,duration);
+            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Condition.wait_for(lock,duration);
         }
         template <typename T_TimePoint>
         inline void wait_until(T_TimePoint const& timepoint) const
         {
-            std::unique_lock<std::mutex> lock {m_Mutex};
-            m_Condition.wait_until(lock,timepoint);
+            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Condition.wait_until(lock,timepoint);
         }
         inline void notify_one() noexcept
         {
-            std::unique_lock<std::mutex> lock {m_Mutex};
-            m_Condition.notify_one();
+            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Condition.notify_one();
         }
         inline void notify_all() noexcept
         {
-            std::unique_lock<std::mutex> lock {m_Mutex};
-            m_Condition.notify_all();
+            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Condition.notify_all();
         }
     private:
-        mutable std::condition_variable m_Condition{};
-        mutable std::mutex m_Mutex{};
+        struct Data
+        {
+            mutable std::condition_variable m_Condition{};
+            mutable std::mutex m_Mutex{};
+        };
+        std::shared_ptr<Data> m_DataPtr = std::make_shared<Data>();
+
+        friend bool operator==(WaitVariable const& var1, WaitVariable const& var2);
     };
+
+    inline bool operator==(WaitVariable const& var1, WaitVariable const& var2)
+    {
+        return var1.m_DataPtr == var2.m_DataPtr;
+    }
 
 } // namespace RockHopper
 

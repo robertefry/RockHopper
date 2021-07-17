@@ -53,8 +53,8 @@ namespace RockHopper
         virtual ~EngineThread();
         explicit EngineThread(std::string const& name);
 
-        virtual WaitVariable const& start();
-        virtual WaitVariable const& stop();
+        virtual WaitVariable start();
+        virtual WaitVariable stop();
 
         inline bool alive() const { return m_IsAlive; };
 
