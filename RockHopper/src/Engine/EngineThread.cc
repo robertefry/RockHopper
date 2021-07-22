@@ -44,42 +44,45 @@ namespace RockHopper
 
     EngineThread::~EngineThread()
     {
-        if (not m_IsStopRequested) stop();
+        m_IsStopRequested = true;
         if (m_Thread.joinable()) m_Thread.join();
     }
 
     EngineThread::EngineThread(std::string const& name)
         : m_DebugName{"EngineThread",name}
-        , m_IsStopRequested{false}, m_IsAlive{false}
     {
     }
 
-    WaitVariable EngineThread::start()
+    void EngineThread::start()
     {
+        std::lock_guard lock {m_Mutex};
+        m_IsStopRequested = false;
+
         if (not m_IsAlive)
         {
-            m_Thread = std::thread([&]()
+            if (m_Thread.joinable())
             {
-                ROCKHOPPER_INTERNAL_LOG_INFO("Starting {}.", m_DebugName);
-                m_IsAlive = true;
+                m_Thread.join();
+            }
+            m_Thread = std::thread{[this]()
+            {
                 this->run();
-                m_IsAlive = false;
-                m_StopNotifier.notify_all();
-                ROCKHOPPER_INTERNAL_LOG_INFO("Stopped {}.", m_DebugName);
-            });
+            }};
         }
-        return m_StopNotifier;
     }
 
-    WaitVariable EngineThread::stop()
+    void EngineThread::stop()
     {
-        ROCKHOPPER_INTERNAL_LOG_DEBUG("Requesting stop {}.", m_DebugName);
+        std::lock_guard lock {m_Mutex};
         m_IsStopRequested = true;
-        return m_StopNotifier;
     }
 
     void EngineThread::run()
     {
+        ROCKHOPPER_INTERNAL_LOG_INFO("Starting {}.", m_DebugName);
+
+        m_StartNotifier.notify_all();
+        m_IsAlive = true;
         init();
 
         m_Timing.init();
@@ -94,6 +97,10 @@ namespace RockHopper
         }
 
         dispose();
+        m_IsAlive = false;
+        m_StopNotifier.notify_all();
+
+        ROCKHOPPER_INTERNAL_LOG_INFO("Stopped {}.", m_DebugName);
     }
 
 } // namespace RockHopper

@@ -69,7 +69,7 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,details]() { m_RenderThread.push_task([this,details]()
         {
-            m_Timing.set_omega(details.frametime);
+            timing().set_omega(details.frametime);
 
             ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for {}.", m_DebugName);
             if (m_WindowHandle)

@@ -53,10 +53,16 @@ namespace RockHopper
         virtual ~EngineThread();
         explicit EngineThread(std::string const& name);
 
-        virtual WaitVariable start();
-        virtual WaitVariable stop();
+        void start();
+        inline auto start_notifier() -> auto const& { return m_StartNotifier; }
+
+        void stop();
+        inline auto stop_notifier() -> auto const& { return m_StopNotifier; }
 
         inline bool alive() const { return m_IsAlive; };
+
+        inline auto timing() const -> EngineTiming const& { return m_Timing; }
+        inline auto timing() -> EngineTiming& { return m_Timing; }
 
     private:
         void run();
@@ -69,11 +75,13 @@ namespace RockHopper
     public:
         DebugName m_DebugName;
 
-    protected:
+    private:
         std::thread m_Thread{};
-        std::atomic<bool> m_IsStopRequested, m_IsAlive;
-        WaitVariable m_StopNotifier{};
+        std::mutex m_Mutex{};
+        std::atomic<bool> m_IsStopRequested{}, m_IsAlive{};
         EngineTiming m_Timing{};
+
+        WaitVariable m_StartNotifier{}, m_StopNotifier{};
    };
 
 } // namespace RockHopper
