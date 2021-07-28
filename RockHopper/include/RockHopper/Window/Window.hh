@@ -3,8 +3,9 @@
 #define __HH_ROCKHOPPER_WINDOW_
 
 #include "RockHopper/Window/WindowEvents.hh"
+#include "RockHopper/Engine/EngineEvent.hh"
 
-#include "RockHopper/Engine/EngineThread.hh"
+#include "RockHopper/Debug.hh"
 #include "RockHopper/Event/EventHandler.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
@@ -16,11 +17,10 @@ namespace RockHopper
     {
         std::string title;
         int width, height;
-        int64_t frametime;
     };
 
     class Window
-        : public EngineThread
+        : public EngineEvent::ListenerType
         , public EventHandler<WindowEvent>
     {
     public:
@@ -43,10 +43,8 @@ namespace RockHopper
         virtual void attach(Mouse*) = 0;
         virtual void detach(Mouse*) = 0;
 
-    protected:
-        virtual void init() = 0;
-        virtual void tick() = 0;
-        virtual void dispose() = 0;
+    public:
+        DebugName m_DebugName;
 
     protected:
         Keyboard* m_KeyboardHandle{};

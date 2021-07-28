@@ -2,6 +2,7 @@
 #include "RockHopper/Window/Platform/GlfwWindow.hh"
 
 #include "RockHopper/Debug.hh"
+#include "RockHopper/Engine/Engine.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
 #include "RockHopper/Input/Mouse/Mouse.hh"
 
@@ -69,8 +70,6 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,details]() { m_RenderThread.push_task([this,details]()
         {
-            timing().set_omega(details.frametime);
-
             ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for {}.", m_DebugName);
             if (m_WindowHandle)
             {
@@ -144,7 +143,7 @@ namespace RockHopper
         }); });
     }
 
-    void GlfwWindow::init()
+    void GlfwWindow::on_event(EngineInitEvent const&)
     {
         m_RenderThread.wait_task([this]()
         {
@@ -154,11 +153,11 @@ namespace RockHopper
         });
     }
 
-    void GlfwWindow::tick()
+    void GlfwWindow::on_event(EngineTickEvent const& event)
     {
         if (glfwWindowShouldClose(m_WindowHandle))
         {
-            stop();
+            event.engine->stop();
         }
 
         m_TaskQueue.execute_all();
@@ -186,7 +185,7 @@ namespace RockHopper
         m_RenderThread.wait_task([](){});
     }
 
-    void GlfwWindow::dispose()
+    void GlfwWindow::on_event(EngineDisposeEvent const&)
     {
         m_RenderThread.wait_task([this]()
         {

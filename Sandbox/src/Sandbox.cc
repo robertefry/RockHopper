@@ -13,7 +13,6 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
     {
         .title = "RockHopper Client",
         .width = 800, .height = 600,
-        .frametime = 1'000'000'000 / 60,
     };
 }
 
@@ -23,6 +22,9 @@ Sandbox::Sandbox()
     , m_Keyboard{std::make_unique<Keyboard>("default")}
     , m_Mouse{std::make_unique<Mouse>("default")}
 {
+    m_Engine->timing().set_omega(1'000'000'000/60);
+    m_Engine->insert_event_listener(m_Window.get());
+
     m_Window->attach(m_Keyboard.get());
     m_Window->attach(m_Mouse.get());
 
@@ -47,6 +49,6 @@ Sandbox::~Sandbox()
 
 void Sandbox::run()
 {
-    m_Window->start();
-    m_Window->stop_notifier().wait();
+    m_Engine->start();
+    m_Engine->stop_notifier().wait();
 }

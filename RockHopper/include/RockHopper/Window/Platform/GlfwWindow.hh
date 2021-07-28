@@ -13,8 +13,7 @@ class GLFWwindow;
 namespace RockHopper
 {
 
-    class GlfwWindow
-        : public Window
+    class GlfwWindow : public Window
     {
     public:
         virtual ~GlfwWindow();
@@ -33,9 +32,9 @@ namespace RockHopper
         virtual void detach(Mouse*) override;
 
     protected:
-        virtual void init() override;
-        virtual void tick() override;
-        virtual void dispose() override;
+        virtual void on_event(EngineInitEvent const&) override;
+        virtual void on_event(EngineTickEvent const&) override;
+        virtual void on_event(EngineDisposeEvent const&) override;
 
     private:
         GLFWwindow* m_WindowHandle{};
