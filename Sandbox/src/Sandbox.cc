@@ -5,8 +5,6 @@
 #include "RockHopper/Window/Platform/GlfwWindow.hh"
 #include "RockHopper/Rendering/Renderer.hh"
 
-#include <GLFW/glfw3.h>
-
 static RockHopper::WindowDetails GetInitialWindowDetails()
 {
     return RockHopper::WindowDetails
