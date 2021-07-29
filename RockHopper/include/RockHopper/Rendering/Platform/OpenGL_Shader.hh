@@ -26,9 +26,12 @@ namespace RockHopper
         virtual void source_shader(Type type, std::string const& source) override;
         virtual void make_program() override;
 
+        virtual void set_uniform(UniformType type, std::string const& name, size_t size, float* data) override;
+
     private:
         uint32_t m_ShaderProgram{};
         std::unordered_map<Type,std::string> m_ShaderSources{};
+        std::unordered_map<std::string,uint64_t> m_UniformCache{};
     };
 
 } // namespace RockHopper

@@ -35,6 +35,7 @@ Sandbox::Sandbox()
     m_Mouse->insert_event_listener(&m_Background);
 
     m_Window->insert_event_listener(&m_Triangle);
+    m_Keyboard->insert_event_listener(&m_Triangle);
 }
 
 Sandbox::~Sandbox()

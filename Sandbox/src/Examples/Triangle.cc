@@ -20,12 +20,15 @@ void Triangle::on_event(WindowInitEvent const& event)
 
             layout(location=0) in vec3 a_Position;
             layout(location=1) in vec4 a_Colour;
+
+            uniform float u_Scale;
+
             out vec3 v_Position;
             out vec4 v_Colour;
 
             void main()
             {
-                gl_Position = vec4(a_Position,1.0);
+                gl_Position = vec4(a_Position*u_Scale,1.0);
                 v_Position = a_Position;
                 v_Colour = a_Colour;
             }
@@ -35,6 +38,7 @@ void Triangle::on_event(WindowInitEvent const& event)
 
             in vec3 v_Position;
             in vec4 v_Colour;
+
             layout(location=0) out vec4 o_Colour;
 
             void main()
@@ -43,6 +47,11 @@ void Triangle::on_event(WindowInitEvent const& event)
             }
         )glsl");
         m_Shader->make_program();
+
+        m_RenderThread.push_task([this]()
+        {
+            m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
+        });
     }
     m_Mesh = Mesh::Create();
     {
@@ -75,4 +84,26 @@ void Triangle::on_event(WindowDisposeEvent const& event)
 void Triangle::on_event(WindowRefreshEvent const& event)
 {
     Renderer::GetInstance()->submit(*m_Shader,*m_Mesh);
+}
+
+void Triangle::on_event(KeyPressEvent const& event)
+{
+    if (event.key == KeyCode::KEY_UP)
+    {
+        m_Scale += 0.1;
+
+        m_RenderThread.push_task([this]()
+        {
+            m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
+        });
+    }
+    if (event.key == KeyCode::KEY_DOWN)
+    {
+        m_Scale -= 0.1;
+
+        m_RenderThread.push_task([this]()
+        {
+            m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
+        });
+    }
 }
