@@ -14,13 +14,15 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
     };
 }
 
+static int64_t FPS_120 = 1'000'000'000 / 120;
+
 Sandbox::Sandbox()
     : m_Engine{std::make_unique<Engine>("default")}
     , m_Window{std::make_unique<GLFW_Window>(Renderer::API::OpenGL,GetInitialWindowDetails())}
     , m_Keyboard{std::make_unique<Keyboard>("default")}
     , m_Mouse{std::make_unique<Mouse>("default")}
 {
-    m_Engine->timing().set_omega(1'000'000'000/60);
+    m_Engine->timing().set_omega(FPS_120);
     m_Engine->insert_event_listener(m_Window.get());
 
     m_Window->attach(m_Keyboard.get());
