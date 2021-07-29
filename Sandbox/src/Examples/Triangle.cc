@@ -47,11 +47,7 @@ void Triangle::on_event(WindowInitEvent const& event)
             }
         )glsl");
         m_Shader->make_program();
-
-        m_RenderThread.push_task([this]()
-        {
-            m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
-        });
+        m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
     }
     m_Mesh = Mesh::Create();
     {
