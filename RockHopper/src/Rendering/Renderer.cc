@@ -20,7 +20,6 @@ namespace RockHopper
     void RenderThread::Instance::tick()
     {
         execute_all();
-        insert_notifier().wait_for(std::chrono::seconds{1});
     }
 
     RenderThread::~RenderThread()
