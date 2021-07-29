@@ -3,7 +3,7 @@
 #define __HH_ROCKHOPPER_WINDOW_GLFW_
 
 #include "RockHopper/Window/Window.hh"
-#include "RockHopper/Window/Platform/GlfwContext.hh"
+#include "RockHopper/Window/Platform/GLFW_Context.hh"
 #include "RockHopper/Rendering/Renderer.hh"
 
 #include "RockHopper/Utility/TaskQueue.hh"
@@ -13,14 +13,14 @@ class GLFWwindow;
 namespace RockHopper
 {
 
-    class GlfwWindow : public Window
+    class GLFW_Window : public Window
     {
     public:
-        virtual ~GlfwWindow();
-        explicit GlfwWindow(Renderer::API render_api, WindowDetails const&);
+        virtual ~GLFW_Window();
+        explicit GLFW_Window(Renderer::API render_api, WindowDetails const&);
 
-        explicit GlfwWindow(GlfwWindow const&) = delete;
-        GlfwWindow& operator=(GlfwWindow const&) = delete;
+        explicit GLFW_Window(GLFW_Window const&) = delete;
+        GLFW_Window& operator=(GLFW_Window const&) = delete;
 
         virtual void set_details(WindowDetails const&) override;
         virtual auto get_details() const -> WindowDetails const& override;

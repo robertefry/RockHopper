@@ -1,5 +1,5 @@
 
-#include "RockHopper/Window/Platform/GlfwWindow.hh"
+#include "RockHopper/Window/Platform/GLFW_Window.hh"
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Engine/Engine.hh"
@@ -11,7 +11,7 @@
 namespace RockHopper
 {
 
-    GlfwWindow::~GlfwWindow()
+    GLFW_Window::~GLFW_Window()
     {
         m_RenderThread.wait_task([this]()
         {
@@ -32,11 +32,11 @@ namespace RockHopper
         });
     }
 
-    GlfwWindow::GlfwWindow(Renderer::API render_api, WindowDetails const& details)
+    GLFW_Window::GLFW_Window(Renderer::API render_api, WindowDetails const& details)
         : Window{details.title}
         , m_Details{details}
     {
-        m_DebugName.set_type("GlfwWindow");
+        m_DebugName.set_type("GLFW_Window");
         set_details(details);
 
         // Create the renderer
@@ -66,7 +66,7 @@ namespace RockHopper
         });
     }
 
-    void GlfwWindow::set_details(WindowDetails const& details)
+    void GLFW_Window::set_details(WindowDetails const& details)
     {
         m_TaskQueue.push_task([this,details]() { m_RenderThread.push_task([this,details]()
         {
@@ -80,12 +80,12 @@ namespace RockHopper
         }); });
     }
 
-    auto GlfwWindow::get_details() const -> WindowDetails const&
+    auto GLFW_Window::get_details() const -> WindowDetails const&
     {
         return m_Details;
     }
 
-    void GlfwWindow::attach(Keyboard* keyboard)
+    void GLFW_Window::attach(Keyboard* keyboard)
     {
         m_TaskQueue.push_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
         {
@@ -102,7 +102,7 @@ namespace RockHopper
         }); });
     }
 
-    void GlfwWindow::detach(Keyboard* keyboard)
+    void GLFW_Window::detach(Keyboard* keyboard)
     {
         m_TaskQueue.push_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
         {
@@ -114,7 +114,7 @@ namespace RockHopper
         }); });
     }
 
-    void GlfwWindow::attach(Mouse* mouse)
+    void GLFW_Window::attach(Mouse* mouse)
     {
         m_TaskQueue.push_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
         {
@@ -131,7 +131,7 @@ namespace RockHopper
         }); });
     }
 
-    void GlfwWindow::detach(Mouse* mouse)
+    void GLFW_Window::detach(Mouse* mouse)
     {
         m_TaskQueue.push_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
         {
@@ -143,7 +143,7 @@ namespace RockHopper
         }); });
     }
 
-    void GlfwWindow::on_event(EngineInitEvent const&)
+    void GLFW_Window::on_event(EngineInitEvent const&)
     {
         m_RenderThread.wait_task([this]()
         {
@@ -153,7 +153,7 @@ namespace RockHopper
         });
     }
 
-    void GlfwWindow::on_event(EngineTickEvent const& event)
+    void GLFW_Window::on_event(EngineTickEvent const& event)
     {
         if (glfwWindowShouldClose(m_WindowHandle))
         {
@@ -185,7 +185,7 @@ namespace RockHopper
         m_RenderThread.wait_task([](){});
     }
 
-    void GlfwWindow::on_event(EngineDisposeEvent const&)
+    void GLFW_Window::on_event(EngineDisposeEvent const&)
     {
         m_RenderThread.wait_task([this]()
         {

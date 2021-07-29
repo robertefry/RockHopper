@@ -1,5 +1,5 @@
 
-#include "RockHopper/Window/Platform/GlfwContext.hh"
+#include "RockHopper/Window/Platform/GLFW_Window.hh"
 
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.hh"

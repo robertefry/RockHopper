@@ -2,6 +2,6 @@
 namespace RockHopper
 {
 
-    class GlfwWindow;
+    class GLFW_Window;
 
 } // namespace RockHopper
