@@ -5,6 +5,8 @@
 #include "RockHopper/Window/Platform/GLFW_Window.hh"
 #include "RockHopper/Rendering/Renderer.hh"
 
+#include "RockHopper/Event/EventListeners.hh"
+
 static RockHopper::WindowDetails GetInitialWindowDetails()
 {
     return RockHopper::WindowDetails
@@ -14,7 +16,7 @@ static RockHopper::WindowDetails GetInitialWindowDetails()
     };
 }
 
-static int64_t FPS_120 = 1'000'000'000 / 120;
+static TimeSpan FPS_120 = 1.0 / 120;
 
 Sandbox::Sandbox()
     : m_Engine{std::make_unique<Engine>("default")}

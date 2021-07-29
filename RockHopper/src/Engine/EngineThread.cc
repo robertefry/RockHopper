@@ -20,12 +20,11 @@ namespace RockHopper
     void EngineTiming::tick()
     {
         m_TimeDelta = Clock::now() - m_TimeLast;
-        if (not triggered()) std::this_thread::sleep_for(TimeSpan{1});
     }
 
     void EngineTiming::reduce()
     {
-        m_TimeLast += m_TimeDelta;
+        m_TimeLast += m_TimeDelta.duration();
     }
 
     bool EngineTiming::triggered() const
@@ -92,6 +91,10 @@ namespace RockHopper
             {
                 m_Timing.reduce();
                 tick();
+            }
+            else
+            {
+                std::this_thread::sleep_for(std::chrono::nanoseconds{1});
             }
             m_Timing.tick();
         }

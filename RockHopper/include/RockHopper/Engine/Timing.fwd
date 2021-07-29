@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class TimeSpan;
+
+} // namespace RockHopper

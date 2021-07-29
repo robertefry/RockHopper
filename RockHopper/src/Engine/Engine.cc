@@ -19,6 +19,7 @@ namespace RockHopper
     void Engine::tick()
     {
         EngineTickEvent event;
+        event.delta = m_Timing.delta();
         event.engine = this;
         dispatch_event(event);
     }

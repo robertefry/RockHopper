@@ -3,6 +3,7 @@
 #define __HH_ROCKHOPPER_ENGINE_THREAD_
 
 #include "RockHopper/Debug.hh"
+#include "RockHopper/Engine/Timing.hh"
 #include "RockHopper/Utility/WaitVariable.hh"
 
 #include <atomic>
@@ -20,7 +21,6 @@ namespace RockHopper
     public:
         using Clock = std::chrono::high_resolution_clock;
         using TimePoint = Clock::time_point;
-        using TimeSpan = std::chrono::duration<int64_t,std::nano>;
 
         void init();
         void tick();
@@ -29,8 +29,8 @@ namespace RockHopper
 
         inline auto delta() const { return m_TimeDelta; }
 
-        inline void set_omega(int64_t omega) { m_TimeOmega = TimeSpan{omega}; }
-        inline auto get_omega() const -> TimeSpan const& { return m_TimeOmega; }
+        inline void set_omega(TimeSpan omega) { m_TimeOmega = omega; }
+        inline auto get_omega() const { return m_TimeOmega; }
 
     private:
         TimePoint m_TimeLast{};
@@ -75,11 +75,13 @@ namespace RockHopper
     public:
         DebugName m_DebugName;
 
+    protected:
+        EngineTiming m_Timing{};
+
     private:
         std::thread m_Thread{};
         std::mutex m_Mutex{};
         std::atomic<bool> m_IsStopRequested{}, m_IsAlive{};
-        EngineTiming m_Timing{};
 
         WaitVariable m_StartNotifier{}, m_StopNotifier{};
    };
