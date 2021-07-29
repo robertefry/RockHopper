@@ -3,7 +3,7 @@
 #define __HH_ROCKHOPPER_ENGINE_EVENT_
 
 #include "RockHopper/Engine/Engine.fwd"
-#include "RockHopper/Engine/EngineEvent.fwd"
+#include "RockHopper/Engine/EngineEvents.fwd"
 
 #include "RockHopper/Event/Event.hh"
 

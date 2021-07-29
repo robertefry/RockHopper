@@ -3,7 +3,7 @@
 #define __HH_ROCKHOPPER_WINDOW_
 
 #include "RockHopper/Window/WindowEvents.hh"
-#include "RockHopper/Engine/EngineEvent.hh"
+#include "RockHopper/Engine/EngineEvents.hh"
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Event/EventHandler.hh"

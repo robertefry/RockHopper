@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_ENGINE_
 #define __HH_ROCKHOPPER_ENGINE_
 
-#include "RockHopper/Engine/EngineEvent.hh"
+#include "RockHopper/Engine/EngineEvents.hh"
 #include "RockHopper/Engine/EngineThread.hh"
 #include "RockHopper/Event/EventHandler.hh"
 
