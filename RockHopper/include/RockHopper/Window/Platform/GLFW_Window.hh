@@ -38,7 +38,7 @@ namespace RockHopper
 
     private:
         GLFWwindow* m_WindowHandle{};
-        GlfwContext m_GlfwContext{};
+        GLFW_Context m_GlfwContext{};
 
         RenderThread m_RenderThread{};
         TaskQueue m_TaskQueue{};

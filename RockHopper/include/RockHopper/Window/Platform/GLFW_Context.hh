@@ -14,14 +14,14 @@ class GLFWwindow;
 namespace RockHopper
 {
 
-    class GlfwContext
+    class GLFW_Context
     {
     public:
-        virtual ~GlfwContext();
-        explicit GlfwContext();
+        virtual ~GLFW_Context();
+        explicit GLFW_Context();
 
-        explicit GlfwContext(GlfwContext const&);
-        GlfwContext& operator=(GlfwContext const&);
+        explicit GLFW_Context(GLFW_Context const&);
+        GLFW_Context& operator=(GLFW_Context const&);
 
         template <typename T_Device, bool T_Enable>
         std::future<void> set_callbacks(GLFWwindow* handle, T_Device* device);
