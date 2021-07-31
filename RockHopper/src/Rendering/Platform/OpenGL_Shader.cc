@@ -147,59 +147,58 @@ namespace RockHopper
         m_UniformCache.clear();
     }
 
-    void OpenGL_Shader::set_uniform(UniformType type, std::string const& name, size_t size, float* data)
+    void OpenGL_Shader::def_uniform(std::string const& name, UniformType type, size_t size)
     {
-        std::function const GetUniformLocation = [this](std::string const& name)
-        {
-            if (not m_UniformCache.contains(name))
-            {
-                uint64_t location = glGetUniformLocation(m_ShaderProgram,name.c_str());
-                ROCKHOPPER_ASSERT_FATAL((location != -1), "Uniform '{}' not found!", name);
-                m_UniformCache.emplace(name,location);
-            }
-            return m_UniformCache[name];
-        };
+        uint64_t location = glGetUniformLocation(m_ShaderProgram,name.c_str());
+        ROCKHOPPER_ASSERT_FATAL((location != -1), "Uniform '{}' not found!", name);
+        m_UniformCache[name] = UniformData{location,type,size};
+    }
 
-        switch (type)
+    void OpenGL_Shader::set_uniform(std::string const& name, float* data)
+    {
+        ROCKHOPPER_INTERNAL_ASSERT_ERROR(m_UniformCache.contains(name),"Uniform {} not found!",name);
+        UniformData uniform_data = m_UniformCache.at(name);
+
+        switch (uniform_data.type)
         {
             case UniformType::SCALAR: {
-                glUniform1fv(GetUniformLocation(name),size,data);
+                glUniform1fv(uniform_data.location,uniform_data.size,data);
             } break;
             case UniformType::VEC2: {
-                glUniform2fv(GetUniformLocation(name),size,data);
+                glUniform2fv(uniform_data.location,uniform_data.size,data);
             } break;
             case UniformType::VEC3: {
-                glUniform3fv(GetUniformLocation(name),size,data);
+                glUniform3fv(uniform_data.location,uniform_data.size,data);
             } break;
             case UniformType::VEC4: {
-                glUniform4fv(GetUniformLocation(name),size,data);
+                glUniform4fv(uniform_data.location,uniform_data.size,data);
             } break;
             case UniformType::MAT22: {
-                glUniformMatrix2fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix2fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT23: {
-                glUniformMatrix2x3fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix2x3fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT24: {
-                glUniformMatrix2x4fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix2x4fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT32: {
-                glUniformMatrix3x2fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix3x2fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT33: {
-                glUniformMatrix3fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix3fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT34: {
-                glUniformMatrix3x4fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix3x4fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT42: {
-                glUniformMatrix4x2fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix4x2fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT43: {
-                glUniformMatrix4x3fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix4x3fv(uniform_data.location,uniform_data.size,false,data);
             } break;
             case UniformType::MAT44: {
-                glUniformMatrix4fv(GetUniformLocation(name),size,false,data);
+                glUniformMatrix4fv(uniform_data.location,uniform_data.size,false,data);
             } break;
         }
     }

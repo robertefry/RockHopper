@@ -48,7 +48,8 @@ void Triangle::on_event(WindowInitEvent const& event)
         )glsl");
         m_Shader->make_program();
         m_Shader->bind();
-        m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
+        m_Shader->def_uniform("u_Scale",Shader::UniformType::SCALAR,1);
+        m_Shader->set_uniform("u_Scale",&m_Scale);
     }
     m_Mesh = Mesh::Create();
     {
@@ -92,7 +93,7 @@ void Triangle::on_event(KeyPressEvent const& event)
         m_RenderThread.push_task([this]()
         {
             m_Shader->bind();
-            m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
+            m_Shader->set_uniform("u_Scale",&m_Scale);
         });
     }
     if (event.key == KeyCode::KEY_DOWN)
@@ -102,7 +103,7 @@ void Triangle::on_event(KeyPressEvent const& event)
         m_RenderThread.push_task([this]()
         {
             m_Shader->bind();
-            m_Shader->set_uniform(Shader::UniformType::SCALAR,"u_Scale",1,&m_Scale);
+            m_Shader->set_uniform("u_Scale",&m_Scale);
         });
     }
 }

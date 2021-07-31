@@ -27,7 +27,8 @@ namespace RockHopper
             SCALAR, VEC2, VEC3, VEC4,
             MAT22, MAT23, MAT24, MAT32, MAT33, MAT34, MAT42, MAT43, MAT44
         };
-        virtual void set_uniform(UniformType type, std::string const& name, size_t size, float* data) = 0;
+        virtual void def_uniform(std::string const& name, UniformType type, size_t size) = 0;
+        virtual void set_uniform(std::string const& name, float* data) = 0;
     };
 
 } // namespace RockHopper
