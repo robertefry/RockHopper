@@ -29,6 +29,13 @@ namespace RockHopper
         };
         virtual void def_uniform(std::string const& name, UniformType type, size_t size) = 0;
         virtual void set_uniform(std::string const& name, float* data) = 0;
+
+        template <typename T_Arg0, typename... T_Args>
+        void set_uniform(std::string const& name, T_Arg0 const& arg0, T_Args&&... args)
+        {
+            T_Arg0 data[] {arg0,args...};
+            set_uniform(name,data);
+        }
     };
 
 } // namespace RockHopper
