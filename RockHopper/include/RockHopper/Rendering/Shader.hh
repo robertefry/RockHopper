@@ -36,6 +36,13 @@ namespace RockHopper
             T_Arg0 data[] {arg0,args...};
             set_uniform(name,data);
         }
+
+        template <typename... T_Args>
+        void def_uniform(std::string const& name, UniformType type, size_t size, T_Args&&... args)
+        {
+            def_uniform(name,type,size);
+            set_uniform(name,std::forward<T_Args>(args)...);
+        }
     };
 
 } // namespace RockHopper
