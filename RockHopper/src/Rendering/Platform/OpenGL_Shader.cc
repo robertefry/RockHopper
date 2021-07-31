@@ -160,8 +160,6 @@ namespace RockHopper
             return m_UniformCache[name];
         };
 
-        bind();
-
         switch (type)
         {
             case UniformType::SCALAR: {
