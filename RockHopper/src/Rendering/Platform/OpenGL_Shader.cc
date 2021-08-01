@@ -150,7 +150,7 @@ namespace RockHopper
     void OpenGL_Shader::def_uniform(std::string const& name, UniformType type, size_t size)
     {
         uint64_t location = glGetUniformLocation(m_ShaderProgram,name.c_str());
-        ROCKHOPPER_ASSERT_FATAL((location != -1), "Uniform '{}' not found!", name);
+        ROCKHOPPER_ASSERT_FATAL((location != 0xFFFF'FFFF'FFFF'FFFF), "Uniform '{}' not found!", name);
         m_UniformCache[name] = UniformData{location,type,size};
     }
 
