@@ -13,16 +13,10 @@ namespace RockHopper
 
     GLFW_Window::~GLFW_Window()
     {
-        m_RenderThread.wait_task([this]()
-        {
-            // Dispose the render context
-            Renderer::GetInstance()->dispose();
-        });
-
         // Unset GLFW callbacks
-        m_GlfwContext.set_callbacks<Window,false>(m_WindowHandle,(Window*)this);
+        m_GlfwContext.set_callbacks<Window,false>(&m_WindowHandle,(Window*)this);
 
-        m_RenderThread.wait_task([this]()
+        Renderer::GetInstance()->push_task([this]()
         {
             // Remove the GLFW user pointer
             glfwSetWindowUserPointer(m_WindowHandle,nullptr);
@@ -30,19 +24,21 @@ namespace RockHopper
             // Destroy the GLFW window
             glfwDestroyWindow(m_WindowHandle);
         });
+
+        // Stop the renderer
+        Renderer::GetInstance()->stop();
+        // TODO: Fix WaitVariable notify-before-wait bug for (start|stop)_notifier
+        Renderer::GetInstance()->stop_notifier().wait();
     }
 
-    GLFW_Window::GLFW_Window(Renderer::API render_api, WindowDetails const& details)
-        : Window{details.title}
+    GLFW_Window::GLFW_Window(Renderer::API renderer_api, WindowDetails const& details)
+        : Window{renderer_api, details.title}
         , m_Details{details}
     {
         m_DebugName.set_type("GLFW_Window");
         set_details(details);
 
-        // Create the renderer
-        Renderer::Create(render_api);
-
-        m_RenderThread.wait_task([this]()
+        Renderer::GetInstance()->push_task([this]()
         {
             // Create a GLFW windowed-mode window handle and it's OpenGL context
             m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
@@ -54,21 +50,21 @@ namespace RockHopper
         });
 
         // Set GLFW callbacks
-        m_GlfwContext.set_callbacks<Window,true>(m_WindowHandle,(Window*)this);
+        m_GlfwContext.set_callbacks<Window,true>(&m_WindowHandle,(Window*)this);
 
-        m_RenderThread.wait_task([this]()
+        Renderer::GetInstance()->push_task([this]()
         {
             // Make the window's context current
             glfwMakeContextCurrent(m_WindowHandle);
-
-            // Initialize the render context
-            Renderer::GetInstance()->initialize();
         });
+
+        // Start the renderer
+        Renderer::GetInstance()->start();
     }
 
     void GLFW_Window::set_details(WindowDetails const& details)
     {
-        m_TaskQueue.push_task([this,details]() { m_RenderThread.push_task([this,details]()
+        m_TaskQueue.push_task([this,details]() { Renderer::GetInstance()->push_task([this,details]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for {}.", m_DebugName);
             if (m_WindowHandle)
@@ -87,7 +83,7 @@ namespace RockHopper
 
     void GLFW_Window::attach(Keyboard* keyboard)
     {
-        m_TaskQueue.push_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
+        m_TaskQueue.push_task([this,keyboard]() { Renderer::GetInstance()->wait_task([this,keyboard]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
             if (m_KeyboardHandle != nullptr)
@@ -98,25 +94,25 @@ namespace RockHopper
             m_KeyboardHandle = keyboard;
             keyboard->on_attach(this);
 
-            m_GlfwContext.set_callbacks<Keyboard,true>(m_WindowHandle,keyboard);
+            m_GlfwContext.set_callbacks<Keyboard,true>(&m_WindowHandle,keyboard);
         }); });
     }
 
     void GLFW_Window::detach(Keyboard* keyboard)
     {
-        m_TaskQueue.push_task([this,keyboard]() { m_RenderThread.wait_task([this,keyboard]()
+        m_TaskQueue.push_task([this,keyboard]() { Renderer::GetInstance()->wait_task([this,keyboard]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Detaching the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
             m_KeyboardHandle = nullptr;
             keyboard->on_detach(this);
 
-            m_GlfwContext.set_callbacks<Keyboard,false>(m_WindowHandle,keyboard);
+            m_GlfwContext.set_callbacks<Keyboard,false>(&m_WindowHandle,keyboard);
         }); });
     }
 
     void GLFW_Window::attach(Mouse* mouse)
     {
-        m_TaskQueue.push_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
+        m_TaskQueue.push_task([this,mouse]() { Renderer::GetInstance()->wait_task([this,mouse]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
             if (m_MouseHandle != nullptr)
@@ -127,27 +123,37 @@ namespace RockHopper
             m_MouseHandle = mouse;
             mouse->on_attach(this);
 
-            m_GlfwContext.set_callbacks<Mouse,true>(m_WindowHandle,mouse);
+            m_GlfwContext.set_callbacks<Mouse,true>(&m_WindowHandle,mouse);
         }); });
     }
 
     void GLFW_Window::detach(Mouse* mouse)
     {
-        m_TaskQueue.push_task([this,mouse]() { m_RenderThread.wait_task([this,mouse]()
+        m_TaskQueue.push_task([this,mouse]() { Renderer::GetInstance()->wait_task([this,mouse]()
         {
             ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
             m_MouseHandle = nullptr;
             mouse->on_detach(this);
 
-            m_GlfwContext.set_callbacks<Mouse,false>(m_WindowHandle,mouse);
+            m_GlfwContext.set_callbacks<Mouse,false>(&m_WindowHandle,mouse);
         }); });
     }
 
     void GLFW_Window::on_event(EngineInitEvent const&)
     {
-        m_RenderThread.wait_task([this]()
+        Renderer::GetInstance()->wait_task([this]()
         {
             WindowInitEvent event;
+            event.window = this;
+            dispatch_event(event);
+        });
+    }
+
+    void GLFW_Window::on_event(EngineDisposeEvent const&)
+    {
+        Renderer::GetInstance()->wait_task([this]()
+        {
+            WindowDisposeEvent event;
             event.window = this;
             dispatch_event(event);
         });
@@ -165,7 +171,7 @@ namespace RockHopper
         if (m_KeyboardHandle) m_KeyboardHandle->tick();
         if (m_MouseHandle) m_MouseHandle->tick();
 
-        m_RenderThread.wait_task([this]()
+        Renderer::GetInstance()->wait_task([this]()
         {
             glfwPollEvents();
 
@@ -173,7 +179,7 @@ namespace RockHopper
             Renderer::GetInstance()->refresh();
         });
 
-        m_RenderThread.wait_task([this]()
+        Renderer::GetInstance()->wait_task([this]()
         {
             WindowRefreshEvent event;
             event.window = this;
@@ -182,17 +188,7 @@ namespace RockHopper
 
         // Wait on a blank graphics task to synchronize the graphics thread
         // with the current window thread.
-        m_RenderThread.wait_task([](){});
-    }
-
-    void GLFW_Window::on_event(EngineDisposeEvent const&)
-    {
-        m_RenderThread.wait_task([this]()
-        {
-            WindowDisposeEvent event;
-            event.window = this;
-            dispatch_event(event);
-        });
+        Renderer::GetInstance()->wait_task([](){});
     }
 
 } // namespace RockHopper

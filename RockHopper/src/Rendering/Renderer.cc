@@ -4,60 +4,17 @@
 
 #include "RockHopper/Debug.hh"
 
-#include <chrono>
-
 namespace RockHopper
 {
 
-    void RenderThread::Instance::init()
+    Renderer::~Renderer()
     {
     }
 
-    void RenderThread::Instance::dispose()
+    Renderer::Renderer(std::string const& api)
+        : EngineThread{api}
     {
-    }
-
-    void RenderThread::Instance::tick()
-    {
-        execute_all();
-    }
-
-    RenderThread::~RenderThread()
-    {
-        if (s_NumInstances == 1)
-        {
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("Stopping the current render thead.");
-            s_InstancePtr->stop();
-
-            while (s_InstancePtr->alive())
-            {
-                s_InstancePtr->stop_notifier().wait_for(std::chrono::seconds{1});
-            }
-            delete s_InstancePtr;
-        }
-        s_NumInstances -= 1;
-    }
-
-    RenderThread::RenderThread()
-    {
-        if (s_NumInstances == 0)
-        {
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("Starting a new render thead.");
-            s_InstancePtr = new Instance{};
-            s_InstancePtr->start();
-        }
-        s_NumInstances += 1;
-    }
-
-    RenderThread::RenderThread(RenderThread const&)
-    {
-        s_NumInstances += 1;
-    }
-
-    RenderThread& RenderThread::operator=(RenderThread const&)
-    {
-        s_NumInstances += 1;
-        return *this;
+        m_DebugName.set_type("Renderer");
     }
 
     void Renderer::Create(API api)
@@ -66,8 +23,7 @@ namespace RockHopper
         {
             ROCKHOPPER_INTERNAL_LOG_FATAL("Cannot create multiple renderers!");
         }
-        s_RenderAPI = api;
-
+        s_RendererAPI = api;
         s_Instance = [&]() -> std::unique_ptr<Renderer>
         {
             switch (api)
@@ -78,12 +34,21 @@ namespace RockHopper
                 case API::None: {
                     ROCKHOPPER_INTERNAL_LOG_FATAL("Cannot create a renderer from the None API!");
                 } break;
-                default: {
-                    ROCKHOPPER_INTERNAL_LOG_FATAL("Could not create a renderer from an unknown API!");
-                } break;
-            }
+            };
+            ROCKHOPPER_INTERNAL_LOG_FATAL("Could not create a renderer from an unknown API!");
             return nullptr;
         }();
+    }
+
+    void Renderer::Destroy()
+    {
+        s_RendererAPI = API::None;
+        s_Instance.reset();
+    }
+
+    void Renderer::tick()
+    {
+        execute_all();
     }
 
 } // namespace RockHopper

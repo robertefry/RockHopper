@@ -4,9 +4,9 @@
 
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Engine/EngineEvents.hh"
-
-#include "RockHopper/Debug.hh"
 #include "RockHopper/Event/EventHandler.hh"
+
+#include "RockHopper/Rendering/Renderer.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
 
@@ -24,8 +24,8 @@ namespace RockHopper
         , public EventHandler<WindowEvent>
     {
     public:
-        virtual ~Window() = default;
-        explicit Window(std::string const& debug_name);
+        virtual ~Window();
+        explicit Window(Renderer::API renderer_api, std::string const& debug_name);
 
         explicit Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;

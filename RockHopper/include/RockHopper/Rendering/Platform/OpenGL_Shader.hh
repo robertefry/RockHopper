@@ -2,7 +2,6 @@
 #ifndef __HH_ROCKHOPPER_RENDERING_OPENGL_SHADER_
 #define __HH_ROCKHOPPER_RENDERING_OPENGL_SHADER_
 
-#include "RockHopper/Rendering/Renderer.hh"
 #include "RockHopper/Rendering/Shader.hh"
 
 #include <cstdint>

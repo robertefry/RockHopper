@@ -89,7 +89,7 @@ void Triangle::on_event(KeyPressEvent const& event)
     {
         m_Scale += 0.1;
 
-        m_RenderThread.push_task([this]()
+        Renderer::GetInstance()->push_task([this]()
         {
             m_Shader->bind();
             m_Shader->set_uniform("u_Scale",m_Scale);
@@ -99,7 +99,7 @@ void Triangle::on_event(KeyPressEvent const& event)
     {
         m_Scale -= 0.1;
 
-        m_RenderThread.push_task([this]()
+        Renderer::GetInstance()->push_task([this]()
         {
             m_Shader->bind();
             m_Shader->set_uniform("u_Scale",m_Scale);

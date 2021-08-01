@@ -4,7 +4,6 @@
 
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Window/Platform/GLFW_Context.hh"
-#include "RockHopper/Rendering/Renderer.hh"
 
 #include "RockHopper/Utility/TaskQueue.hh"
 
@@ -17,7 +16,7 @@ namespace RockHopper
     {
     public:
         virtual ~GLFW_Window();
-        explicit GLFW_Window(Renderer::API render_api, WindowDetails const&);
+        explicit GLFW_Window(Renderer::API renderer_api, WindowDetails const&);
 
         explicit GLFW_Window(GLFW_Window const&) = delete;
         GLFW_Window& operator=(GLFW_Window const&) = delete;
@@ -33,14 +32,13 @@ namespace RockHopper
 
     protected:
         virtual void on_event(EngineInitEvent const&) override;
-        virtual void on_event(EngineTickEvent const&) override;
         virtual void on_event(EngineDisposeEvent const&) override;
+        virtual void on_event(EngineTickEvent const&) override;
 
     private:
         GLFWwindow* m_WindowHandle{};
         GLFW_Context m_GlfwContext{};
 
-        RenderThread m_RenderThread{};
         TaskQueue m_TaskQueue{};
         WindowDetails m_Details;
     };

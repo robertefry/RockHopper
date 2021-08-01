@@ -1,11 +1,7 @@
 
 #include "Sandbox.hh"
 
-#include "RockHopper/Debug.hh"
 #include "RockHopper/Window/Platform/GLFW_Window.hh"
-#include "RockHopper/Rendering/Renderer.hh"
-
-#include "RockHopper/Event/EventListeners.hh"
 
 static RockHopper::WindowDetails GetInitialWindowDetails()
 {
@@ -40,7 +36,8 @@ Sandbox::Sandbox()
 
 Sandbox::~Sandbox()
 {
-    m_Window->insert_event_listener(&m_Triangle);
+    m_Window->remove_event_listener(&m_Triangle);
+    m_Keyboard->remove_event_listener(&m_Triangle);
 
     m_Window->remove_event_listener(&m_Background);
     m_Keyboard->remove_event_listener(&m_Background);

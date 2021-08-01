@@ -2,6 +2,7 @@
 #include "RockHopper/Rendering/Platform/OpenGL_Shader.hh"
 
 #include "RockHopper/Debug.hh"
+#include "RockHopper/Rendering/Renderer.hh"
 
 #include <glad/glad.h>
 
