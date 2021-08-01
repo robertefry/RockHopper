@@ -3,6 +3,7 @@
 #define __HH_ROCKHOPPER_WAIT_VARIABLE_
 
 #include <memory>
+#include <atomic>
 #include <condition_variable>
 #include <mutex>
 
@@ -18,33 +19,47 @@ namespace RockHopper
         inline void wait() const noexcept
         {
             std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
-            m_DataPtr->m_Condition.wait(lock);
+
+            if (not m_DataPtr->m_Triggered)
+            {
+                m_DataPtr->m_Condition.wait(lock);
+            }
         }
         template <typename T_Duration>
         inline void wait_for(T_Duration const& duration) const
         {
             std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
-            m_DataPtr->m_Condition.wait_for(lock,duration);
+
+            if (not m_DataPtr->m_Triggered)
+            {
+                m_DataPtr->m_Condition.wait_for(lock,duration);
+            }
         }
         template <typename T_TimePoint>
         inline void wait_until(T_TimePoint const& timepoint) const
         {
             std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
-            m_DataPtr->m_Condition.wait_until(lock,timepoint);
+
+            if (not m_DataPtr->m_Triggered)
+            {
+                m_DataPtr->m_Condition.wait_until(lock,timepoint);
+            }
         }
-        inline void notify_one() noexcept
+        inline void notify_all()
         {
             std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
-            m_DataPtr->m_Condition.notify_one();
-        }
-        inline void notify_all() noexcept
-        {
-            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Triggered = true;
             m_DataPtr->m_Condition.notify_all();
+        }
+        inline void reset()
+        {
+            std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
+            m_DataPtr->m_Triggered = false;
         }
     private:
         struct Data
         {
+            std::atomic<bool> m_Triggered{};
             mutable std::condition_variable m_Condition{};
             mutable std::mutex m_Mutex{};
         };

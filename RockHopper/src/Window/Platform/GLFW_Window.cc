@@ -27,7 +27,6 @@ namespace RockHopper
 
         // Stop the renderer
         Renderer::GetInstance()->stop();
-        // TODO: Fix WaitVariable notify-before-wait bug for (start|stop)_notifier
         Renderer::GetInstance()->stop_notifier().wait();
     }
 
