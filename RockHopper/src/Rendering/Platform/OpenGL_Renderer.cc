@@ -19,31 +19,6 @@ namespace RockHopper
     {
     }
 
-    void OpenGL_Renderer::scene_begin()
-    {
-    }
-
-    void OpenGL_Renderer::scene_end()
-    {
-    }
-
-    void OpenGL_Renderer::refresh()
-    {
-        // TODO: OpenGL_Renderer::refresh()
-        // Insert a task to pause the renderer, then resume it;
-        // thus all tasks will be executed, and then the renderer will pause again.
-        scene_end();
-        glClear(GL_COLOR_BUFFER_BIT);
-        scene_begin();
-    }
-
-    void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
-    {
-        shader.bind();
-        mesh.bind();
-        glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,nullptr);
-    }
-
     void OpenGL_Renderer::init()
     {
         push_task([this]()
@@ -70,6 +45,31 @@ namespace RockHopper
     void OpenGL_Renderer::dispose()
     {
         scene_end();
+    }
+
+    void OpenGL_Renderer::scene_begin()
+    {
+    }
+
+    void OpenGL_Renderer::scene_end()
+    {
+    }
+
+    void OpenGL_Renderer::refresh()
+    {
+        push_task([this]()
+        {
+            scene_end();
+            glClear(GL_COLOR_BUFFER_BIT);
+            scene_begin();
+        });
+    }
+
+    void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
+    {
+        shader.bind();
+        mesh.bind();
+        glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,nullptr);
     }
 
 } // namespace RockHopper

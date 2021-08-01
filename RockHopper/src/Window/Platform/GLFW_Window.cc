@@ -176,8 +176,8 @@ namespace RockHopper
             glfwPollEvents();
 
             glfwSwapBuffers(m_WindowHandle);
-            Renderer::GetInstance()->refresh();
         });
+        Renderer::GetInstance()->refresh();
 
         Renderer::GetInstance()->wait_task([this]()
         {
