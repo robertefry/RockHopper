@@ -3,6 +3,8 @@
 
 #include "RockHopper/Rendering/Renderer.hh"
 
+#include <cmath>
+
 Triangle::~Triangle()
 {
 }
@@ -21,6 +23,7 @@ void Triangle::on_event(WindowInitEvent const& event)
             layout(location=0) in vec3 a_Position;
             layout(location=1) in vec4 a_Colour;
 
+            uniform mat4 u_View;
             uniform float u_Scale;
 
             out vec3 v_Position;
@@ -28,7 +31,7 @@ void Triangle::on_event(WindowInitEvent const& event)
 
             void main()
             {
-                gl_Position = vec4(a_Position*u_Scale,1.0);
+                gl_Position = u_View * vec4(a_Position*u_Scale,1.0);
                 v_Position = a_Position;
                 v_Colour = a_Colour;
             }
@@ -48,6 +51,7 @@ void Triangle::on_event(WindowInitEvent const& event)
         )glsl");
         m_Shader->make_program();
         m_Shader->bind();
+        m_Shader->def_uniform("u_View",Shader::UniformType::MAT44,1,m_Camera.data());
         m_Shader->def_uniform("u_Scale",Shader::UniformType::SCALAR,1,m_Scale);
     }
     m_Mesh = Mesh::Create();
@@ -78,8 +82,18 @@ void Triangle::on_event(WindowDisposeEvent const& event)
     m_Mesh.reset();
 }
 
+void Triangle::on_event(EngineTickEvent const& event)
+{
+    // m_Camera.rotate_z(event.delta*M_PI);
+    m_Sigma = fmod(m_Sigma+(float)event.delta,2*M_PI);
+    m_Camera.position(glm::vec3{sin(m_Sigma),0,0});
+}
+
 void Triangle::on_event(WindowRefreshEvent const& event)
 {
+    m_Shader->bind();
+    m_Shader->set_uniform("u_View",m_Camera.data());
+
     Renderer::GetInstance()->submit(*m_Shader,*m_Mesh);
 }
 

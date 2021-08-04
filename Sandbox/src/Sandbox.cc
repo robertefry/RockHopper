@@ -30,12 +30,14 @@ Sandbox::Sandbox()
     m_Keyboard->insert_event_listener(&m_Background);
     m_Mouse->insert_event_listener(&m_Background);
 
+    m_Engine->insert_event_listener(&m_Triangle);
     m_Window->insert_event_listener(&m_Triangle);
     m_Keyboard->insert_event_listener(&m_Triangle);
 }
 
 Sandbox::~Sandbox()
 {
+    m_Engine->remove_event_listener(&m_Triangle);
     m_Window->remove_event_listener(&m_Triangle);
     m_Keyboard->remove_event_listener(&m_Triangle);
 

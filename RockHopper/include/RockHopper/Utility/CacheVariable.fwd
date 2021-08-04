@@ -1,0 +1,8 @@
+
+namespace RockHopper
+{
+
+    template <typename T_DataType>
+    class CacheVariable;
+
+} // namespace RockHopper
