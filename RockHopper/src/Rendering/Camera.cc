@@ -12,7 +12,7 @@ namespace RockHopper
     {
         m_ViewMatrix.set_recalculate_function([this]()
         {
-            return glm::lookAt(m_Position,-m_Frame.axis_z,m_Frame.axis_y);
+            return glm::lookAt(m_Position,m_Position-m_Frame.axis_z,m_Frame.axis_y);
         });
     }
 
