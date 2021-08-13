@@ -241,6 +241,8 @@ namespace RockHopper
             });
             glfwSetWindowSizeCallback(*handle,[](GLFWwindow* handle, int width, int height)
             {
+                Renderer::GetInstance()->viewport(0,0,width,height);
+
                 WindowSizeEvent event;
                 event.width = width;
                 event.height = height;

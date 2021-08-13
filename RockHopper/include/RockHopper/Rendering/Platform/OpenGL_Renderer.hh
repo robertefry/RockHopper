@@ -13,6 +13,8 @@ namespace RockHopper
         virtual ~OpenGL_Renderer();
         explicit OpenGL_Renderer();
 
+        virtual void viewport(float x, float y, float w, float h) override;
+
         virtual void scene_begin() override;
         virtual void scene_end() override;
 

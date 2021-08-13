@@ -27,6 +27,8 @@ namespace RockHopper
         static void Create(API api);
         static void Destroy();
 
+        virtual void viewport(float x, float y, float w, float h) = 0;
+
         virtual void scene_begin() = 0;
         virtual void scene_end() = 0;
 

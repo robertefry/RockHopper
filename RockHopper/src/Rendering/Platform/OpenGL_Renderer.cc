@@ -19,6 +19,14 @@ namespace RockHopper
     {
     }
 
+    void OpenGL_Renderer::viewport(float x, float y, float w, float h)
+    {
+        push_task([=]()
+        {
+            glViewport(x,y,w,h);
+        });
+    }
+
     void OpenGL_Renderer::init()
     {
         push_task([this]()
