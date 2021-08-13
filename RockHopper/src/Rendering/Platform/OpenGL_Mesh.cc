@@ -47,15 +47,27 @@ namespace RockHopper
         glBindVertexArray(0);
     }
 
+    size_t OpenGL_Mesh::num_vertices() const
+    {
+        return m_NumVertices;
+    }
+
+    size_t OpenGL_Mesh::num_indices() const
+    {
+        return m_NumIndices;
+    }
+
     void OpenGL_Mesh::upload(Data const& data)
     {
         glBindVertexArray(m_VertexArray);
 
         glBindBuffer(GL_ARRAY_BUFFER,m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER,sizeof(float)*data.vertices.size(),data.vertices.data(),GL_STATIC_DRAW);
+        m_NumVertices = data.vertices.size();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_IndexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(uint32_t)*data.indices.size(),data.indices.data(),GL_STATIC_DRAW);
+        m_NumIndices = data.indices.size();
 
         std::function const GetTypeSize = [&](Data::Type type) -> uint32_t
         {

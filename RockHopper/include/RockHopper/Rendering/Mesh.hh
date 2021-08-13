@@ -17,6 +17,9 @@ namespace RockHopper
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
+        virtual size_t num_vertices() const = 0;
+        virtual size_t num_indices() const = 0;
+
         struct Data
         {
             enum class Type

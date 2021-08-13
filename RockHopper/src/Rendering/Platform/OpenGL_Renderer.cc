@@ -69,7 +69,7 @@ namespace RockHopper
     {
         shader.bind();
         mesh.bind();
-        glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,nullptr);
+        glDrawElements(GL_TRIANGLES,mesh.num_indices(),GL_UNSIGNED_INT,nullptr);
     }
 
 } // namespace RockHopper

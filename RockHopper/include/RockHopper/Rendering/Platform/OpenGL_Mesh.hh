@@ -21,12 +21,17 @@ namespace RockHopper
         virtual void bind() const override;
         virtual void unbind() const override;
 
+        virtual size_t num_vertices() const override;
+        virtual size_t num_indices() const override;
+
         virtual void upload(Data const& data) override;
 
     private:
         uint32_t m_VertexArray{};
         uint32_t m_VertexBuffer{};
         uint32_t m_IndexBuffer{};
+
+        size_t m_NumVertices{}, m_NumIndices{};
     };
 
 } // namespace RockHopper
