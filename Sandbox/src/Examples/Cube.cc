@@ -93,6 +93,7 @@ void Cube::on_event(EngineTickEvent const& event)
 {
     m_SigmaTime = fmod(m_SigmaTime+(float)event.delta,2*M_PI);
     m_Camera.position(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
+    m_Camera.rotation(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
 }
 
 void Cube::on_event(WindowRefreshEvent const& event)

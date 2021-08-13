@@ -27,6 +27,8 @@ namespace RockHopper
 
         virtual void position(glm::vec3 const&);
         virtual void translate(glm::vec3 const&);
+
+        virtual void rotation(glm::vec3 const&);
         virtual void rotate_x(float rad);
         virtual void rotate_y(float rad);
         virtual void rotate_z(float rad);

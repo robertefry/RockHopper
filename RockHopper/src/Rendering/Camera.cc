@@ -38,6 +38,14 @@ namespace RockHopper
         m_ViewMatrix.mark_dirty();
     }
 
+    void Camera::rotation(glm::vec3 const& rads)
+    {
+        m_Frame = Frame{};
+        rotate_z(rads.z);
+        rotate_y(rads.y);
+        rotate_x(rads.x);
+    }
+
     void Camera::rotate_x(float rad)
     {
         m_Frame.axis_y = glm::rotate(m_Frame.axis_y,rad,m_Frame.axis_x);
