@@ -26,24 +26,14 @@ Sandbox::Sandbox()
     m_Window->attach(m_Keyboard.get());
     m_Window->attach(m_Mouse.get());
 
-    m_Window->insert_event_listener(&m_Background);
-    m_Keyboard->insert_event_listener(&m_Background);
-    m_Mouse->insert_event_listener(&m_Background);
-
-    m_Engine->insert_event_listener(&m_Triangle);
-    m_Window->insert_event_listener(&m_Triangle);
-    m_Keyboard->insert_event_listener(&m_Triangle);
+    m_Engine->insert_event_listener(m_Cube.get());
+    m_Window->insert_event_listener(m_Cube.get());
 }
 
 Sandbox::~Sandbox()
 {
-    m_Engine->remove_event_listener(&m_Triangle);
-    m_Window->remove_event_listener(&m_Triangle);
-    m_Keyboard->remove_event_listener(&m_Triangle);
-
-    m_Window->remove_event_listener(&m_Background);
-    m_Keyboard->remove_event_listener(&m_Background);
-    m_Mouse->remove_event_listener(&m_Background);
+    m_Engine->remove_event_listener(m_Cube.get());
+    m_Window->remove_event_listener(m_Cube.get());
 
     m_Window->detach(m_Keyboard.get());
     m_Window->detach(m_Mouse.get());

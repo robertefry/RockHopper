@@ -8,8 +8,7 @@
 #include "RockHopper/Input/Keyboard/Keyboard.hh"
 #include "RockHopper/Input/Mouse/Mouse.hh"
 
-#include "Examples/Background.hh"
-#include "Examples/Triangle.hh"
+#include "Examples/Cube.hh"
 
 #include <memory>
 
@@ -30,6 +29,5 @@ private:
     std::unique_ptr<Keyboard> m_Keyboard;
     std::unique_ptr<Mouse> m_Mouse;
 
-    Background m_Background{};
-    Triangle m_Triangle{};
+    std::unique_ptr<Cube> m_Cube = std::make_unique<Cube>();
 };
