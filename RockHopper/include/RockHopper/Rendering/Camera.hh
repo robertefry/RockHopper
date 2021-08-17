@@ -37,7 +37,7 @@ namespace RockHopper
         glm::vec3 m_Position{};
         Camera::Frame m_Frame{};
 
-        mutable CacheVariable<glm::mat4> m_ViewMatrix{};
+        mutable CacheVariable<glm::mat4> m_ViewMatrix{1.0f};
     };
 
 } // namespace RockHopper

@@ -26,6 +26,5 @@ private:
     std::unique_ptr<Shader> m_Shader{};
     std::unique_ptr<Mesh> m_Mesh{};
 
-    Camera m_Camera{};
     float m_SigmaTime = 0;
 };

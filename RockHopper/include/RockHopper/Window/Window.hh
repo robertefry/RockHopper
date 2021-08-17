@@ -7,8 +7,11 @@
 #include "RockHopper/Event/EventHandler.hh"
 
 #include "RockHopper/Rendering/Renderer.hh"
+#include "RockHopper/Rendering/Camera.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
+
+#include <memory>
 
 namespace RockHopper
 {
@@ -33,6 +36,9 @@ namespace RockHopper
         virtual void set_details(WindowDetails const&) = 0;
         virtual auto get_details() const -> WindowDetails const& = 0;
 
+        virtual auto camera() -> Camera& { return *m_Camera; };
+        virtual auto camera() const -> Camera const& { return *m_Camera; };
+
         inline auto keyboard() -> Keyboard* { return m_KeyboardHandle; }
         inline auto keyboard() const -> Keyboard const* { return m_KeyboardHandle; }
         virtual void attach(Keyboard*) = 0;
@@ -47,6 +53,8 @@ namespace RockHopper
         DebugName m_DebugName;
 
     protected:
+        std::unique_ptr<Camera> m_Camera{};
+
         Keyboard* m_KeyboardHandle{};
         Mouse* m_MouseHandle{};
     };

@@ -1,6 +1,7 @@
 
 #include "Cube.hh"
 
+#include "RockHopper/Window/Window.hh"
 #include "RockHopper/Rendering/Renderer.hh"
 
 #include <glad/glad.h>
@@ -43,7 +44,7 @@ void Cube::on_event(WindowInitEvent const& event)
         m_Shader->make_program();
         m_Shader->bind();
         m_Shader->def_uniform("u_Scale",Shader::UniformType::SCALAR,1,0.5f);
-        m_Shader->def_uniform("u_View",Shader::UniformType::MAT44,1,m_Camera.data());
+        m_Shader->def_uniform("u_View",Shader::UniformType::MAT44,1);
     }
     m_Mesh = Mesh::Create();
     {
@@ -92,14 +93,16 @@ void Cube::on_event(WindowDisposeEvent const& event)
 void Cube::on_event(EngineTickEvent const& event)
 {
     m_SigmaTime = fmod(m_SigmaTime+(float)event.delta,2*M_PI);
-    m_Camera.position(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
-    m_Camera.rotation(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
 }
 
 void Cube::on_event(WindowRefreshEvent const& event)
 {
+    Camera& camera = event.window->camera();
+    camera.position(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
+    camera.rotation(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
+
     m_Shader->bind();
-    m_Shader->set_uniform("u_View",m_Camera.data());
+    m_Shader->set_uniform("u_View",camera.data());
 
     Renderer::GetInstance()->submit(*m_Shader,*m_Mesh);
 }
