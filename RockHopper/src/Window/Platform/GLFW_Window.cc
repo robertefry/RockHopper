@@ -178,13 +178,16 @@ namespace RockHopper
             glfwPollEvents();
             glfwSwapBuffers(m_WindowHandle);
         });
-        Renderer::GetInstance()->refresh();
 
         Renderer::GetInstance()->wait_task([this]()
         {
+            Renderer::GetInstance()->scene_begin();
+
             WindowRefreshEvent event;
             event.window = this;
             dispatch_event(event);
+
+            Renderer::GetInstance()->scene_end();
         });
     }
 

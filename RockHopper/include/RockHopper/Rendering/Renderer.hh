@@ -32,7 +32,6 @@ namespace RockHopper
         virtual void scene_begin() = 0;
         virtual void scene_end() = 0;
 
-        virtual void refresh() = 0;
         virtual void submit(Shader const&, Mesh const&) = 0;
 
         static auto GetAPI() -> API { return s_RendererAPI; }

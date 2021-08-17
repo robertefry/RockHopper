@@ -45,32 +45,20 @@ namespace RockHopper
 
             // Enable SRGB colours
             glEnable(GL_FRAMEBUFFER_SRGB);
-
-            scene_begin();
         });
     }
 
     void OpenGL_Renderer::dispose()
     {
-        scene_end();
     }
 
     void OpenGL_Renderer::scene_begin()
     {
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     void OpenGL_Renderer::scene_end()
     {
-    }
-
-    void OpenGL_Renderer::refresh()
-    {
-        push_task([this]()
-        {
-            scene_end();
-            glClear(GL_COLOR_BUFFER_BIT);
-            scene_begin();
-        });
     }
 
     void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
