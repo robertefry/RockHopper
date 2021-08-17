@@ -15,50 +15,35 @@ namespace RockHopper
         virtual ~CacheVariable() = default;
 
         template <typename... T_Args>
-        explicit CacheVariable(T_Args&&... args)
+            requires std::is_constructible<T_DataType,T_Args...>::value
+        CacheVariable(T_Args&&... args)
             : m_Data{std::forward<T_Args>(args)...}
-            , m_IsDirty{true}
         {
-        }
-
-        CacheVariable operator=(T_DataType const& data)
-        {
-            m_Data = data;
-            m_IsDirty = false;
-        }
-        CacheVariable operator=(T_DataType&& data)
-        {
-            m_Data = std::move(data);
-            m_IsDirty = false;
-        }
-
-        void set_recalculate_function(std::function<T_DataType(void)> const& func)
-        {
-            m_Recalculate = func;
-        }
-
-        operator T_DataType() const
-        {
-            return get();
-        }
-        operator T_DataType()
-        {
-            return get();
         }
 
         auto get() const -> T_DataType const&
         {
-            if (m_IsDirty)
+            if (m_HasRecacheFunction && m_IsDirty)
             {
-                m_Data = m_Recalculate();
+                m_Data = m_RecacheFunction();
                 m_IsDirty = false;
             }
             return m_Data;
         }
         auto get() -> T_DataType&
         {
-            // call the const version
             return const_cast<T_DataType&>(const_cast<const CacheVariable*>(this)->get());
+        }
+
+        void set_recache_function(std::function<T_DataType(void)> const& func)
+        {
+            m_RecacheFunction = func;
+            m_HasRecacheFunction = true;
+        }
+        void set_recache_function(std::function<T_DataType(void)>&& func)
+        {
+            m_RecacheFunction = std::move(func);
+            m_HasRecacheFunction = true;
         }
 
         void mark_dirty()
@@ -94,12 +79,23 @@ namespace RockHopper
         {
             return get();
         }
+        template <typename T_Index>
+        auto operator[](T_Index&& index) const
+        {
+            return m_Data[std::forward<T_Index>(index)];
+        }
+        template <typename T_Index>
+        auto operator[](T_Index&& index)
+        {
+            return m_Data[std::forward<T_Index>(index)];
+        }
 
     private:
         mutable T_DataType m_Data;
         mutable bool m_IsDirty{};
 
-        std::function<T_DataType(void)> m_Recalculate{};
+        std::function<T_DataType(void)> m_RecacheFunction{};
+        bool m_HasRecacheFunction{};
     };
 
 } // namespace RockHopper
