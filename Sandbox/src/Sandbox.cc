@@ -2,6 +2,8 @@
 #include "Sandbox.hh"
 
 #include "RockHopper/Window/Platform/GLFW_Window.hh"
+#include "RockHopper/Rendering/Camera.hh"
+#include "RockHopper/Rendering/Projection.hh"
 
 static RockHopper::WindowDetails GetInitialWindowDetails()
 {
@@ -41,6 +43,9 @@ Sandbox::~Sandbox()
 
 void Sandbox::run()
 {
+    float w = m_Window->get_details().width, h = m_Window->get_details().height;
+    m_Window->camera().projection(std::make_shared<ProjectionPerspective3D>(45,1,100));
+
     m_Engine->start();
     m_Engine->stop_notifier().wait();
 }

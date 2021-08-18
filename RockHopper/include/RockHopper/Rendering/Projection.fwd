@@ -1,0 +1,8 @@
+
+namespace RockHopper
+{
+
+    class Projection;
+    class ProjectionPerspective3D;
+
+} // namespace RockHopper

@@ -9,11 +9,24 @@ namespace RockHopper
 {
 
     Camera::Camera()
+        : m_Projection{std::make_shared<ProjectionDefault>()}
     {
         m_ViewMatrix.set_recache_function([this]()
         {
-            return glm::lookAt(m_Position,m_Position-m_Frame.axis_z,m_Frame.axis_y);
+            return m_Projection->matrix() * glm::lookAt(m_Position,m_Position-m_Frame.axis_z,m_Frame.axis_y);
         });
+        m_ViewMatrix.mark_dirty();
+    }
+
+    void Camera::on_event(WindowSizeEvent const& event)
+    {
+        m_Projection->on_event(event);
+    }
+
+    void Camera::projection(std::shared_ptr<Projection> const& projection)
+    {
+        m_Projection = projection;
+        m_ViewMatrix.mark_dirty();
     }
 
     glm::mat4 Camera::matrix() const

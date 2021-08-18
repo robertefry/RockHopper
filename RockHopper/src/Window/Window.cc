@@ -1,5 +1,6 @@
 
 #include "RockHopper/Window/Window.hh"
+#include "RockHopper/Event/EventListeners.hh"
 
 namespace RockHopper
 {
@@ -8,17 +9,16 @@ namespace RockHopper
         : m_DebugName{"Window",debug_name}
         , m_Camera{std::make_unique<Camera>()}
     {
-        // All window events must be dispatched on the graphics thread
-        set_parallel_dispatch(false);
-
-        // Create the renderer
         Renderer::Create(renderer_api);
+
+        insert_event_listener(m_Camera.get());
     }
 
     Window::~Window()
     {
-        // Destroy the renderer
         Renderer::Destroy();
+
+        remove_event_listener(m_Camera.get());
     }
 
 } // namespace RockHopper

@@ -98,8 +98,8 @@ void Cube::on_event(EngineTickEvent const& event)
 void Cube::on_event(WindowRefreshEvent const& event)
 {
     Camera& camera = event.window->camera();
-    camera.position(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
-    camera.rotation(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
+    camera.position(glm::vec3{2.0f*sin(m_SigmaTime),2.0f*cos(m_SigmaTime),4.0f});
+    // camera.rotation(glm::vec3{0.5f*sin(m_SigmaTime),0.5f*cos(m_SigmaTime),0.0f});
 
     m_Shader->bind();
     m_Shader->set_uniform("u_View",camera.data());
