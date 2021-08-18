@@ -46,6 +46,24 @@ void Sandbox::run()
     float w = m_Window->get_details().width, h = m_Window->get_details().height;
     m_Window->camera().projection(std::make_shared<ProjectionPerspective3D>(45,1,100));
 
+    class CameraAnimation : public EngineEvent::ListenerType
+    {
+    public:
+        explicit CameraAnimation(Camera& camera)
+            : m_Camera{camera}
+        {}
+        virtual void on_event(EngineTickEvent const& event) override
+        {
+            m_SigmaTime = fmod(m_SigmaTime+(float)event.delta,2*M_PI);
+            m_Camera.position(glm::vec3{2.0f*sin(m_SigmaTime),2.0f*cos(m_SigmaTime),4.0f});
+        }
+    private:
+        Camera& m_Camera;
+        float m_SigmaTime{};
+    };
+    CameraAnimation camera_animation {m_Window->camera()};
+    m_Engine->insert_event_listener(&camera_animation);
+
     m_Engine->start();
     m_Engine->stop_notifier().wait();
 }
