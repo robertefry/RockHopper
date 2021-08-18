@@ -1,5 +1,5 @@
 
-#include "RockHopper/Rendering/Projection.hh"
+#include "RockHopper/Rendering/Camera/Projection.hh"
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>

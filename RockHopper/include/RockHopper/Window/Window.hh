@@ -7,7 +7,7 @@
 #include "RockHopper/Event/EventHandler.hh"
 
 #include "RockHopper/Rendering/Renderer.hh"
-#include "RockHopper/Rendering/Camera.hh"
+#include "RockHopper/Rendering/Camera/Camera.hh"
 #include "RockHopper/Input/Keyboard/Keyboard.fwd"
 #include "RockHopper/Input/Mouse/Mouse.fwd"
 

@@ -3,7 +3,7 @@
 #define __HH_ROCKHOPPER_RENDERING_CAMERA_
 
 #include "RockHopper/Window/WindowEvents.hh"
-#include "RockHopper/Rendering/Projection.hh"
+#include "RockHopper/Rendering/Camera/Projection.hh"
 #include "RockHopper/Utility/CacheVariable.hh"
 
 #include <glm/glm.hpp>

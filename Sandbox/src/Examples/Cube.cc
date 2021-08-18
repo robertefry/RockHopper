@@ -3,6 +3,7 @@
 
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Rendering/Renderer.hh"
+#include "RockHopper/Rendering/Camera/Camera.hh"
 
 #include <glad/glad.h>
 

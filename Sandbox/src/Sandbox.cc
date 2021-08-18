@@ -2,8 +2,8 @@
 #include "Sandbox.hh"
 
 #include "RockHopper/Window/Platform/GLFW_Window.hh"
-#include "RockHopper/Rendering/Camera.hh"
-#include "RockHopper/Rendering/Projection.hh"
+#include "RockHopper/Rendering/Camera/Camera.hh"
+#include "RockHopper/Rendering/Camera/Projection.hh"
 
 static RockHopper::WindowDetails GetInitialWindowDetails()
 {

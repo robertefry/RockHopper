@@ -6,9 +6,9 @@
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Input/Keyboard/KeyEvents.hh"
 
+#include "RockHopper/Rendering/Camera/Camera.hh"
 #include "RockHopper/Rendering/Mesh.hh"
 #include "RockHopper/Rendering/Shader.hh"
-#include "RockHopper/Rendering/Camera.hh"
 
 #include <memory>
 

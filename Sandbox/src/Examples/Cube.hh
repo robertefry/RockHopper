@@ -6,7 +6,6 @@
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Rendering/Shader.hh"
 #include "RockHopper/Rendering/Mesh.hh"
-#include "RockHopper/Rendering/Camera.hh"
 using namespace RockHopper;
 
 class Cube
