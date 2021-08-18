@@ -21,7 +21,7 @@ namespace RockHopper
         return *m_ViewMatrix;
     }
 
-    float* Camera::data() const
+    float* Camera::data()
     {
         return glm::value_ptr(*m_ViewMatrix);
     }
