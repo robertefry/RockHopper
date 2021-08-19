@@ -40,14 +40,14 @@ namespace RockHopper
         Renderer::GetInstance()->push_task([this]()
         {
             // Create a GLFW windowed-mode window handle and it's OpenGL context
-            m_WindowHandle = glfwCreateWindow(1,1,m_Details.title.c_str(),NULL,NULL);
+            m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
             ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle! {}", m_DebugName);
             ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window {}.", m_DebugName);
 
             // Set the GLFW user pointer to this window
             glfwSetWindowUserPointer(m_WindowHandle,this);
 
-            // Set window properties via callbacks
+            // Invoke window callbacks
             glfwSetWindowSize(m_WindowHandle,m_Details.width,m_Details.height);
         });
 
