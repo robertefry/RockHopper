@@ -33,7 +33,7 @@ namespace RockHopper
 
         enum class Uniform
         {
-            CAMERA,
+            CAMERA, TRANSFORM
         };
         void map_uniform(Uniform uniform, std::string const& name);
         auto uniform_map() const -> auto const& { return m_UniformMap; }

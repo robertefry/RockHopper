@@ -6,6 +6,7 @@
 #include "RockHopper/Window/WindowEvents.hh"
 #include "RockHopper/Rendering/Shader.hh"
 #include "RockHopper/Rendering/Mesh.hh"
+#include "RockHopper/Rendering/Transform.hh"
 using namespace RockHopper;
 
 class Cube
@@ -13,6 +14,7 @@ class Cube
 {
 public:
     virtual ~Cube() = default;
+    explicit Cube();
 
 private:
     virtual void on_event(WindowInitEvent const&) override;
@@ -24,4 +26,5 @@ private:
 private:
     std::unique_ptr<Shader> m_Shader{};
     std::unique_ptr<Mesh> m_Mesh{};
+    std::unique_ptr<Transform> m_Transform{};
 };

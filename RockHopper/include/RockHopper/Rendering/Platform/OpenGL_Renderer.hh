@@ -21,7 +21,7 @@ namespace RockHopper
         virtual void scene_begin(Camera*) override;
         virtual void scene_end() override;
 
-        virtual void submit(Shader&, Mesh&) override;
+        virtual void submit(Shader&, Mesh&, Transform&) override;
 
     private:
         virtual void init() override;

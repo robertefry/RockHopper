@@ -7,6 +7,10 @@
 
 #include <glad/glad.h>
 
+Cube::Cube()
+{
+}
+
 void Cube::on_event(WindowInitEvent const& event)
 {
     m_Shader = Shader::Create();
@@ -16,7 +20,7 @@ void Cube::on_event(WindowInitEvent const& event)
 
             layout(location=0) in vec3 a_Position;
 
-            uniform float u_Scale;
+            uniform mat4 u_Transform;
             uniform mat4 u_View;
 
             out vec3 v_Position;
@@ -24,7 +28,7 @@ void Cube::on_event(WindowInitEvent const& event)
 
             void main()
             {
-                gl_Position = u_View * vec4(a_Position*u_Scale,1.0);
+                gl_Position = u_View * u_Transform * vec4(a_Position,1.0);
                 v_Position = a_Position;
                 v_Colour = vec4(a_Position*0.5+0.5,1.0);
             }
@@ -44,9 +48,8 @@ void Cube::on_event(WindowInitEvent const& event)
         )glsl");
         m_Shader->make_program();
         m_Shader->map_uniform(Shader::Uniform::CAMERA,"u_View");
+        m_Shader->map_uniform(Shader::Uniform::TRANSFORM,"u_Transform");
     }
-    m_Shader->bind();
-    m_Shader->def_uniform("u_Scale",Shader::UniformType::SCALAR,1,0.5f);
 
     m_Mesh = Mesh::Create();
     {
@@ -84,6 +87,9 @@ void Cube::on_event(WindowInitEvent const& event)
         };
         m_Mesh->upload(mesh_data);
     }
+
+    m_Transform = std::make_unique<Transform>();
+    m_Transform->scale(glm::vec3{0.75f});
 }
 
 void Cube::on_event(WindowDisposeEvent const& event)
@@ -94,9 +100,10 @@ void Cube::on_event(WindowDisposeEvent const& event)
 
 void Cube::on_event(EngineTickEvent const& event)
 {
+    m_Transform->rotate(event.delta.count()*0.7f,glm::vec3{0.5f,0.5f,0.2f});
 }
 
 void Cube::on_event(WindowRefreshEvent const& event)
 {
-    Renderer::GetInstance()->submit(*m_Shader,*m_Mesh);
+    Renderer::GetInstance()->submit(*m_Shader,*m_Mesh,*m_Transform);
 }

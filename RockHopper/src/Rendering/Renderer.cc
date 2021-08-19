@@ -3,6 +3,9 @@
 #include "RockHopper/Rendering/Platform/OpenGL_Renderer.hh"
 
 #include "RockHopper/Debug.hh"
+#include "RockHopper/Rendering/Shader.hh"
+#include "RockHopper/Rendering/Mesh.hh"
+#include "RockHopper/Rendering/Transform.hh"
 
 namespace RockHopper
 {
@@ -44,6 +47,12 @@ namespace RockHopper
     {
         s_RendererAPI = API::None;
         s_Instance.reset();
+    }
+
+    void Renderer::submit(Shader& shader, Mesh& mesh)
+    {
+        Transform transform;
+        submit(shader,mesh,transform);
     }
 
     void Renderer::tick()

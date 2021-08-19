@@ -27,6 +27,7 @@ namespace RockHopper
             switch (uniform)
             {
                 case Uniform::CAMERA: return UniformType::MAT44;
+                case Uniform::TRANSFORM: return UniformType::MAT44;
             }
             ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown uniform map type!");
             return UniformType::VOID;

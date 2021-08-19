@@ -5,6 +5,7 @@
 #include "RockHopper/Rendering/Camera/Camera.hh"
 #include "RockHopper/Rendering/Shader.hh"
 #include "RockHopper/Rendering/Mesh.hh"
+#include "RockHopper/Rendering/Transform.hh"
 
 #include <glad/glad.h>
 
@@ -73,14 +74,17 @@ namespace RockHopper
 #endif
     }
 
-    void OpenGL_Renderer::submit(Shader& shader, Mesh& mesh)
+    void OpenGL_Renderer::submit(Shader& shader, Mesh& mesh, Transform& trans)
     {
-        std::function const GetUniformData = [this](Shader::Uniform uniform) -> float*
+        std::function const GetUniformData = [&](Shader::Uniform uniform) -> float*
         {
             switch (uniform)
             {
                 case Shader::Uniform::CAMERA: {
                     return m_SceneCamera->data();
+                } break;
+                case Shader::Uniform::TRANSFORM: {
+                    return trans.data();
                 } break;
             }
             ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown shader uniform type!");

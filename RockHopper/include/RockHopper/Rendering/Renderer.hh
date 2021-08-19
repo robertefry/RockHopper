@@ -5,6 +5,7 @@
 #include "RockHopper/Rendering/Camera/Camera.fwd"
 #include "RockHopper/Rendering/Shader.fwd"
 #include "RockHopper/Rendering/Mesh.fwd"
+#include "RockHopper/Rendering/Transform.fwd"
 
 #include "RockHopper/Engine/EngineThread.hh"
 #include "RockHopper/Utility/TaskQueue.hh"
@@ -33,7 +34,8 @@ namespace RockHopper
         virtual void scene_begin(Camera*) = 0;
         virtual void scene_end() = 0;
 
-        virtual void submit(Shader&, Mesh&) = 0;
+        virtual void submit(Shader&, Mesh&);
+        virtual void submit(Shader&, Mesh&, Transform&) = 0;
 
         static auto GetAPI() -> API { return s_RendererAPI; }
         static auto GetInstance() -> auto& { return s_Instance; }

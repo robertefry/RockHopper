@@ -51,11 +51,13 @@ void Sandbox::run()
     public:
         explicit CameraAnimation(Camera& camera)
             : m_Camera{camera}
-        {}
+        {
+            m_Camera.position(glm::vec3{0.0f,0.0f,4.0f});
+        }
         virtual void on_event(EngineTickEvent const& event) override
         {
             m_SigmaTime = fmod(m_SigmaTime+(float)event.delta,2*M_PI);
-            m_Camera.position(glm::vec3{2.0f*sin(m_SigmaTime),2.0f*cos(m_SigmaTime),4.0f});
+            m_Camera.position(glm::vec3{2.0f*sin(m_SigmaTime),2.0f*cos(m_SigmaTime),6.0f});
         }
     private:
         Camera& m_Camera;
