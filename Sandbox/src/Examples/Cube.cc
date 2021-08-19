@@ -43,9 +43,9 @@ void Cube::on_event(WindowInitEvent const& event)
             }
         )glsl");
         m_Shader->make_program();
+        m_Shader->map_uniform(Shader::Uniform::CAMERA,"u_View");
         m_Shader->bind();
         m_Shader->def_uniform("u_Scale",Shader::UniformType::SCALAR,1,0.5f);
-        m_Shader->def_uniform("u_View",Shader::UniformType::MAT44,1);
     }
     m_Mesh = Mesh::Create();
     {
@@ -97,8 +97,5 @@ void Cube::on_event(EngineTickEvent const& event)
 
 void Cube::on_event(WindowRefreshEvent const& event)
 {
-    m_Shader->bind();
-    m_Shader->set_uniform("u_View",event.window->camera().data());
-
     Renderer::GetInstance()->submit(*m_Shader,*m_Mesh);
 }

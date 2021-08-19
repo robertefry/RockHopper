@@ -8,6 +8,8 @@
 
 #include <glad/glad.h>
 
+#include <functional>
+
 namespace RockHopper
 {
 
@@ -71,10 +73,28 @@ namespace RockHopper
 #endif
     }
 
-    void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
+    void OpenGL_Renderer::submit(Shader& shader, Mesh& mesh)
     {
+        std::function const GetUniformData = [this](Shader::Uniform uniform) -> float*
+        {
+            switch (uniform)
+            {
+                case Shader::Uniform::CAMERA: {
+                    return m_SceneCamera->data();
+                } break;
+            }
+            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown shader uniform type!");
+            return nullptr;
+        };
+
         shader.bind();
         mesh.bind();
+
+        for (auto const& [uniform,name] : shader.uniform_map())
+        {
+            shader.set_uniform(name,GetUniformData(uniform));
+        }
+
         glDrawElements(GL_TRIANGLES,mesh.num_indices(),GL_UNSIGNED_INT,nullptr);
     }
 

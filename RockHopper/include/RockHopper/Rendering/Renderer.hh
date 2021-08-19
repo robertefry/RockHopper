@@ -33,7 +33,7 @@ namespace RockHopper
         virtual void scene_begin(Camera*) = 0;
         virtual void scene_end() = 0;
 
-        virtual void submit(Shader const&, Mesh const&) = 0;
+        virtual void submit(Shader&, Mesh&) = 0;
 
         static auto GetAPI() -> API { return s_RendererAPI; }
         static auto GetInstance() -> auto& { return s_Instance; }
