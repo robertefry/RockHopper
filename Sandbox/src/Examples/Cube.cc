@@ -19,31 +19,32 @@ void Cube::on_event(WindowInitEvent const& event)
             #version 330 core
 
             layout(location=0) in vec3 a_Position;
+            layout(location=1) in vec4 a_Color;
 
             uniform mat4 u_Transform;
             uniform mat4 u_View;
 
             out vec3 v_Position;
-            out vec4 v_Colour;
+            out vec4 v_Color;
 
             void main()
             {
                 gl_Position = u_View * u_Transform * vec4(a_Position,1.0);
                 v_Position = a_Position;
-                v_Colour = vec4(a_Position*0.5+0.5,1.0);
+                v_Color = a_Color;
             }
         )glsl");
         m_Shader->source_shader(Shader::Type::FRAGMENT,R"glsl(
             #version 330 core
 
             in vec3 v_Position;
-            in vec4 v_Colour;
+            in vec4 v_Color;
 
-            layout(location=0) out vec4 o_Colour;
+            layout(location=0) out vec4 o_Color;
 
             void main()
             {
-                o_Colour = v_Colour;
+                o_Color = v_Color;
             }
         )glsl");
         m_Shader->make_program();
@@ -57,18 +58,19 @@ void Cube::on_event(WindowInitEvent const& event)
         mesh_data.layout =
         {
             { Mesh::Data::Type::FLOAT, 3, false, "a_Position" },
+            { Mesh::Data::Type::FLOAT, 4, false, "a_Color" },
         };
         mesh_data.vertices =
         {
-            +0.0f, +0.0f, +0.0f,
-            +1.0f, +1.0f, -1.0f,
-            +1.0f, -1.0f, -1.0f,
-            +1.0f, +1.0f, +1.0f,
-            +1.0f, -1.0f, +1.0f,
-            -1.0f, +1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, +1.0f, +1.0f,
-            -1.0f, -1.0f, +1.0f,
+            +0.0f, +0.0f, +0.0f, +0.0f, +0.0f, +0.0f, +0.0f,
+            +1.0f, +1.0f, -1.0f, +1.0f, +1.0f, +0.0f, +1.0f,
+            +1.0f, -1.0f, -1.0f, +1.0f, +0.0f, +0.0f, +1.0f,
+            +1.0f, +1.0f, +1.0f, +1.0f, +1.0f, +1.0f, +1.0f,
+            +1.0f, -1.0f, +1.0f, +1.0f, +0.0f, +1.0f, +1.0f,
+            -1.0f, +1.0f, -1.0f, +0.0f, +1.0f, +0.0f, +1.0f,
+            -1.0f, -1.0f, -1.0f, +0.0f, +0.0f, +0.0f, +1.0f,
+            -1.0f, +1.0f, +1.0f, +0.0f, +1.0f, +1.0f, +1.0f,
+            -1.0f, -1.0f, +1.0f, +0.0f, +0.0f, +1.0f, +1.0f,
         };
         mesh_data.indices =
         {
