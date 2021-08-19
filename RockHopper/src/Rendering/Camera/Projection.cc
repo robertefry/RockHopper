@@ -39,7 +39,7 @@ namespace RockHopper
 
     void ProjectionPerspective3D::on_event(WindowSizeEvent const& event)
     {
-        m_Aspect = event.width / event.height;
+        m_Aspect = (float)event.width / (float)event.height;
         m_Matrix.mark_dirty();
     }
 
