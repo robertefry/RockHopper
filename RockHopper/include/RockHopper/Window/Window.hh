@@ -36,6 +36,8 @@ namespace RockHopper
         virtual void set_details(WindowDetails const&) = 0;
         virtual auto get_details() const -> WindowDetails const& = 0;
 
+        virtual void swap_interval(int) = 0;
+
         virtual auto camera() -> Camera& { return *m_Camera; };
         virtual auto camera() const -> Camera const& { return *m_Camera; };
 

@@ -83,6 +83,15 @@ namespace RockHopper
         return m_Details;
     }
 
+    void GLFW_Window::swap_interval(int interval)
+    {
+        m_TaskQueue.push_task([this,interval]() { Renderer::GetInstance()->push_task([this,interval]()
+        {
+            glfwMakeContextCurrent(m_WindowHandle);
+            glfwSwapInterval(interval);
+        }); });
+    }
+
     void GLFW_Window::attach(Keyboard* keyboard)
     {
         m_TaskQueue.push_task([this,keyboard]() { Renderer::GetInstance()->push_task([this,keyboard]()

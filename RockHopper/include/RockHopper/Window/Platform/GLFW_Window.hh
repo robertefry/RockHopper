@@ -24,6 +24,8 @@ namespace RockHopper
         virtual void set_details(WindowDetails const&) override;
         virtual auto get_details() const -> WindowDetails const& override;
 
+        virtual void swap_interval(int) override;
+
         virtual void attach(Keyboard*) override;
         virtual void detach(Keyboard*) override;
 

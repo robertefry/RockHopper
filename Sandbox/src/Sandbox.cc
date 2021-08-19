@@ -22,8 +22,9 @@ Sandbox::Sandbox()
     , m_Keyboard{std::make_unique<Keyboard>("default")}
     , m_Mouse{std::make_unique<Mouse>("default")}
 {
-    m_Engine->timing().set_omega(FPS_120);
+    // m_Engine->timing().set_omega(FPS_120);
     m_Engine->insert_event_listener(m_Window.get());
+    m_Window->swap_interval(1);
 
     m_Window->attach(m_Keyboard.get());
     m_Window->attach(m_Mouse.get());
