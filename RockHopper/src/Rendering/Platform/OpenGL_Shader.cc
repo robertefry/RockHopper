@@ -162,6 +162,8 @@ namespace RockHopper
 
         switch (uniform_data.type)
         {
+            case UniformType::VOID: {
+            } break;
             case UniformType::SCALAR: {
                 glUniform1fv(uniform_data.location,uniform_data.size,data);
             } break;

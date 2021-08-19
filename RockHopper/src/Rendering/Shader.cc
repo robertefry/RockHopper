@@ -4,6 +4,8 @@
 
 #include "RockHopper/Rendering/Renderer.hh"
 
+#include <functional>
+
 namespace RockHopper
 {
 
@@ -16,6 +18,22 @@ namespace RockHopper
         }
         ROCKHOPPER_INTERNAL_LOG_FATAL("Could not create a shader from an unknown API!");
         return nullptr;
+    }
+
+    void Shader::map_uniform(Uniform uniform, std::string const& name)
+    {
+        std::function const GetUniformType = [](Uniform uniform)
+        {
+            switch (uniform)
+            {
+                case Uniform::CAMERA: return UniformType::MAT44;
+            }
+            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown uniform map type!");
+            return UniformType::VOID;
+        };
+
+        def_uniform(name,GetUniformType(uniform),1);
+        m_UniformMap[uniform] = name;
     }
 
 } // namespace RockHopper
