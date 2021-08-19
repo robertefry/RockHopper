@@ -181,7 +181,7 @@ namespace RockHopper
 
         Renderer::GetInstance()->wait_task([this]()
         {
-            Renderer::GetInstance()->scene_begin();
+            Renderer::GetInstance()->scene_begin(m_Camera.get());
 
             WindowRefreshEvent event;
             event.window = this;

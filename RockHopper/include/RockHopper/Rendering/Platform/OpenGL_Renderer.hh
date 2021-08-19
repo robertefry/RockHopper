@@ -13,9 +13,12 @@ namespace RockHopper
         virtual ~OpenGL_Renderer();
         explicit OpenGL_Renderer();
 
+        explicit OpenGL_Renderer(OpenGL_Renderer const&) = delete;
+        OpenGL_Renderer& operator=(OpenGL_Renderer const&) = delete;
+
         virtual void viewport(float x, float y, float w, float h) override;
 
-        virtual void scene_begin() override;
+        virtual void scene_begin(Camera*) override;
         virtual void scene_end() override;
 
         virtual void submit(Shader const&, Mesh const&) override;
@@ -23,6 +26,10 @@ namespace RockHopper
     private:
         virtual void init() override;
         virtual void dispose() override;
+
+    private:
+        Camera* m_SceneCamera{};
+        bool m_SceneInProgress = false;
     };
 
 } // namespace RockHopper

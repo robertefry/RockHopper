@@ -188,11 +188,11 @@ namespace RockHopper
 
             glfwSetWindowRefreshCallback(*handle,[](GLFWwindow* handle)
             {
-                WindowRefreshEvent event;
+                // WindowRefreshEvent event;
 
-                Window* window = GLFW_Context_Data::GetUserPointer<Window>(handle);
-                event.window = window;
-                window->dispatch_event(event);
+                // Window* window = GLFW_Context_Data::GetUserPointer<Window>(handle);
+                // event.window = window;
+                // window->dispatch_event(event);
             });
             glfwSetWindowCloseCallback(*handle,[](GLFWwindow* handle)
             {

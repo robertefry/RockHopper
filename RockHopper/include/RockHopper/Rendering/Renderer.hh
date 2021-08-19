@@ -2,8 +2,9 @@
 #ifndef __HH_ROCKHOPPER_RENDERER_
 #define __HH_ROCKHOPPER_RENDERER_
 
-#include "RockHopper/Rendering/Mesh.fwd"
+#include "RockHopper/Rendering/Camera/Camera.fwd"
 #include "RockHopper/Rendering/Shader.fwd"
+#include "RockHopper/Rendering/Mesh.fwd"
 
 #include "RockHopper/Engine/EngineThread.hh"
 #include "RockHopper/Utility/TaskQueue.hh"
@@ -29,7 +30,7 @@ namespace RockHopper
 
         virtual void viewport(float x, float y, float w, float h) = 0;
 
-        virtual void scene_begin() = 0;
+        virtual void scene_begin(Camera*) = 0;
         virtual void scene_end() = 0;
 
         virtual void submit(Shader const&, Mesh const&) = 0;

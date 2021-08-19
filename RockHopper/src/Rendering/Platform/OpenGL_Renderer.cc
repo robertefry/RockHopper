@@ -2,6 +2,7 @@
 #include "RockHopper/Rendering/Platform/OpenGL_Renderer.hh"
 
 #include "RockHopper/Debug.hh"
+#include "RockHopper/Rendering/Camera/Camera.hh"
 #include "RockHopper/Rendering/Shader.hh"
 #include "RockHopper/Rendering/Mesh.hh"
 
@@ -52,13 +53,22 @@ namespace RockHopper
     {
     }
 
-    void OpenGL_Renderer::scene_begin()
+    void OpenGL_Renderer::scene_begin(Camera* camera)
     {
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL((m_SceneInProgress == false),"Only one scene allowed per renderer!");
+        m_SceneInProgress = true;
+        m_SceneCamera = camera;
+
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
     void OpenGL_Renderer::scene_end()
     {
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL((m_SceneInProgress == true),"Must begin the scene before ending the scene!");
+        m_SceneInProgress = false;
+#ifndef NDEBUG
+        m_SceneCamera = nullptr;
+#endif
     }
 
     void OpenGL_Renderer::submit(Shader const& shader, Mesh const& mesh)
