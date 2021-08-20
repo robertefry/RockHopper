@@ -91,7 +91,7 @@ void Cube::on_event(WindowInitEvent const& event)
     }
 
     m_Transform = std::make_unique<Transform>();
-    m_Transform->scale(glm::vec3{0.75f});
+    m_Transform->scale(0.75f);
 }
 
 void Cube::on_event(WindowDisposeEvent const& event)
@@ -102,7 +102,9 @@ void Cube::on_event(WindowDisposeEvent const& event)
 
 void Cube::on_event(EngineTickEvent const& event)
 {
+    m_SigmaTime += event.delta;
     m_Transform->rotate(event.delta.count()*0.7f,glm::vec3{0.5f,0.5f,0.2f});
+    m_Transform->translate(0.005f*glm::vec3{cos(m_SigmaTime.count()*8),sin(m_SigmaTime.count()*8),0.0f});
 }
 
 void Cube::on_event(WindowRefreshEvent const& event)

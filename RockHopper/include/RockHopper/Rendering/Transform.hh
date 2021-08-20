@@ -5,6 +5,10 @@
 #include "RockHopper/Utility/CacheVariable.hh"
 
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+#include <iosfwd>
+#include <glm/gtx/string_cast.hpp>
 
 namespace RockHopper
 {
@@ -18,28 +22,42 @@ namespace RockHopper
         auto matrix() const -> glm::mat4;
         auto data() -> float*;
 
-        void position(glm::vec3 const&);
-        void translate(glm::vec3 const&);
-        auto get_translation() const { return m_Translation; }
+        void translate(glm::vec3 const& vec);
+        glm::vec3 get_translation() const { return m_Translation; }
+        glm::mat4 get_translation_m() const;
 
-        void rotation(glm::quat const&);
         void rotate(float rad, glm::vec3 const& axis);
-        auto get_rotation() const { return m_Rotation; }
+        glm::quat get_rotation() const { return m_Rotation; }
+        glm::mat4 get_rotation_m() const;
 
-        void scale(glm::vec3 const&);
-        void grow(glm::vec3 const&);
-        auto get_scale() const { return m_Scale; }
+        void scale(float f);
+        void scale(glm::vec3 const& vec);
+        glm::vec3 get_scale() const { return m_Scale; }
+        glm::mat4 get_scale_m() const;
 
-    public:
-        glm::mat4 m_Translation{1.0f}, m_Rotation{1.0f}, m_Scale{1.0f};
+    private:
+        glm::vec3 m_Translation;
+        glm::quat m_Rotation;
+        glm::vec3 m_Scale;
+
         CacheVariable<glm::mat4> m_Matrix{1.0f};
-
-    public:
-        static inline glm::vec3 const AXIS_X {1.0f,0.0f,0.0f};
-        static inline glm::vec3 const AXIS_Y {0.0f,1.0f,0.0f};
-        static inline glm::vec3 const AXIS_Z {0.0f,0.0f,1.0f};
     };
 
 } // namespace RockHopper
+
+namespace std
+{
+    using namespace RockHopper;
+
+    template <typename T_Char>
+    std::basic_ostream<T_Char>& operator<<(std::basic_ostream<T_Char>& ostr, Transform const& transform)
+    {
+        return ostr
+            << "t:" << glm::to_string(transform.get_translation()) << "\n"
+            << "r:" << glm::to_string(transform.get_rotation()) << "\n"
+            << "s:" << glm::to_string(transform.get_scale());
+    }
+
+} // namespace std
 
 #endif /* __HH_ROCKHOPPER_RENDERING_TRANSFORM_ */

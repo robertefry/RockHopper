@@ -27,4 +27,6 @@ private:
     std::unique_ptr<Shader> m_Shader{};
     std::unique_ptr<Mesh> m_Mesh{};
     std::unique_ptr<Transform> m_Transform{};
+
+    TimeSpan m_SigmaTime{};
 };
