@@ -20,15 +20,14 @@ namespace RockHopper
 
         void position(glm::vec3 const&);
         void translate(glm::vec3 const&);
+        auto get_translation() const { return m_Translation; }
 
         void rotation(glm::quat const&);
         void rotate(float rad, glm::vec3 const& axis);
+        auto get_rotation() const { return m_Rotation; }
 
         void scale(glm::vec3 const&);
         void grow(glm::vec3 const&);
-
-        auto get_translation() const { return m_Translation; }
-        auto get_rotation() const { return m_Rotation; }
         auto get_scale() const { return m_Scale; }
 
     public:
