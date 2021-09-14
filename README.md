@@ -14,6 +14,7 @@ mkdir build && cd $_
 cmake .. && make <target>
 ```
 Please see the make `target`s below.
+* The default target will make everything.
 * `RockHopper` will make the main RockHopper dynamic library.
 * `RockHopper_Sandbox` will make RockHopper and the current Sandbox application.
 * `run_sandbox` will make the Sandbox application, and run it.
