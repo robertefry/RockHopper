@@ -48,12 +48,18 @@ namespace RockHopper
 
             name = name.substr(index,length);
         };
+        std::function const erase_trim = [&]()
+        {
+            name = std::regex_replace(name,std::regex("^[^a-zA-Z0-9_]+"),"");
+            name = std::regex_replace(name,std::regex("[^a-zA-Z0-9_]+$"),"");
+        };
 
         erase_delimited('(',')');
         erase_delimited('[',']');
         erase_delimited('<','>');
         erase_keywords({"const(expr|eval)?"});
         make_last_word();
+        erase_trim();
 
         return name;
     }
