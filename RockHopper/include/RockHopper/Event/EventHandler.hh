@@ -147,6 +147,7 @@ namespace RockHopper
 
         if (m_ParallelDispatch)
         {
+            // TODO: Use a thread pool for event dispatch
             std::vector<std::thread> dispatch_threads;
 
             for (ListenerType* listener : m_EventListeners)
