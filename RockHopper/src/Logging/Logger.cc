@@ -34,7 +34,7 @@ std::shared_ptr<spdlog::logger>& LoggerInstanceManager::GetInstance(RockHopper::
     {
         case RockHopper::Logger::Instance::InternalLogger:
         {
-            auto logger = spdlog::stdout_color_mt("RockHopper");
+            auto logger = spdlog::stdout_color_mt("Internal");
             logger->set_level(spdlog::level::trace);
             logger->set_pattern("%^[%T] [%t] %L %n: %v%$");
             return m_LoggerInstances[instance] = logger;
