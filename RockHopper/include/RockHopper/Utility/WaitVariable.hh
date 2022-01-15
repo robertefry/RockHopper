@@ -15,6 +15,7 @@ namespace RockHopper
     public:
         virtual ~WaitVariable() = default;
         explicit WaitVariable() = default;
+
     public:
         inline void wait() const noexcept
         {
@@ -56,6 +57,7 @@ namespace RockHopper
             std::unique_lock<std::mutex> lock {m_DataPtr->m_Mutex};
             m_DataPtr->m_Triggered = false;
         }
+
     private:
         struct Data
         {
