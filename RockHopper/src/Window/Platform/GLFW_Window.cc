@@ -41,8 +41,8 @@ namespace RockHopper
         {
             // Create a GLFW windowed-mode window handle and it's OpenGL context
             m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"Failed to create a GLFW window handle! {}", m_DebugName);
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("Created a GLFW window {}.", m_DebugName);
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"GLFW failed to create a handle for {}", m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("GLFW {} created", m_DebugName);
 
             // Set the GLFW user pointer to this window
             glfwSetWindowUserPointer(m_WindowHandle,this);
@@ -68,7 +68,7 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,details]() { Renderer::GetInstance()->push_task([this,details]()
         {
-            ROCKHOPPER_INTERNAL_LOG_INFO("Setting details for {}.", m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_INFO("GLFW configuring {}", m_DebugName);
             if (m_WindowHandle)
             {
                 glfwSetWindowSize(m_WindowHandle,details.width,details.height);
@@ -96,10 +96,10 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,keyboard]() { Renderer::GetInstance()->push_task([this,keyboard]()
         {
-            ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Keyboard {} to the Window {}.", keyboard->m_DebugName, m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_INFO("attaching {} to {}", keyboard->m_DebugName, m_DebugName);
             if (m_KeyboardHandle != nullptr)
             {
-                ROCKHOPPER_INTERNAL_LOG_ERROR("The Keyboard {} is already attached to the Window {}!", keyboard->m_DebugName, m_DebugName);
+                ROCKHOPPER_INTERNAL_LOG_ERROR("{} already attached to {}", keyboard->m_DebugName, m_DebugName);
                 return;
             }
             m_KeyboardHandle = keyboard;
@@ -113,7 +113,7 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,keyboard]() { Renderer::GetInstance()->push_task([this,keyboard]()
         {
-            ROCKHOPPER_INTERNAL_LOG_INFO("Detaching the Keyboard {} from the Window {}.", keyboard->m_DebugName, m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_INFO("detaching {} from {}", keyboard->m_DebugName, m_DebugName);
             m_KeyboardHandle = nullptr;
             keyboard->on_detach(this);
 
@@ -125,10 +125,10 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,mouse]() { Renderer::GetInstance()->push_task([this,mouse]()
         {
-            ROCKHOPPER_INTERNAL_LOG_INFO("Attaching the Mouse {} to the Window {}.", mouse->m_DebugName, m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_INFO("attaching {} to {}", mouse->m_DebugName, m_DebugName);
             if (m_MouseHandle != nullptr)
             {
-                ROCKHOPPER_INTERNAL_LOG_ERROR("The Mouse {} is already attached to the Window {}!", mouse->m_DebugName, m_DebugName);
+                ROCKHOPPER_INTERNAL_LOG_ERROR("{} already attached to {}", mouse->m_DebugName, m_DebugName);
                 return;
             }
             m_MouseHandle = mouse;
@@ -142,7 +142,7 @@ namespace RockHopper
     {
         m_TaskQueue.push_task([this,mouse]() { Renderer::GetInstance()->push_task([this,mouse]()
         {
-            ROCKHOPPER_INTERNAL_LOG_INFO("Detached the Mouse {} from the Window {}.", mouse->m_DebugName, m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_INFO("detaching {} from {}", mouse->m_DebugName, m_DebugName);
             m_MouseHandle = nullptr;
             mouse->on_detach(this);
 

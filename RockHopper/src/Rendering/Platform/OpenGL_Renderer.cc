@@ -35,12 +35,12 @@ namespace RockHopper
     {
         push_task([this]()
         {
-            ROCKHOPPER_INTERNAL_LOG_INFO("Loading GLAD OpenGL.");
+            ROCKHOPPER_INTERNAL_LOG_INFO("loading GLAD OpenGL");
             int status = gladLoadGL();
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(status,"GLAD failed to load OpenGL!");
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(status,"GLAD failed to load OpenGL");
 
             const GLubyte* version = glGetString(GL_VERSION);
-            ROCKHOPPER_INTERNAL_LOG_INFO("Initialized GLAD OpenGL {}.",version);
+            ROCKHOPPER_INTERNAL_LOG_INFO("initialized GLAD OpenGL {}",version);
 
             // Enable counter-clockwise face culling
             glFrontFace(GL_CCW);
@@ -58,7 +58,7 @@ namespace RockHopper
 
     void OpenGL_Renderer::scene_begin(Camera* camera)
     {
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL((m_SceneInProgress == false),"Only one scene allowed per renderer!");
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL((m_SceneInProgress == false),"only one scene allowed per renderer");
         m_SceneInProgress = true;
         m_SceneCamera = camera;
 
@@ -67,7 +67,7 @@ namespace RockHopper
 
     void OpenGL_Renderer::scene_end()
     {
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL((m_SceneInProgress == true),"Must begin the scene before ending the scene!");
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL((m_SceneInProgress == true),"must begin the scene before ending the scene");
         m_SceneInProgress = false;
 #ifndef NDEBUG
         m_SceneCamera = nullptr;
@@ -87,7 +87,7 @@ namespace RockHopper
                     return trans.data();
                 } break;
             }
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown shader uniform type!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported uniform type");
             return nullptr;
         };
 

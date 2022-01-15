@@ -57,7 +57,7 @@ namespace RockHopper
                     case Type::GEOMETRY: return GL_GEOMETRY_SHADER;
                     case Type::FRAGMENT: return GL_FRAGMENT_SHADER;
                 }
-                ROCKHOPPER_INTERNAL_LOG_FATAL("Trying to compile a shader of unknown type.");
+                ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported shader type");
                 return 0;
             }();
 
@@ -85,7 +85,7 @@ namespace RockHopper
                 glDeleteShader(shader);
 
                 std::string error = std::string{infolog.begin(),infolog.end()};
-                ROCKHOPPER_INTERNAL_LOG_FATAL("Shader compilation failed: {}.",error);
+                ROCKHOPPER_INTERNAL_LOG_FATAL("compilation failure: {}",error);
             }
 
             return shader;
@@ -129,7 +129,7 @@ namespace RockHopper
             glDeleteProgram(program);
 
             std::string error = std::string{infolog.begin(),infolog.end()};
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Shader linking failed: {}.",error);
+            ROCKHOPPER_INTERNAL_LOG_FATAL("linker failure: {}",error);
         }
 
         // Detach and delete the compiled shaders after a successful link
@@ -151,13 +151,13 @@ namespace RockHopper
     void OpenGL_Shader::def_uniform(std::string const& name, UniformType type, size_t size)
     {
         uint64_t location = glGetUniformLocation(m_ShaderProgram,name.c_str());
-        ROCKHOPPER_INTERNAL_ASSERT_FATAL((location != 0xFFFF'FFFF'FFFF'FFFF), "Uniform '{}' not found!", name);
+        ROCKHOPPER_INTERNAL_ASSERT_FATAL((location != 0xFFFF'FFFF'FFFF'FFFF), "{} not found", DebugName{"OpenGL::Uniform",name});
         m_UniformCache[name] = UniformData{location,type,size};
     }
 
     void OpenGL_Shader::set_uniform(std::string const& name, float* data)
     {
-        ROCKHOPPER_INTERNAL_ASSERT_ERROR(m_UniformCache.contains(name),"Uniform {} not found!",name);
+        ROCKHOPPER_INTERNAL_ASSERT_ERROR(m_UniformCache.contains(name), "{} not found", DebugName{"OpenGL::Uniform",name});
         UniformData uniform_data = m_UniformCache.at(name);
 
         switch (uniform_data.type)

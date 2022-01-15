@@ -78,7 +78,7 @@ namespace RockHopper
 
     void EngineThread::run()
     {
-        ROCKHOPPER_INTERNAL_LOG_INFO("Starting {}.", m_DebugName);
+        ROCKHOPPER_INTERNAL_LOG_INFO("{} starting", m_DebugName);
 
         m_StartNotifier.notify_all();
         m_StopNotifier.reset();
@@ -107,7 +107,7 @@ namespace RockHopper
         m_StartNotifier.reset();
         m_StopNotifier.notify_all();
 
-        ROCKHOPPER_INTERNAL_LOG_INFO("Stopped {}.", m_DebugName);
+        ROCKHOPPER_INTERNAL_LOG_INFO("{} stopped", m_DebugName);
     }
 
 } // namespace RockHopper

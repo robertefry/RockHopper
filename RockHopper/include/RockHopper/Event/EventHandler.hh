@@ -85,7 +85,7 @@ namespace RockHopper
     {
         std::lock_guard<std::mutex> guard {m_Mutex};
         m_EventListeners.insert(listener);
-        ROCKHOPPER_INTERNAL_LOG_TRACE("inserted an event listener for events of type '{}'",typeid(T_EventCategory).name());
+        ROCKHOPPER_INTERNAL_LOG_TRACE("type '{}'",typeid(T_EventCategory).name());
     }
 
     template <typename T_EventCategory>
@@ -93,7 +93,7 @@ namespace RockHopper
     {
         std::lock_guard<std::mutex> guard {m_Mutex};
         m_EventListeners.erase(listener);
-        ROCKHOPPER_INTERNAL_LOG_TRACE("removed an event listener for events of type '{}'",typeid(T_EventCategory).name());
+        ROCKHOPPER_INTERNAL_LOG_TRACE("type '{}'",typeid(T_EventCategory).name());
     }
 
     template <typename T_EventCategory>
@@ -104,7 +104,7 @@ namespace RockHopper
         auto owned = std::make_unique<T_EventListenable>(std::forward<Args>(args)...);
         m_EventListeners.insert(owned.get());
         m_OwnedEventListeners.insert(std::move(owned));
-        ROCKHOPPER_INTERNAL_LOG_TRACE("emplaced an event listener for events of type '{}'",typeid(T_EventListenable).name());
+        ROCKHOPPER_INTERNAL_LOG_TRACE("type '{}'",typeid(T_EventListenable).name());
     }
 
     template <typename T_EventCategory>
@@ -115,7 +115,7 @@ namespace RockHopper
         auto owned = std::make_unique<T_EventListenable>(std::move(listener));
         m_EventListeners.insert(owned.get());
         m_OwnedEventListeners.insert(std::move(owned));
-        ROCKHOPPER_INTERNAL_LOG_TRACE("given an event listener for events of type '{}'",typeid(T_EventListenable).name());
+        ROCKHOPPER_INTERNAL_LOG_TRACE("type '{}'",typeid(T_EventListenable).name());
     }
 
     template <typename T_EventCategory>
@@ -126,7 +126,7 @@ namespace RockHopper
         auto owned = std::make_unique<T_EventListenable>(listener);
         m_EventListeners.insert(owned.get());
         m_OwnedEventListeners.insert(std::move(owned));
-        ROCKHOPPER_INTERNAL_LOG_TRACE("given an event listener for events of type '{}'",typeid(T_EventListenable).name());
+        ROCKHOPPER_INTERNAL_LOG_TRACE("type '{}'",typeid(T_EventListenable).name());
     }
 
     template <typename T_EventCategory>
@@ -137,7 +137,7 @@ namespace RockHopper
         auto itr = m_OwnedEventListeners.find(listener);
         m_EventListeners.erase(itr->get());
         m_OwnedEventListeners.erase(listener);
-        ROCKHOPPER_INTERNAL_LOG_TRACE("taken an event listener for events of type '{}'",typeid(T_EventListenable).name());
+        ROCKHOPPER_INTERNAL_LOG_TRACE("type '{}'",typeid(T_EventListenable).name());
     }
 
     template <typename T_EventCategory>
@@ -160,7 +160,9 @@ namespace RockHopper
             {
                 thread.join();
             }
-            ROCKHOPPER_INTERNAL_LOG_TRACE("parallel-dispatched an event of type '{}'",typeid(T_EventCategory).name());
+#ifdef ROCKHOPPER_LOG_EVENT_DISPATCH
+            ROCKHOPPER_INTERNAL_LOG_TRACE("parallel type '{}'",typeid(T_EventCategory).name());
+#endif
         }
         else
         {
@@ -168,7 +170,9 @@ namespace RockHopper
             {
                 event.accept(listener);
             }
-            ROCKHOPPER_INTERNAL_LOG_TRACE("dispatched an event of type '{}'",typeid(T_EventCategory).name());
+#ifdef ROCKHOPPER_LOG_EVENT_DISPATCH
+            ROCKHOPPER_INTERNAL_LOG_TRACE("sequential type '{}'",typeid(T_EventCategory).name());
+#endif
         }
     }
 

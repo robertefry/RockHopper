@@ -24,7 +24,7 @@ namespace RockHopper
     {
         if (s_Instance != nullptr)
         {
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Cannot create multiple renderers!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("cannot create multiple renderers");
         }
         s_RendererAPI = api;
         s_Instance = [&]() -> std::unique_ptr<Renderer>
@@ -35,10 +35,10 @@ namespace RockHopper
                     return std::make_unique<OpenGL_Renderer>();
                 } break;
                 case API::None: {
-                    ROCKHOPPER_INTERNAL_LOG_FATAL("Cannot create a renderer from the None API!");
+                    ROCKHOPPER_INTERNAL_LOG_FATAL("cannot create a renderer from the None API");
                 } break;
             };
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Could not create a renderer from an unknown API!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported API");
             return nullptr;
         }();
     }

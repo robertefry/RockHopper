@@ -14,9 +14,9 @@ namespace RockHopper
         switch (Renderer::GetAPI())
         {
             case Renderer::API::OpenGL: return std::make_unique<OpenGL_Shader>();
-            case Renderer::API::None: ROCKHOPPER_INTERNAL_LOG_FATAL("Cannot create a shader from the None API!");
+            case Renderer::API::None: ROCKHOPPER_INTERNAL_LOG_FATAL("cannot create a shader from the None API");
         }
-        ROCKHOPPER_INTERNAL_LOG_FATAL("Could not create a shader from an unknown API!");
+        ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported API");
         return nullptr;
     }
 
@@ -29,7 +29,7 @@ namespace RockHopper
                 case Uniform::CAMERA: return UniformType::MAT44;
                 case Uniform::TRANSFORM: return UniformType::MAT44;
             }
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown uniform map type!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported uniform type");
             return UniformType::VOID;
         };
 

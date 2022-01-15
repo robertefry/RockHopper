@@ -77,7 +77,7 @@ namespace RockHopper
                 case Data::Type::INT:   return 4;
                 case Data::Type::FLOAT: return 4;
             }
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown vertex data type!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported vertex data size");
             return 0;
         };
         std::function const GetTypeEnum = [&](Data::Type type) -> GLenum
@@ -88,7 +88,7 @@ namespace RockHopper
                 case Data::Type::INT:   return GL_INT;
                 case Data::Type::FLOAT: return GL_FLOAT;
             }
-            ROCKHOPPER_INTERNAL_LOG_FATAL("Unknown vertex data type!");
+            ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported vertex data type");
             return 0;
         };
 

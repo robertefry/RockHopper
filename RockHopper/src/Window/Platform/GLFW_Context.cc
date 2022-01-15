@@ -58,7 +58,7 @@ namespace RockHopper
         }
 
         // execution should never get here
-        ROCKHOPPER_INTERNAL_LOG_FATAL("No matching user pointer for type");
+        ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported device pointer");
     }
 
     template <typename T_Device>
@@ -80,7 +80,7 @@ namespace RockHopper
         }
 
         // execution should never get here
-        ROCKHOPPER_INTERNAL_LOG_FATAL("No matching user pointer for type");
+        ROCKHOPPER_INTERNAL_LOG_FATAL("unsupported device pointer");
         return nullptr;
     }
 
@@ -104,7 +104,7 @@ namespace RockHopper
         {
             Renderer::GetInstance()->push_task([]()
             {
-                ROCKHOPPER_INTERNAL_LOG_INFO("Terminating GLFW.");
+                ROCKHOPPER_INTERNAL_LOG_INFO("GLFW terminating");
                 glfwTerminate();
             });
         }
@@ -117,11 +117,11 @@ namespace RockHopper
         {
             Renderer::GetInstance()->push_task([]()
             {
-                ROCKHOPPER_INTERNAL_LOG_INFO("Initializing GLFW.");
+                ROCKHOPPER_INTERNAL_LOG_INFO("GLFW initializing");
                 glfwSetErrorCallback(GLFW_ErrorCallback);
 
                 int status = glfwInit();
-                ROCKHOPPER_INTERNAL_ASSERT_FATAL(status,"Failed to initialize GLFW!");
+                ROCKHOPPER_INTERNAL_ASSERT_FATAL(status,"GLFW initialization failed");
 
                 // Setup GLFW Window Hints
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,ROCKHOPPER_GLFW_VERSION_MAJOR);
@@ -334,7 +334,7 @@ namespace RockHopper
                         keyboard->dispatch_event(event);
                     }
                     break;
-                    default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an unknown GLFW key event!");
+                    default: ROCKHOPPER_INTERNAL_LOG_ERROR("unsupported GLFW key event");
                 }
             });
         });
@@ -414,7 +414,7 @@ namespace RockHopper
                         mouse->dispatch_event(event);
                     }
                     break;
-                    default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
+                    default: ROCKHOPPER_INTERNAL_LOG_ERROR("unsupported GLFW mouse event");
                 }
             });
             glfwSetMouseButtonCallback(*handle,[](GLFWwindow* handle, int button, int action, int mods)
@@ -454,7 +454,7 @@ namespace RockHopper
                         mouse->dispatch_event(event);
                     }
                     break;
-                    default: ROCKHOPPER_INTERNAL_LOG_ERROR("Encountered an known GLFW mouse event!");
+                    default: ROCKHOPPER_INTERNAL_LOG_ERROR("unsupported GLFW mouse event");
                 }
             });
             glfwSetScrollCallback(*handle,[](GLFWwindow* handle, double offset_x, double offset_y)
