@@ -1,6 +1,6 @@
 
-#ifndef __HH_ROCKHOPPER_TIMING_
-#define __HH_ROCKHOPPER_TIMING_
+#ifndef __HH_ROCKHOPPER_UTIL_TIME_TIMESPAN_
+#define __HH_ROCKHOPPER_UTIL_TIME_TIMESPAN_
 
 #include <cstdint>
 #include <compare>
@@ -73,4 +73,4 @@ namespace RockHopper
 
 } // namespace RockHopper
 
-#endif /* __HH_ROCKHOPPER_TIMING_ */
+#endif /* __HH_ROCKHOPPER_UTIL_TIME_TIMESPAN_ */

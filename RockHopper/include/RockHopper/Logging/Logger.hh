@@ -5,7 +5,7 @@
 #include <fmt/core.h>
 #include <spdlog/fmt/ostr.h>
 
-#include "RockHopper/Utility/StringUtility.hh"
+#include "RockHopper/Utility/String/StringUtility.hh"
 
 /* ************************************************************************** */
 // [Definition] RockHopper::Logger

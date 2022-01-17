@@ -4,7 +4,7 @@
 
 #include "RockHopper/Window/Window.fwd"
 #include "RockHopper/Window/WindowEvents.hh"
-#include "RockHopper/Utility/CacheVariable.hh"
+#include "RockHopper/Utility/Cache/CacheVariable.hh"
 
 #include <glm/glm.hpp>
 

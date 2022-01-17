@@ -1,10 +1,10 @@
 
-#ifndef __HH_ROCKHOPPER_UTIL_TASK_QUEUE_
-#define __HH_ROCKHOPPER_UTIL_TASK_QUEUE_
+#ifndef __HH_ROCKHOPPER_UTIL_ASYNC_TASK_QUEUE_
+#define __HH_ROCKHOPPER_UTIL_ASYNC_TASK_QUEUE_
 
 #include "TaskQueue.fwd"
 
-#include "RockHopper/Utility/WaitVariable.hh"
+#include "RockHopper/Utility/Async/WaitVariable.hh"
 
 #include <functional>
 #include <tuple>
@@ -155,4 +155,4 @@ namespace RockHopper
 
 } // namespace RockHopper
 
-#endif /* __HH_ROCKHOPPER_UTIL_TASK_QUEUE_ */
+#endif /* __HH_ROCKHOPPER_UTIL_ASYNC_TASK_QUEUE_ */

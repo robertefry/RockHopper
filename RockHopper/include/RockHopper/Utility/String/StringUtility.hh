@@ -1,4 +1,7 @@
 
+#ifndef __HH_ROCKHOPPER_UTIL_STRING_UTILITY_
+#define __HH_ROCKHOPPER_UTIL_STRING_UTILITY_
+
 #include <string>
 
 namespace RockHopper
@@ -13,3 +16,5 @@ namespace RockHopper
     }
 
 } // namespace RockHopper
+
+#endif /* __HH_ROCKHOPPER_UTIL_STRING_UTILITY_ */

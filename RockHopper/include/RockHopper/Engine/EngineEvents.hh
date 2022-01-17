@@ -6,7 +6,7 @@
 #include "RockHopper/Engine/EngineEvents.fwd"
 
 #include "RockHopper/Event/Event.hh"
-#include "RockHopper/Engine/Timing.hh"
+#include "RockHopper/Utility/Time/TimeSpan.hh"
 
 namespace RockHopper
 {

@@ -1,5 +1,5 @@
 
-#include "RockHopper/Utility/StringUtility.hh"
+#include "RockHopper/Utility/String/StringUtility.hh"
 
 #include <regex>
 

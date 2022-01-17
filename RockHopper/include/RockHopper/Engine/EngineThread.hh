@@ -3,8 +3,8 @@
 #define __HH_ROCKHOPPER_ENGINE_THREAD_
 
 #include "RockHopper/Debug.hh"
-#include "RockHopper/Engine/Timing.hh"
-#include "RockHopper/Utility/WaitVariable.hh"
+#include "RockHopper/Utility/Time/TimeSpan.hh"
+#include "RockHopper/Utility/Async/WaitVariable.hh"
 
 #include <atomic>
 #include <thread>

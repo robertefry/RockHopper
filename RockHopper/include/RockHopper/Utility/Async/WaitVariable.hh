@@ -1,6 +1,6 @@
 
-#ifndef __HH_ROCKHOPPER_WAIT_VARIABLE_
-#define __HH_ROCKHOPPER_WAIT_VARIABLE_
+#ifndef __HH_ROCKHOPPER_UTIL_ASYNC_WAIT_VARIABLE_
+#define __HH_ROCKHOPPER_UTIL_ASYNC_WAIT_VARIABLE_
 
 #include <memory>
 #include <atomic>
@@ -77,4 +77,4 @@ namespace RockHopper
 
 } // namespace RockHopper
 
-#endif /* __HH_ROCKHOPPER_WAIT_VARIABLE_ */
+#endif /* __HH_ROCKHOPPER_UTIL_ASYNC_WAIT_VARIABLE_ */

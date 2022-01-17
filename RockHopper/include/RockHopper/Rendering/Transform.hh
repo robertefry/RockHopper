@@ -2,7 +2,7 @@
 #ifndef __HH_ROCKHOPPER_RENDERING_TRANSFORM_
 #define __HH_ROCKHOPPER_RENDERING_TRANSFORM_
 
-#include "RockHopper/Utility/CacheVariable.hh"
+#include "RockHopper/Utility/Cache/CacheVariable.hh"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
