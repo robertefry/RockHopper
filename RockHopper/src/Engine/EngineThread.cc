@@ -80,8 +80,7 @@ namespace RockHopper
     {
         ROCKHOPPER_INTERNAL_LOG_INFO("{} starting", m_DebugName);
 
-        m_StartNotifier.notify_all();
-        m_StopNotifier.reset();
+        m_StartLock.notify_all();
 
         m_IsAlive = true;
         init();
@@ -104,8 +103,7 @@ namespace RockHopper
         dispose();
         m_IsAlive = false;
 
-        m_StartNotifier.reset();
-        m_StopNotifier.notify_all();
+        m_StopLock.notify_all();
 
         ROCKHOPPER_INTERNAL_LOG_INFO("{} stopped", m_DebugName);
     }
