@@ -134,10 +134,14 @@ namespace RockHopper
 
     void TaskQueue::execute_one()
     {
-        m_TaskQueue.front()->operator()();
+        std::unique_ptr<I_Executor> front;
+        {
+            std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
 
-        std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueue.pop();
+            front = std::move(m_TaskQueue.front());
+            m_TaskQueue.pop();
+        }
+        front->operator()();
     }
 
     void TaskQueue::execute_all()
