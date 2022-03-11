@@ -6,7 +6,9 @@ include("vcpkg/scripts/buildsystems/vcpkg.cmake")
 project("RockHopper" LANGUAGES CXX VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD "20")
 add_library(${PROJECT_NAME} SHARED "")
-enable_testing()
+
+# Add tests subdirectory
+add_subdirectory(tests)
 
 # Define compiler configuration
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
@@ -17,10 +19,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC "include")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
 # Define build sources
-file(GLOB_RECURSE SOURCES
+file(GLOB_RECURSE PROJECT_SOURCES
     "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
 )
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
+target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 
 # Define ROCKHOPPER_LOG_LEVEL
 if(NOT DEFINED ROCKHOPPER_LOG_LEVEL)

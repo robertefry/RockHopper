@@ -1,8 +1,8 @@
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.11)
 
 # Define project
-project("RockHopper_Sandbox" LANGUAGES CXX VERSION 1.0.0)
+project("RockHopper_Tests" LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD "20")
 add_executable(${PROJECT_NAME} "")
 
@@ -14,18 +14,23 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused)
 target_include_directories(${PROJECT_NAME} PUBLIC "include")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
-# Define build sources
-file(GLOB_RECURSE SOURCES
+# Define test sources
+file(GLOB_RECURSE TEST_SOURCES
     "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
 )
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
+target_sources(${PROJECT_NAME} PRIVATE ${TEST_SOURCES})
 
 # Use RockHopper
 target_link_libraries(${PROJECT_NAME} PRIVATE RockHopper)
 
-# Add launch target
-add_custom_target(run_sandbox
-    COMMENT "Running the ${PROJECT_NAME} binary..."
+# Use GTest
+find_package(GTest CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
+
+# Add test target
+add_test(NAME ${PROJECT_NAME} COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
+
+# Add explicit gtest target
+add_custom_target(gtest
     COMMAND $<TARGET_FILE:${PROJECT_NAME}>
     DEPENDS ${PROJECT_NAME})
-add_dependencies(run_sandbox RockHopper)

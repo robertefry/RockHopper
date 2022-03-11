@@ -1,5 +1,5 @@
 
-#include "RockHopper/Engine/Timing.hh"
+#include "RockHopper/Utility/Time/TimeSpan.hh"
 
 namespace RockHopper
 {

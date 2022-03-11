@@ -1,7 +1,0 @@
-
-namespace RockHopper
-{
-
-    class WaitVariable;
-
-} // namespace RockHopper

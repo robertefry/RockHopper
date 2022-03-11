@@ -1,10 +1,10 @@
 
-#ifndef __HH_ROCKHOPPER_UTIL_TASK_QUEUE_
-#define __HH_ROCKHOPPER_UTIL_TASK_QUEUE_
+#ifndef __HH_ROCKHOPPER_UTIL_ASYNC_TASK_QUEUE_
+#define __HH_ROCKHOPPER_UTIL_ASYNC_TASK_QUEUE_
 
 #include "TaskQueue.fwd"
 
-#include "RockHopper/Utility/WaitVariable.hh"
+#include "RockHopper/Utility/Async/WaitLock.hh"
 
 #include <functional>
 #include <tuple>
@@ -68,7 +68,7 @@ namespace RockHopper
         auto wait_task(T_Func&& func, T_Args&&... args)
             -> std::invoke_result<T_Func,T_Args...>::type;
 
-        inline auto insert_notifier() const -> auto const& { return m_InsertNotifier; }
+        inline auto insert_notifier() const { return m_InsertLock.async(); }
 
         inline size_t size() const;
         inline void execute_one();
@@ -76,7 +76,7 @@ namespace RockHopper
 
     private:
         std::queue<std::unique_ptr<I_Executor>> m_TaskQueue{};
-        WaitVariable m_InsertNotifier{};
+        WaitLock m_InsertLock{};
         mutable std::mutex m_TaskQueueMutex{};
     };
 
@@ -109,7 +109,7 @@ namespace RockHopper
 
         std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
         m_TaskQueue.push(std::move(executor));
-        m_InsertNotifier.notify_all();
+        m_InsertLock.notify_one();
         return future;
     }
 
@@ -134,15 +134,14 @@ namespace RockHopper
 
     void TaskQueue::execute_one()
     {
-        m_TaskQueue.front()->operator()();
-
-        std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
-        m_TaskQueue.pop();
-
-        if (m_TaskQueue.empty())
+        std::unique_ptr<I_Executor> front;
         {
-            m_InsertNotifier.reset();
+            std::lock_guard<std::mutex> lock {m_TaskQueueMutex};
+
+            front = std::move(m_TaskQueue.front());
+            m_TaskQueue.pop();
         }
+        front->operator()();
     }
 
     void TaskQueue::execute_all()
@@ -155,4 +154,4 @@ namespace RockHopper
 
 } // namespace RockHopper
 
-#endif /* __HH_ROCKHOPPER_UTIL_TASK_QUEUE_ */
+#endif /* __HH_ROCKHOPPER_UTIL_ASYNC_TASK_QUEUE_ */

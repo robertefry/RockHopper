@@ -5,7 +5,7 @@
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Window/Platform/GLFW_Context.hh"
 
-#include "RockHopper/Utility/TaskQueue.hh"
+#include "RockHopper/Utility/Async/TaskQueue.hh"
 
 class GLFWwindow;
 

@@ -8,7 +8,7 @@
 #include "RockHopper/Rendering/Transform.fwd"
 
 #include "RockHopper/Engine/EngineThread.hh"
-#include "RockHopper/Utility/TaskQueue.hh"
+#include "RockHopper/Utility/Async/TaskQueue.hh"
 
 #include <memory>
 #include <atomic>
