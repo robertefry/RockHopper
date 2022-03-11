@@ -5,6 +5,7 @@ git submodule update --init --recursive
 
 # list dependencies
 declare -a dependencies
+dependencies+=(gtest)       # testing
 dependencies+=(fmt spdlog)  # logging
 dependencies+=(glm)         # maths
 dependencies+=(glfw3 glad)  # graphics

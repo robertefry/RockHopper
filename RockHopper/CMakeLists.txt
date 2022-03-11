@@ -7,6 +7,9 @@ project("RockHopper" LANGUAGES CXX VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD "20")
 add_library(${PROJECT_NAME} SHARED "")
 
+# Add tests subdirectory
+add_subdirectory(tests)
+
 # Define compiler configuration
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused)
