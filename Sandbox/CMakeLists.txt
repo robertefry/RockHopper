@@ -29,10 +29,3 @@ add_custom_target(run_sandbox
     COMMAND $<TARGET_FILE:${PROJECT_NAME}>
     DEPENDS ${PROJECT_NAME})
 add_dependencies(run_sandbox RockHopper)
-
-# Add launch target with mangohud
-add_custom_target(run_mangohud
-    COMMENT "Running the ${PROJECT_NAME} binary..."
-    COMMAND mangohud $<TARGET_FILE:${PROJECT_NAME}>
-    DEPENDS ${PROJECT_NAME})
-add_dependencies(run_mangohud RockHopper)
