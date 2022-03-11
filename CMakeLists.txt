@@ -2,6 +2,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(RockHopper_META)
+enable_testing()
 
 # Define the output directory
 set(PROJECT_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output)

@@ -6,7 +6,6 @@ include("vcpkg/scripts/buildsystems/vcpkg.cmake")
 project("RockHopper" LANGUAGES CXX VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD "20")
 add_library(${PROJECT_NAME} SHARED "")
-enable_testing()
 
 # Define compiler configuration
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
