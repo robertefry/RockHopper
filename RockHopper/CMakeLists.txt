@@ -17,10 +17,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC "include")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
 # Define build sources
-file(GLOB_RECURSE SOURCES
+file(GLOB_RECURSE PROJECT_SOURCES
     "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
 )
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
+target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 
 # Define ROCKHOPPER_LOG_LEVEL
 if(NOT DEFINED ROCKHOPPER_LOG_LEVEL)
