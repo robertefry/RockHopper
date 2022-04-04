@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class WaitLock;
+
+} // namespace RockHopper
