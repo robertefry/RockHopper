@@ -4,6 +4,4 @@ namespace RockHopper
 
     class Application;
 
-    Application* CreateApplication();
-
 } // namespace RockHopper
