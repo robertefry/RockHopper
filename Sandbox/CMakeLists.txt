@@ -1,31 +1,29 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-# Define project
-project("RockHopper_Sandbox" LANGUAGES CXX VERSION 1.0.0)
-set(CMAKE_CXX_STANDARD "20")
-add_executable(${PROJECT_NAME} "")
+# Define binary
+set(BINARY_NAME "RockHopper-Sandbox")
+add_executable(${BINARY_NAME} "")
 
 # Define compiler configuration
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
-target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused)
+target_compile_options(${BINARY_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
+target_compile_options(${BINARY_NAME} PRIVATE -Wno-unused)
 
 # Define include directories
-target_include_directories(${PROJECT_NAME} PUBLIC "include")
-target_include_directories(${PROJECT_NAME} PRIVATE "src")
+target_include_directories(${BINARY_NAME} PUBLIC "include")
+target_include_directories(${BINARY_NAME} PRIVATE "src")
 
 # Define build sources
-file(GLOB_RECURSE SOURCES
-    "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
+file(GLOB_RECURSE BINARY_SOURCES
+  "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
 )
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
+target_sources(${BINARY_NAME} PRIVATE ${BINARY_SOURCES})
 
 # Use RockHopper
-target_link_libraries(${PROJECT_NAME} PRIVATE RockHopper)
+target_link_libraries(${BINARY_NAME} PRIVATE RockHopper)
 
 # Add launch target
 add_custom_target(run_sandbox
-    COMMENT "Running the ${PROJECT_NAME} binary..."
-    COMMAND $<TARGET_FILE:${PROJECT_NAME}>
-    DEPENDS ${PROJECT_NAME})
-add_dependencies(run_sandbox RockHopper)
+  COMMENT "Running the ${BINARY_NAME} binary..."
+  DEPENDS ${BINARY_NAME}
+  COMMAND $<TARGET_FILE:${BINARY_NAME}>)

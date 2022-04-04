@@ -9,13 +9,13 @@ public:
     virtual ~TestApp() = default;
     explicit TestApp() = default;
 
-    virtual void run() override;
+    virtual int run() override;
 };
 
-void TestApp::run()
+int TestApp::run()
 {
     testing::InitGoogleTest();
-    RUN_ALL_TESTS();
+    return RUN_ALL_TESTS();
 }
 
 /*

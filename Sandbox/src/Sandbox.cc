@@ -42,7 +42,7 @@ Sandbox::~Sandbox()
     m_Window->detach(m_Mouse.get());
 }
 
-void Sandbox::run()
+int Sandbox::run()
 {
     float w = m_Window->get_details().width, h = m_Window->get_details().height;
     m_Window->camera().projection(std::make_shared<ProjectionPerspective3D>(45,1,100));
@@ -69,4 +69,6 @@ void Sandbox::run()
 
     m_Engine->start();
     m_Engine->stop_notifier().wait();
+
+    return 0;
 }

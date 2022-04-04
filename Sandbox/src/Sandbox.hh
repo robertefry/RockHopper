@@ -20,7 +20,7 @@ public:
     Sandbox();
     ~Sandbox();
 
-    virtual void run() override;
+    virtual int run() override;
 
 private:
     std::unique_ptr<Engine> m_Engine;
