@@ -15,9 +15,14 @@ cmake .. && make <target>
 ```
 Please see the make `target`s below.
 * The default target will make everything.
-* `RockHopper` will make the main RockHopper dynamic library.
-* `RockHopper_Sandbox` will make RockHopper and the current Sandbox application.
-* `run_sandbox` will make the Sandbox application, and run it.
+* Binaries;
+    * `RockHopper` will make the main RockHopper dynamic library.
+    * `RockHopper-Tests` will make the RockHopper test suite.
+    * `RockHopper-Sandbox` will make the Sandbox application.
+* Commands;
+    * `run_sandbox` will make and run the Sandbox application.
+    * `test` will run the test suite using cmake-tests.
+    * `gtest` will run the test suite application.
 
 ## Development
 To setup the development environment; please clone the `develop` branch of this repository.

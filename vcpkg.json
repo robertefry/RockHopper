@@ -1,0 +1,12 @@
+{
+    "name": "project-initial",
+    "version-string": "1.0.0",
+    "dependencies": [
+        "gtest",
+        "fmt",
+        "spdlog",
+        "glm",
+        "glfw3",
+        "glad"
+    ]
+}
