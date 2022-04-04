@@ -31,6 +31,11 @@ namespace RockHopper
         m_DataPtr->m_Notified = false;
     }
 
+    size_t WaitLock::num_waiting() const
+    {
+        return m_DataPtr->m_NumWaiting;
+    }
+
     WaitLock::Async::Async(std::shared_ptr<Data> const& data_ptr)
         : m_DataPtr{data_ptr}
     {
