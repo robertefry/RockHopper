@@ -56,8 +56,11 @@ namespace RockHopper
             std::unique_lock lock {m_DataPtr->m_Mutex};
 
             m_DataPtr->m_NumWaiting += 1;
-            m_DataPtr->m_LockVar.wait(lock);
-            notified = m_DataPtr->m_Notified; // check for spurious wakeup
+            {
+                m_DataPtr->m_LockVar.wait(lock);
+                if (not m_DataPtr->m_Notified) notified = false;
+                if (not m_DataPtr->m_IsAlive) notified = false;
+            }
             m_DataPtr->m_NumWaiting -= 1;
         }
         return notified;
