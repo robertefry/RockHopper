@@ -42,6 +42,10 @@ target_compile_definitions(${BINARY_NAME} PUBLIC ROCKHOPPER_LOG_LEVEL=${ROCKHOPP
 find_package(Threads)
 target_link_libraries(${BINARY_NAME} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
+# Use thread-tools (https://github.com/robertefry/thread-tools)
+add_subdirectory(deps/thread-tools/thread-tools)
+target_link_libraries(${BINARY_NAME} PUBLIC thread-tools)
+
 # Use fmtlib
 find_package(fmt CONFIG REQUIRED)
 target_link_libraries(${BINARY_NAME} PRIVATE fmt::fmt)
