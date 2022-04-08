@@ -2,12 +2,10 @@
 #include "RockHopper/RockHopper.hh"
 #include "Sandbox.hh"
 
-/*
- * main function implemented in RockHopper.cpp
- */
+#include <memory>
 
-// Required by RockHopper engine
-RockHopper::Application* RockHopper::CreateApplication()
+int main()
 {
-    return new Sandbox{};
+    std::unique_ptr sandbox = std::make_unique<Sandbox>();
+    return sandbox->run();
 }

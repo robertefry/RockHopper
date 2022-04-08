@@ -46,7 +46,7 @@ namespace RockHopper
         void notify_one() noexcept;
         void notify_all() noexcept;
 
-        size_t size() const { return m_DataPtr->m_NumWaiting; }
+        size_t num_waiting() const;
 
     private:
         std::shared_ptr<Data> m_DataPtr = std::make_shared<Data>();
