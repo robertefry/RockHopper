@@ -4,7 +4,8 @@
 
 #include "RockHopper/Debug.hh"
 #include "RockHopper/Utility/Time/TimeSpan.hh"
-#include "RockHopper/Utility/Async/WaitLock.hh"
+
+#include <thread-tools/wait_lock.hh>
 
 #include <atomic>
 #include <thread>
@@ -54,10 +55,10 @@ namespace RockHopper
         explicit EngineThread(std::string const& name);
 
         void start();
-        inline auto start_notifier() const { return m_StartLock.async(); }
+        inline auto start_notifier() const { return m_StartLock.access(); }
 
         void stop();
-        inline auto stop_notifier() const { return m_StopLock.async(); }
+        inline auto stop_notifier() const { return m_StopLock.access(); }
 
         inline bool alive() const { return m_IsAlive; };
 
@@ -83,7 +84,7 @@ namespace RockHopper
         std::mutex m_Mutex{};
         std::atomic<bool> m_IsStopRequested{}, m_IsAlive{};
 
-        WaitLock m_StartLock{}, m_StopLock{};
+        thd::wait_lock m_StartLock{}, m_StopLock{};
    };
 
 } // namespace RockHopper
