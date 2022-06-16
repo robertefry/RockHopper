@@ -1,3 +1,6 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/Microsoft/vcpkg.git
+[submodule "RockHopper/deps/thread-tools"]
+	path = RockHopper/deps/thread-tools
+	url = https://github.com/robertefry/thread-tools

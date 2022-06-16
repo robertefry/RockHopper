@@ -5,7 +5,7 @@
 #include "RockHopper/Window/Window.hh"
 #include "RockHopper/Window/Platform/GLFW_Context.hh"
 
-#include "RockHopper/Utility/Async/TaskQueue.hh"
+#include <thread-tools/task_queue.hh>
 
 class GLFWwindow;
 
@@ -40,9 +40,9 @@ namespace RockHopper
     private:
         GLFWwindow* m_WindowHandle{};
         GLFW_Context m_GlfwContext{};
-
-        TaskQueue m_TaskQueue{};
         WindowDetails m_Details;
+
+        thd::task_queue m_TaskQueue{};
     };
 
 } // namespace RockHopper
