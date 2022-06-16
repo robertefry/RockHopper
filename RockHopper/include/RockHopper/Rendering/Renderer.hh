@@ -8,7 +8,8 @@
 #include "RockHopper/Rendering/Transform.fwd"
 
 #include "RockHopper/Engine/EngineThread.hh"
-#include "RockHopper/Utility/Async/TaskQueue.hh"
+
+#include <thread-tools/task_queue.hh>
 
 #include <memory>
 #include <atomic>
@@ -16,7 +17,8 @@
 namespace RockHopper
 {
 
-    class Renderer : public EngineThread, public TaskQueue
+    class Renderer : public EngineThread
+        , public thd::task_queue
     {
     public:
         virtual ~Renderer();
