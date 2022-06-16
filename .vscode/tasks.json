@@ -1,20 +1,32 @@
 {
-    "tasks": [
+	"version": "2.0.0",
+	"tasks": [
         {
+            "label": "CMake: Configure (Debug)",
             "type": "shell",
-            "label": "C/C++: CMake Build",
-            "command": "mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Debug ..; make",
-            "args": [],
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
+            "command": "cmake",
+            "args": [
+                "-D", "CMAKE_BUILD_TYPE:STRING=Debug",
+                "-S", "${workspaceRoot}",
+                "-B", "${workspaceRoot}/build",
+                "-G", "Ninja"
+            ],
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Generate a Debug Makefile with CMake, and build the project."
+        },
+        {
+            "label": "CMake: Build All (Debug)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceRoot}/build",
+                "--config", "Debug",
+                "--target", "all",
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CMake: Configure (Debug)",
+            ],
+            "problemMatcher": [],
         }
-    ],
-    "version": "2.0.0"
+    ]
 }
