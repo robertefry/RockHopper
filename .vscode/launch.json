@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Make & Debug (gcc)",
+            "name": "(gdb) Run Sandbox",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/output/RockHopper_Sandbox",
+            "program": "${workspaceRoot}/output/RockHopper-Sandbox",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceRoot}/output",
+            "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -22,8 +22,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: CMake Build",
-            "miDebuggerPath": "/usr/bin/gdb"
-        }
+            "preLaunchTask": "CMake: Build All (Debug)",
+        },
     ]
 }

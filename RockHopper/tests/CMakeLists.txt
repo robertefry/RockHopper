@@ -30,6 +30,6 @@ target_link_libraries(${BINARY_NAME} PRIVATE GTest::gmock GTest::gtest GTest::gm
 add_test(NAME ${BINARY_NAME} COMMAND $<TARGET_FILE:${BINARY_NAME}>)
 
 # Add launch target
-add_custom_target(gtest
+add_custom_target(test-RockHopper
   DEPENDS ${BINARY_NAME}
   COMMAND $<TARGET_FILE:${BINARY_NAME}>)

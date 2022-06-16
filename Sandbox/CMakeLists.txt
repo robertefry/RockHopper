@@ -23,7 +23,7 @@ target_sources(${BINARY_NAME} PRIVATE ${BINARY_SOURCES})
 target_link_libraries(${BINARY_NAME} PRIVATE RockHopper)
 
 # Add launch target
-add_custom_target(run_sandbox
+add_custom_target(run-Sandbox
   COMMENT "Running the ${BINARY_NAME} binary..."
   DEPENDS ${BINARY_NAME}
   COMMAND $<TARGET_FILE:${BINARY_NAME}>)
