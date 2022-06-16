@@ -37,12 +37,16 @@ namespace RockHopper
         m_DebugName.set_type("GLFW_Window");
         set_details(details);
 
+        // Start the renderer
+        Renderer::GetInstance()->start();
+
+        // Create the GLFW window
         Renderer::GetInstance()->push_task([this]()
         {
             // Create a GLFW windowed-mode window handle and it's OpenGL context
             m_WindowHandle = glfwCreateWindow(m_Details.width,m_Details.height,m_Details.title.c_str(),NULL,NULL);
-            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"GLFW failed to create a handle for {}", m_DebugName);
-            ROCKHOPPER_INTERNAL_LOG_DEBUG("GLFW {} created", m_DebugName);
+            ROCKHOPPER_INTERNAL_ASSERT_FATAL(m_WindowHandle,"GLFW failed to create a handle for {}",m_DebugName);
+            ROCKHOPPER_INTERNAL_LOG_DEBUG("GLFW {} created",m_DebugName);
 
             // Set the GLFW user pointer to this window
             glfwSetWindowUserPointer(m_WindowHandle,this);
@@ -54,14 +58,12 @@ namespace RockHopper
         // Set GLFW callbacks
         m_GlfwContext.set_callbacks<Window,true>(&m_WindowHandle,(Window*)this);
 
-        Renderer::GetInstance()->push_task([this]()
+        // Make the window's context current
+        Renderer::GetInstance()->wait_task([this]()
         {
-            // Make the window's context current
             glfwMakeContextCurrent(m_WindowHandle);
         });
-
-        // Start the renderer
-        Renderer::GetInstance()->start();
+        // Don't return until everything is set up properly!
     }
 
     void GLFW_Window::set_details(WindowDetails const& details)
