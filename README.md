@@ -1,6 +1,8 @@
 # RockHopper
 RockHopper is a cross-platform event-driven multi-thread logic and rendering framework, written for C++ 3D modeling applications (or games).
 
+RockHopper's Trello board can be found here: https://trello.com/b/0tjpxdqC/rockhopper
+
 ## Example Usage
 Please see the included `Sandbox` application for examples of how RockHopper is used.
 This is indecently where I'm testing new features as I add them, while a better testing environment is still pending.
