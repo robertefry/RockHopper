@@ -2,7 +2,8 @@
 RockHopper is a cross-platform event-driven multi-thread logic and rendering framework, written for C++ 3D modeling applications (or games).
 
 ## Example Usage
-Please see the included `Sandbox` application for examples of how RockHopper is used. This is indecently where I'm also testing new features as I add them.
+Please see the included `Sandbox` application for examples of how RockHopper is used.
+This is indecently where I'm testing new features as I add them, while a better testing environment is still pending.
 
 A wiki will hopefully come later when I have the time.
 
@@ -10,9 +11,11 @@ A wiki will hopefully come later when I have the time.
 RockHopper uses CMake as its meta-build system, and a local clone of vcpkg to manage it's dependencies. Running `bootstrap.sh` will locally set-up the build environment.
 ```bash
 ./bootstrap.sh
-mkdir build && cd $_
-cmake .. && make <target>
+cmake -DCMAKE_BUILD_TYPE:STRING=Debug -B build -G Ninja
+cmake --build build --config Debug --target all
 ```
+Built binaries are found in the `output` directory.
+
 Please see the make `target`s below.
 * The default target will make everything.
 * Binaries;
