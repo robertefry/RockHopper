@@ -1,0 +1,7 @@
+
+namespace RockHopper
+{
+
+    class Logger;
+
+} // namespace RockHopper
