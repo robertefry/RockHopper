@@ -1,0 +1,9 @@
+
+namespace RockHopper::UI
+{
+
+    struct I_Window;
+
+    class Window;
+
+} // namespace RockHopper::UI
