@@ -1,0 +1,11 @@
+
+namespace RockHopper::Event
+{
+
+    template <typename T_EventCategory>
+    struct I_EventHandler;
+
+    template <typename T_EventCategory, typename T_EventDispatcher>
+    class EventHandler;
+
+} // namespace RockHopper::Event

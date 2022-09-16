@@ -1,0 +1,11 @@
+
+namespace RockHopper::Event::Dispatch
+{
+
+    template <typename T_EventCategory>
+    class SequentialDispatch;
+
+    template <typename T_EventCategory>
+    class ParallelDispatch;
+
+} // namespace RockHopper::Event::Dispatch

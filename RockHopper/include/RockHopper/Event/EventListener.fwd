@@ -1,0 +1,8 @@
+
+namespace RockHopper::Event
+{
+
+    template <typename T_Event>
+    class EventListener;
+
+} // namespace RockHopper::Event
