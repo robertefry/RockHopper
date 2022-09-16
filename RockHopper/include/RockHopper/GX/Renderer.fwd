@@ -1,0 +1,7 @@
+
+namespace RockHopper::GX
+{
+
+    class Renderer;
+
+} // namespace RockHopper::GX
