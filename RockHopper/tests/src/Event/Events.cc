@@ -42,9 +42,10 @@ struct TestEventHandler
     using EventHandler<TestEventCategory,T_EventDispatch>::dispatch_event;
 };
 
-TEST(EVENTS,DISPATCH_SEQUENTIAL)
+template <typename T_EventDispatch>
+void TestEventDispatch()
 {
-    TestEventHandler<Dispatch::SequentialDispatch> event_handler;
+    TestEventHandler<T_EventDispatch> event_handler;
 
     struct TestEvent_Listener
         : public TestEventCategory::ListenerType
@@ -92,9 +93,19 @@ TEST(EVENTS,DISPATCH_SEQUENTIAL)
     EXPECT_EQ(listener->m_CallCount_Category,2);
 }
 
-TEST(EVENTS,EVENT_LISTENER)
+TEST(EVENTS,DISPATCH_SEQUENTIAL)
 {
-    TestEventHandler<Dispatch::SequentialDispatch> event_handler;
+    TestEventDispatch<Dispatch::SequentialDispatch>();
+}
+TEST(EVENTS,DISPATCH_PARALLEL)
+{
+    TestEventDispatch<Dispatch::ParallelDispatch>();
+}
+
+template <typename T_EventDispatch>
+void TestEventListener()
+{
+    TestEventHandler<T_EventDispatch> event_handler;
 
     unsigned int call_count = 0;
 
@@ -113,4 +124,13 @@ TEST(EVENTS,EVENT_LISTENER)
     event_handler.dispatch_event(TestEvent2{});
 
     EXPECT_EQ(call_count,1);
+}
+
+TEST(EVENTS,LISTENER_SEQUENTIAL)
+{
+    TestEventListener<Dispatch::SequentialDispatch>();
+}
+TEST(EVENTS,LISTENER_PARALLEL)
+{
+    TestEventListener<Dispatch::ParallelDispatch>();
 }

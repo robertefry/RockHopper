@@ -1,0 +1,9 @@
+
+namespace RockHopper::Chrono
+{
+
+    struct I_TickThread;
+
+    class TickThread;
+
+} // namespace RockHopper::Chrono

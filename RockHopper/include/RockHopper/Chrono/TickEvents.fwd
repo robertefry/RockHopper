@@ -1,0 +1,15 @@
+
+#include "RockHopper/Event/Event.fwd"
+
+namespace RockHopper::Chrono
+{
+
+    struct TickEvent;
+    struct TickEvent_Init;
+    struct TickEvent_Dispose;
+    struct TickEvent_OnTick;
+
+    using TickEventSet = Event::EventSet<TickEvent,
+        TickEvent_Init, TickEvent_Dispose, TickEvent_OnTick >;
+
+} // namespace RockHopper::Chrono
