@@ -1,0 +1,7 @@
+
+namespace RockHopper::UI::GLFW
+{
+
+    class Window;
+
+} // namespace RockHopper::UI::GLFW
