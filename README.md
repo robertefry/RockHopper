@@ -3,6 +3,8 @@ RockHopper is a cross-platform event-driven multi-thread logic and rendering fra
 
 RockHopper's Trello board can be found here: https://trello.com/b/0tjpxdqC/rockhopper
 
+**NOTICE**: RockHopper is currently undergoing an overhaul to streamline it's subsystems. The overhaul branch is named `overhaul/master`, which will later be merged into `master` when completed.
+
 ## Example Usage
 Please see the included `Sandbox` application for examples of how RockHopper is used.
 This is indecently where I'm testing new features as I add them, while a better testing environment is still pending.
