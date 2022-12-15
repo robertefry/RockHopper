@@ -1,35 +1,37 @@
 
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.12)
+enable_testing()
 
-# Define binary
-set(BINARY_NAME "RockHopper-Tests")
-add_executable(${BINARY_NAME} "")
+# ---- binary ----
 
-# Define compiler configuration
-target_compile_options(${BINARY_NAME} PRIVATE -Wall -Wextra -Weffc++ -Wpedantic)
-target_compile_options(${BINARY_NAME} PRIVATE -Wno-unused)
+set(TESTS_NAME ${BINARY_NAME}-Tests)
+add_executable(${TESTS_NAME} "")
 
-# Define include directories
-target_include_directories(${BINARY_NAME} PUBLIC "include")
-target_include_directories(${BINARY_NAME} PRIVATE "src")
+target_link_libraries(${TESTS_NAME} PRIVATE ${BINARY_NAME})
 
-# Define build sources
-file(GLOB_RECURSE BINARY_SOURCES
-  "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx"
+# ---- cmake targets ----
+
+add_custom_target(test-${BINARY_NAME}
+  COMMAND $<TARGET_FILE:${TESTS_NAME}>
+  DEPENDS ${TESTS_NAME})
+
+add_test(NAME ${TESTS_NAME} COMMAND $<TARGET_FILE:${TESTS_NAME}>)
+
+# ---- compiler targets ----
+
+target_include_directories(${TESTS_NAME}
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
-target_sources(${BINARY_NAME} PRIVATE ${BINARY_SOURCES})
 
-# Use RockHopper
-target_link_libraries(${BINARY_NAME} PRIVATE RockHopper)
+file(GLOB_RECURSE GLOB_SOURCES CONFIGURE_DEPENDS
+  "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx")
+target_sources(${TESTS_NAME} PRIVATE ${GLOB_SOURCES})
 
-# Use GTest
-find_package(GTest CONFIG REQUIRED)
-target_link_libraries(${BINARY_NAME} PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
-
-# Add test target
-add_test(NAME ${BINARY_NAME} COMMAND $<TARGET_FILE:${BINARY_NAME}>)
-
-# Add launch target
-add_custom_target(test-RockHopper
-  DEPENDS ${BINARY_NAME}
-  COMMAND $<TARGET_FILE:${BINARY_NAME}>)
+target_link_libraries(${TESTS_NAME}
+  PUBLIC
+    GTest::gtest GTest::gtest_main GTest::gmock
+)

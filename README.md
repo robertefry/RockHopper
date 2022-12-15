@@ -4,7 +4,7 @@ RockHopper is a cross-platform event-driven multi-thread logic and rendering fra
 RockHopper's Trello board can be found here: https://trello.com/b/0tjpxdqC/rockhopper
 
 ## Example Usage
-Please see the included `Sandbox` application for examples of how RockHopper is used.
+Please see the included `RockHopper-Sandbox` application for examples of how RockHopper is used.
 This is indecently where I'm testing new features as I add them, while a better testing environment is still pending.
 
 A wiki will hopefully come later when I have the time.
@@ -25,9 +25,8 @@ Please see the make `target`s below.
     * `RockHopper-Tests` will make the RockHopper test suite.
     * `RockHopper-Sandbox` will make the Sandbox application.
 * Commands;
-    * `run_sandbox` will make and run the Sandbox application.
-    * `test` will run the test suite using cmake-tests.
-    * `gtest` will run the test suite application.
+    * `test-RockHopper` will run the test suite using cmake-tests.
+    * `run-RockHopper-Sandbox` will make and run the Sandbox application.
 
 ## Development
 To setup the development environment; please clone the `develop` branch of this repository.

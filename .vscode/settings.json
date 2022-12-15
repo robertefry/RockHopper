@@ -1,12 +1,22 @@
 {
+    // CMake
+    "cmake.configureOnOpen": true,
+    "cmake.buildDirectory": "${workspaceFolder}/.build",
+
+    // Clang-Tidy
+    "clang-tidy.buildPath": "${workspaceFolder}/.build",
+
+    // C/C++
     "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+
     "files.associations": {
         "*.fwd": "cpp"
     },
+
+    // Spell-Check Dictionary
+    "cSpell.language": "en-GB",
     "cSpell.words": [
-        "iconified",
-        "Iconify",
         "ROCKHOPPER"
     ],
 }
