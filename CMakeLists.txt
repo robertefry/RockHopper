@@ -7,6 +7,7 @@ project("RockHopper" VERSION "1.0.0" LANGUAGES "C" "CXX"
   DESCRIPTION "A C++ multithreaded logic and rendering framework.")
 
 set(CMAKE_CXX_STANDARD "20")
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # ---- add dependencies via CPM ----
 # see https://github.com/cpm-cmake/CPM.cmake for more info
@@ -14,6 +15,14 @@ include(.cmake/get_cpm.cmake)
 
 CPMAddPackage(NAME "Catch2"
   GITHUB_REPOSITORY "catchorg/Catch2" GIT_TAG "v3.2.1"
+)
+CPMAddPackage(NAME "fmt"
+  GITHUB_REPOSITORY "fmtlib/fmt" GIT_TAG "9.1.0"
+  OPTIONS "FMT_INSTALL NO"
+)
+CPMAddPackage(NAME "spdlog"
+  GITHUB_REPOSITORY "gabime/spdlog" GIT_TAG "v1.11.0"
+  OPTIONS "SPDLOG_FMT_EXTERNAL ON"
 )
 
 # ---- project units ----

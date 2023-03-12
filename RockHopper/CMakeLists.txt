@@ -19,6 +19,8 @@ file(GLOB_RECURSE GLOB_SOURCES CONFIGURE_DEPENDS
   "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx")
 target_sources(${BINARY_NAME} PRIVATE ${GLOB_SOURCES})
 
+target_link_libraries(${BINARY_NAME} PUBLIC fmt::fmt spdlog::spdlog)
+
 # ---- testing ----
 
 add_subdirectory(tests)

@@ -1,9 +1,11 @@
 
+#include <fmt/format.h>
+#include <spdlog/spdlog.h>
+
 #include <catch2/catch_all.hpp>
 
-#include <iostream>
-
-TEST_CASE("Is Catch2 working?")
+TEST_CASE("Are all dependencies working?")
 {
-    std::cout << "Catch2 tests are working :)" << "\n";
+    auto message = fmt::format("{}","Dependencies are working; Catch2, FmtLib, SpdLog");
+    spdlog::info(message);
 }
