@@ -1,7 +1,9 @@
 
-#include <gtest/gtest.h>
+#include <catch2/catch_all.hpp>
 
-TEST(MAIN,TESTING)
+#include <iostream>
+
+TEST_CASE("Is Catch2 working?")
 {
-    std::cout << "GTest tests are working :)" << "\n";
+    std::cout << "Catch2 tests are working :)" << "\n";
 }

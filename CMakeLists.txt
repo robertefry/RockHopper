@@ -12,13 +12,12 @@ set(CMAKE_CXX_STANDARD "20")
 # see https://github.com/cpm-cmake/CPM.cmake for more info
 include(.cmake/get_cpm.cmake)
 
-CPMAddPackage(NAME "googletest"
-  GITHUB_REPOSITORY "google/googletest" GIT_TAG "release-1.12.1"
-  OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt"
+CPMAddPackage(NAME "Catch2"
+  GITHUB_REPOSITORY "catchorg/Catch2" GIT_TAG "v3.2.1"
 )
 
 # ---- project units ----
-include(.cmake/tools.cmake) # toolkit for buildsystem features
+include(.cmake/build_tools.cmake) # toolkit for buildsystem features
 
 add_subdirectory(RockHopper)
 add_subdirectory(RockHopper-Sandbox)
@@ -28,6 +27,7 @@ add_subdirectory(RockHopper-Sandbox)
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.10.0")
 
 # ---- cmake & compiler options ----
+include(.cmake/build_type.cmake)
 
 # dissallow in-source builds
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)

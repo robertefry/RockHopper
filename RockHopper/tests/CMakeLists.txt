@@ -31,7 +31,4 @@ file(GLOB_RECURSE GLOB_SOURCES CONFIGURE_DEPENDS
   "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx")
 target_sources(${TESTS_NAME} PRIVATE ${GLOB_SOURCES})
 
-target_link_libraries(${TESTS_NAME}
-  PUBLIC
-    GTest::gtest GTest::gtest_main GTest::gmock
-)
+target_link_libraries(${TESTS_NAME} PUBLIC Catch2::Catch2WithMain)
