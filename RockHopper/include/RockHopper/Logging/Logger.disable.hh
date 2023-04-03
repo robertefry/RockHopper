@@ -1,0 +1,7 @@
+
+#define ROCKHOPPER_LOG_FATAL(...)
+#define ROCKHOPPER_LOG_ERROR(...)
+#define ROCKHOPPER_LOG_WARN(...)
+#define ROCKHOPPER_LOG_INFO(...)
+#define ROCKHOPPER_LOG_DEBUG(...)
+#define ROCKHOPPER_LOG_TRACE(...)
