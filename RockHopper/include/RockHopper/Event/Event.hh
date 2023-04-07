@@ -32,6 +32,12 @@ namespace RockHopper::Event
         using Variant = std::variant<T_EventPack...>;
         using Listener = I_Listener;
 
+        template <typename T_Event, typename... Args>
+        static Variant MakeEvent(Args&&... args)
+        {
+            return T_Event{std::forward<Args>(args)...};
+        }
+
         template <typename T_Listener, typename T_Event>
         static void Dispatch(T_Listener&& listener, T_Event&& event)
         {

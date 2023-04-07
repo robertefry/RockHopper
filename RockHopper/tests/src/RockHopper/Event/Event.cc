@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <type_traits>
 
 enum ArgumentQualifier
 {
@@ -113,4 +114,10 @@ TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
         REQUIRE(listener.counts[R_REF] == 1);
         REQUIRE(listener.counts[CR_REF] == 0);
     }
+}
+
+TEST_CASE("EventSet::MakeEvent correctly makes an instance of EventSet::Variant")
+{
+    auto event = TestEvent::MakeEvent<TestEvent1>();
+    REQUIRE(std::is_same<TestEvent::Variant,std::remove_cv<decltype(event)>::type>::value);
 }
