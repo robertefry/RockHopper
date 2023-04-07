@@ -1,7 +1,9 @@
 
+#include <catch2/catch_all.hpp>
+
 #include "RockHopper/Event/Event.hh"
 
-#include <catch2/catch_all.hpp>
+#include <memory>
 #include <unordered_map>
 
 enum ArgumentQualifier
@@ -11,8 +13,8 @@ enum ArgumentQualifier
 
 /* ************************************************************************** */
 
-struct TestEvent1 {};
-struct TestEvent2 {};
+struct TestEvent1 { std::unique_ptr<int> no_copy; };
+struct TestEvent2 { std::unique_ptr<int> no_copy; };
 using TestEvent = RockHopper::Event::EventSet<TestEvent1,TestEvent2>;
 
 template <typename T_Event>
