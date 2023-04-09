@@ -21,7 +21,7 @@ namespace RockHopper::Event
             virtual void on_event(T_Event &&) {}
         };
 
-        struct I_Listener : I_Listener_Base<T_EventPack>...
+        struct I_Listener : virtual I_Listener_Base<T_EventPack>...
         {
             virtual ~I_Listener() = default;
 
