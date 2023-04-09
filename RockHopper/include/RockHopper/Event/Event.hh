@@ -31,50 +31,58 @@ namespace RockHopper::Event
         using Listener = I_Listener;
 
         template <typename T_Event>
-        class EventKit
-        {
-        public:
-            template <typename... T_Args>
-            static auto Make(T_Args&&... args) -> Variant
-            {
-                return T_Event{std::forward<T_Args>(args)...};
-            }
-        };
+        class EventKit;
 
         template <typename T_Event>
-        class ListenerKit
-        {
-        public:
-            template <typename T_OnEvent>
-            class OnEventListener : public Listener
-            {
-            public:
-                explicit OnEventListener(T_OnEvent func)
-                    : m_OnEvent{std::move(func)}
-                {}
-
-                using Listener::on_event;
-                void on_event(T_Event const& event) override { m_OnEvent(event); }
-                void on_event(T_Event & event) override { m_OnEvent(event); }
-                void on_event(T_Event const&& event) override { m_OnEvent(std::move(event)); }
-                void on_event(T_Event && event) override { m_OnEvent(std::move(event)); }
-
-            private:
-                T_OnEvent m_OnEvent;
-            };
-
-            template <typename T_OnEvent>
-            static auto Make(T_OnEvent&& func) -> OnEventListener<T_OnEvent>
-            {
-                return OnEventListener<T_OnEvent>{std::forward<T_OnEvent>(func)};
-            }
-        };
+        class ListenerKit;
 
         template <typename T_Listener, typename T_Event>
         static void Dispatch(T_Listener&& listener, T_Event&& event)
         {
             auto const visitor = [&]<typename E>(E&& e) { listener.on_event(std::forward<E>(e)); };
             std::visit(visitor,std::forward<T_Event>(event));
+        }
+    };
+
+    template <typename... T_EventPack>
+    template <typename T_Event>
+    class EventSet<T_EventPack...>::EventKit
+    {
+    public:
+        template <typename... T_Args>
+        static auto Make(T_Args&&... args) -> Variant
+        {
+            return T_Event{std::forward<T_Args>(args)...};
+        }
+    };
+
+    template <typename... T_EventPack>
+    template <typename T_Event>
+    class EventSet<T_EventPack...>::ListenerKit
+    {
+    public:
+        template <typename T_OnEvent>
+        class OnEventListener : public Listener
+        {
+        public:
+            explicit OnEventListener(T_OnEvent func)
+                : m_OnEvent{std::move(func)}
+            {}
+
+            using Listener::on_event;
+            void on_event(T_Event const& event) override { m_OnEvent(event); }
+            void on_event(T_Event & event) override { m_OnEvent(event); }
+            void on_event(T_Event const&& event) override { m_OnEvent(std::move(event)); }
+            void on_event(T_Event && event) override { m_OnEvent(std::move(event)); }
+
+        private:
+            T_OnEvent m_OnEvent;
+        };
+
+        template <typename T_OnEvent>
+        static auto Make(T_OnEvent&& func) -> OnEventListener<T_OnEvent>
+        {
+            return OnEventListener<T_OnEvent>{std::forward<T_OnEvent>(func)};
         }
     };
 
