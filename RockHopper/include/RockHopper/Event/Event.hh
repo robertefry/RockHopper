@@ -41,7 +41,7 @@ namespace RockHopper::Event
         template <typename T_Event, typename T_OnEvent>
         static auto MakeListener(T_OnEvent&& func)
         {
-            class OnEventListener : Listener
+            class OnEventListener : public Listener
             {
             public:
                 explicit OnEventListener(T_OnEvent func)
