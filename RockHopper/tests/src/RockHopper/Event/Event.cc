@@ -93,3 +93,20 @@ TEST_CASE("EventSet::MakeEvent correctly makes an instance of EventSet::Variant"
     auto event = TestEvent::MakeEvent<TestEvent1>();
     REQUIRE(std::is_same<TestEvent::Variant,std::remove_cv<decltype(event)>::type>::value);
 }
+
+TEST_CASE("EventSet::MakeListener correctly makes an event listener")
+{
+    size_t count = 0;
+
+    auto listener = TestEvent::MakeListener<TestEvent1>([&]<typename E>(E&& event)
+    {
+        count += 1;
+    });
+
+    REQUIRE(count == 0);
+
+    TestEvent::Variant const event = TestEvent::MakeEvent<TestEvent1>();
+    TestEvent::Dispatch(listener,event);
+
+    REQUIRE(count == 1);
+}

@@ -38,6 +38,29 @@ namespace RockHopper::Event
             return T_Event{std::forward<Args>(args)...};
         }
 
+        template <typename T_Event, typename T_OnEvent>
+        static auto MakeListener(T_OnEvent&& func)
+        {
+            class OnEventListener : Listener
+            {
+            public:
+                explicit OnEventListener(T_OnEvent func)
+                    : m_OnEvent{std::move(func)}
+                {}
+
+                using Listener::on_event;
+                void on_event(T_Event const& event) override { m_OnEvent(event); }
+                void on_event(T_Event & event) override { m_OnEvent(event); }
+                void on_event(T_Event const&& event) override { m_OnEvent(std::move(event)); }
+                void on_event(T_Event && event) override { m_OnEvent(std::move(event)); }
+
+            private:
+                T_OnEvent m_OnEvent;
+            };
+
+            return OnEventListener{std::forward<T_OnEvent>(func)};
+        }
+
         template <typename T_Listener, typename T_Event>
         static void Dispatch(T_Listener&& listener, T_Event&& event)
         {
