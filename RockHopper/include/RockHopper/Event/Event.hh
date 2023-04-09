@@ -23,8 +23,6 @@ namespace RockHopper::Event
 
         struct I_Listener : virtual I_Listener_Base<T_EventPack>...
         {
-            virtual ~I_Listener() = default;
-
             using I_Listener_Base<T_EventPack>::on_event...;
         };
 
@@ -32,15 +30,22 @@ namespace RockHopper::Event
         using Variant = std::variant<T_EventPack...>;
         using Listener = I_Listener;
 
-        template <typename T_Event, typename... Args>
-        static Variant MakeEvent(Args&&... args)
+        template <typename T_Event>
+        class EventKit
         {
-            return T_Event{std::forward<Args>(args)...};
-        }
+        public:
+            template <typename... T_Args>
+            static auto Make(T_Args&&... args) -> Variant
+            {
+                return T_Event{std::forward<T_Args>(args)...};
+            }
+        };
 
-        template <typename T_Event, typename T_OnEvent>
-        static auto MakeListener(T_OnEvent&& func)
+        template <typename T_Event>
+        class ListenerKit
         {
+        public:
+            template <typename T_OnEvent>
             class OnEventListener : public Listener
             {
             public:
@@ -58,8 +63,12 @@ namespace RockHopper::Event
                 T_OnEvent m_OnEvent;
             };
 
-            return OnEventListener{std::forward<T_OnEvent>(func)};
-        }
+            template <typename T_OnEvent>
+            static auto Make(T_OnEvent&& func) -> OnEventListener<T_OnEvent>
+            {
+                return OnEventListener<T_OnEvent>{std::forward<T_OnEvent>(func)};
+            }
+        };
 
         template <typename T_Listener, typename T_Event>
         static void Dispatch(T_Listener&& listener, T_Event&& event)
