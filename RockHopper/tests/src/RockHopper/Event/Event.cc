@@ -17,118 +17,168 @@ using TestEvent = RockHopper::Event::EventSet<TestEvent1,TestEvent2>;
 
 TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
 {
-    struct Listener : TestEvent::Listener
+    enum class ArgumentQualifier
     {
-        enum ArgumentQualifier
-        {
-            VAL, L_REF, CL_REF, R_REF, CR_REF,
-        };
-        std::unordered_map<ArgumentQualifier,size_t> counts {};
-
-        using TestEvent::Listener::on_event;
-        void on_event(TestEvent1 const&) override { counts[CL_REF] += 1; }
-        void on_event(TestEvent1 &) override { counts[L_REF] += 1; }
-        void on_event(TestEvent1 const&&) override { counts[CR_REF] += 1; }
-        void on_event(TestEvent1 &&) override { counts[R_REF] += 1; }
+        NONE, L_REF, CL_REF, R_REF, CR_REF,
     };
-    Listener listener;
 
-    REQUIRE(listener.counts[Listener::VAL] == 0);
-    REQUIRE(listener.counts[Listener::L_REF] == 0);
-    REQUIRE(listener.counts[Listener::CL_REF] == 0);
-    REQUIRE(listener.counts[Listener::R_REF] == 0);
-    REQUIRE(listener.counts[Listener::CR_REF] == 0);
-
-    SECTION("listen for const& variant events")
+    constexpr auto RunTests = []<typename T_Listener>(T_Listener&& listener)
     {
-        TestEvent::Variant const event = TestEvent1{};
-        TestEvent::Dispatch(listener,event);
+        REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+        REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+        REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+        REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+        REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
 
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 0);
-        REQUIRE(listener.counts[Listener::CL_REF] == 1);
-        REQUIRE(listener.counts[Listener::R_REF] == 0);
-        REQUIRE(listener.counts[Listener::CR_REF] == 0);
+        SECTION("listen for const& variant events")
+        {
+            TestEvent::Variant const event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),event);
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 1);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
+        }
+        SECTION("listen for const& concrete events")
+        {
+            TestEvent1 const event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),event);
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 1);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
+        }
+
+        SECTION("listen for & variant events")
+        {
+            TestEvent::Variant event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),event);
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 1);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
+        }
+        SECTION("listen for & concrete events")
+        {
+            TestEvent1 event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),event);
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 1);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
+        }
+
+        SECTION("listen for const&& variant events")
+        {
+            TestEvent::Variant const event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),std::move(event));
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 1);
+        }
+        SECTION("listen for const&& concrete events")
+        {
+            TestEvent1 const event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),std::move(event));
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 1);
+        }
+
+        SECTION("listen for const&& variant events")
+        {
+            TestEvent::Variant event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),std::move(event));
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 1);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
+        }
+        SECTION("listen for const&& concrete events")
+        {
+            TestEvent1 event = TestEvent1{};
+            TestEvent::Dispatch(std::forward<T_Listener>(listener),std::move(event));
+
+            REQUIRE(listener.counts[ArgumentQualifier::NONE] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::L_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::CL_REF] == 0);
+            REQUIRE(listener.counts[ArgumentQualifier::R_REF] == 1);
+            REQUIRE(listener.counts[ArgumentQualifier::CR_REF] == 0);
+        }
+    };
+
+    SECTION("non-const listener")
+    {
+        /*
+         * When using non-const listener, the non-const on_event functions
+         * should be invoked. Thus, we use ArgumentQualifier::NONE for the const
+         * qualified on_event functions to ensure they are not called.
+         */
+        struct Listener : TestEvent::Listener
+        {
+            std::unordered_map<ArgumentQualifier,size_t> mutable counts {};
+
+            using TestEvent::Listener::on_event;
+
+            void on_event(TestEvent1 const&) override { counts[ArgumentQualifier::CL_REF] += 1; }
+            void on_event(TestEvent1 &) override { counts[ArgumentQualifier::L_REF] += 1; }
+            void on_event(TestEvent1 const&&) override { counts[ArgumentQualifier::CR_REF] += 1; }
+            void on_event(TestEvent1 &&) override { counts[ArgumentQualifier::R_REF] += 1; }
+
+            /* using ArgumentQualifier::NONE */
+            void on_event(TestEvent1 const&) const override { counts[ArgumentQualifier::NONE] += 1; }
+            void on_event(TestEvent1 &) const override { counts[ArgumentQualifier::NONE] += 1; }
+            void on_event(TestEvent1 const&&) const override { counts[ArgumentQualifier::NONE] += 1; }
+            void on_event(TestEvent1 &&) const override { counts[ArgumentQualifier::NONE] += 1; }
+        };
+        Listener listener;
+
+        RunTests(std::move(listener));
     }
-    SECTION("listen for const& concrete events")
+
+    SECTION("const listener")
     {
-        TestEvent1 const event = TestEvent1{};
-        TestEvent::Dispatch(listener,event);
+        /*
+         * When using const listener, the const on_event functions should be
+         * invoked. Thus, we use ArgumentQualifier::NONE for the non-const
+         * qualified on_event functions to ensure they are not called.
+         */
+        struct Listener : TestEvent::Listener
+        {
+            std::unordered_map<ArgumentQualifier,size_t> mutable counts {};
 
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 0);
-        REQUIRE(listener.counts[Listener::CL_REF] == 1);
-        REQUIRE(listener.counts[Listener::R_REF] == 0);
-        REQUIRE(listener.counts[Listener::CR_REF] == 0);
-    }
+            using TestEvent::Listener::on_event;
 
-    SECTION("listen for & variant events")
-    {
-        TestEvent::Variant event = TestEvent1{};
-        TestEvent::Dispatch(listener,event);
+            /* using ArgumentQualifier::NONE */
+            void on_event(TestEvent1 const&) override { counts[ArgumentQualifier::NONE] += 1; }
+            void on_event(TestEvent1 &) override { counts[ArgumentQualifier::NONE] += 1; }
+            void on_event(TestEvent1 const&&) override { counts[ArgumentQualifier::NONE] += 1; }
+            void on_event(TestEvent1 &&) override { counts[ArgumentQualifier::NONE] += 1; }
 
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 1);
-        REQUIRE(listener.counts[Listener::CL_REF] == 0);
-        REQUIRE(listener.counts[Listener::R_REF] == 0);
-        REQUIRE(listener.counts[Listener::CR_REF] == 0);
-    }
-    SECTION("listen for & concrete events")
-    {
-        TestEvent1 event = TestEvent1{};
-        TestEvent::Dispatch(listener,event);
+            void on_event(TestEvent1 const&) const override { counts[ArgumentQualifier::CL_REF] += 1; }
+            void on_event(TestEvent1 &) const override { counts[ArgumentQualifier::L_REF] += 1; }
+            void on_event(TestEvent1 const&&) const override { counts[ArgumentQualifier::CR_REF] += 1; }
+            void on_event(TestEvent1 &&) const override { counts[ArgumentQualifier::R_REF] += 1; }
+        };
+        Listener const listener;
 
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 1);
-        REQUIRE(listener.counts[Listener::CL_REF] == 0);
-        REQUIRE(listener.counts[Listener::R_REF] == 0);
-        REQUIRE(listener.counts[Listener::CR_REF] == 0);
-    }
-
-    SECTION("listen for const&& variant events")
-    {
-        TestEvent::Variant const event = TestEvent1{};
-        TestEvent::Dispatch(listener,std::move(event));
-
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 0);
-        REQUIRE(listener.counts[Listener::CL_REF] == 0);
-        REQUIRE(listener.counts[Listener::R_REF] == 0);
-        REQUIRE(listener.counts[Listener::CR_REF] == 1);
-    }
-    SECTION("listen for const&& concrete events")
-    {
-        TestEvent1 const event = TestEvent1{};
-        TestEvent::Dispatch(listener,std::move(event));
-
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 0);
-        REQUIRE(listener.counts[Listener::CL_REF] == 0);
-        REQUIRE(listener.counts[Listener::R_REF] == 0);
-        REQUIRE(listener.counts[Listener::CR_REF] == 1);
-    }
-
-    SECTION("listen for const&& variant events")
-    {
-        TestEvent::Variant event = TestEvent1{};
-        TestEvent::Dispatch(listener,std::move(event));
-
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 0);
-        REQUIRE(listener.counts[Listener::CL_REF] == 0);
-        REQUIRE(listener.counts[Listener::R_REF] == 1);
-        REQUIRE(listener.counts[Listener::CR_REF] == 0);
-    }
-    SECTION("listen for const&& concrete events")
-    {
-        TestEvent1 event = TestEvent1{};
-        TestEvent::Dispatch(listener,std::move(event));
-
-        REQUIRE(listener.counts[Listener::VAL] == 0);
-        REQUIRE(listener.counts[Listener::L_REF] == 0);
-        REQUIRE(listener.counts[Listener::CL_REF] == 0);
-        REQUIRE(listener.counts[Listener::R_REF] == 1);
-        REQUIRE(listener.counts[Listener::CR_REF] == 0);
+        RunTests(std::move(listener));
     }
 }
 

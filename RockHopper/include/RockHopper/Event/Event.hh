@@ -19,6 +19,11 @@ namespace RockHopper::Event
             virtual void on_event(T_Event &) {}
             virtual void on_event(T_Event const&&) {}
             virtual void on_event(T_Event &&) {}
+
+            virtual void on_event(T_Event const&) const {}
+            virtual void on_event(T_Event &) const {}
+            virtual void on_event(T_Event const&&) const {}
+            virtual void on_event(T_Event &&) const {}
         };
 
         struct I_Listener : virtual I_Listener_Base<T_EventPack>...
