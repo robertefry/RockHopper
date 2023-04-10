@@ -37,10 +37,18 @@ namespace RockHopper::Event
         class ListenerKit;
 
         template <typename T_Listener, typename T_Event>
+            requires std::is_same<Variant,std::remove_cvref_t<T_Event>>::value
         static void Dispatch(T_Listener&& listener, T_Event&& event)
         {
             auto const visitor = [&]<typename E>(E&& e) { listener.on_event(std::forward<E>(e)); };
             std::visit(visitor,std::forward<T_Event>(event));
+        }
+
+        template <typename T_Listener, typename T_Event>
+            requires std::disjunction<std::is_same<T_EventPack,std::remove_cvref_t<T_Event>>...>::value
+        static void Dispatch(T_Listener&& listener, T_Event&& event)
+        {
+            listener.on_event(std::forward<T_Event>(event));
         }
     };
 

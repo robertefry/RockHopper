@@ -39,7 +39,7 @@ TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
     REQUIRE(listener.counts[Listener::R_REF] == 0);
     REQUIRE(listener.counts[Listener::CR_REF] == 0);
 
-    SECTION("listen for const& events")
+    SECTION("listen for const& variant events")
     {
         TestEvent::Variant const event = TestEvent1{};
         TestEvent::Dispatch(listener,event);
@@ -50,8 +50,19 @@ TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
         REQUIRE(listener.counts[Listener::R_REF] == 0);
         REQUIRE(listener.counts[Listener::CR_REF] == 0);
     }
+    SECTION("listen for const& concrete events")
+    {
+        TestEvent1 const event = TestEvent1{};
+        TestEvent::Dispatch(listener,event);
 
-    SECTION("listen for & events")
+        REQUIRE(listener.counts[Listener::VAL] == 0);
+        REQUIRE(listener.counts[Listener::L_REF] == 0);
+        REQUIRE(listener.counts[Listener::CL_REF] == 1);
+        REQUIRE(listener.counts[Listener::R_REF] == 0);
+        REQUIRE(listener.counts[Listener::CR_REF] == 0);
+    }
+
+    SECTION("listen for & variant events")
     {
         TestEvent::Variant event = TestEvent1{};
         TestEvent::Dispatch(listener,event);
@@ -62,8 +73,19 @@ TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
         REQUIRE(listener.counts[Listener::R_REF] == 0);
         REQUIRE(listener.counts[Listener::CR_REF] == 0);
     }
+    SECTION("listen for & concrete events")
+    {
+        TestEvent1 event = TestEvent1{};
+        TestEvent::Dispatch(listener,event);
 
-    SECTION("listen for const&& events")
+        REQUIRE(listener.counts[Listener::VAL] == 0);
+        REQUIRE(listener.counts[Listener::L_REF] == 1);
+        REQUIRE(listener.counts[Listener::CL_REF] == 0);
+        REQUIRE(listener.counts[Listener::R_REF] == 0);
+        REQUIRE(listener.counts[Listener::CR_REF] == 0);
+    }
+
+    SECTION("listen for const&& variant events")
     {
         TestEvent::Variant const event = TestEvent1{};
         TestEvent::Dispatch(listener,std::move(event));
@@ -74,10 +96,32 @@ TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
         REQUIRE(listener.counts[Listener::R_REF] == 0);
         REQUIRE(listener.counts[Listener::CR_REF] == 1);
     }
+    SECTION("listen for const&& concrete events")
+    {
+        TestEvent1 const event = TestEvent1{};
+        TestEvent::Dispatch(listener,std::move(event));
 
-    SECTION("listen for const&& events")
+        REQUIRE(listener.counts[Listener::VAL] == 0);
+        REQUIRE(listener.counts[Listener::L_REF] == 0);
+        REQUIRE(listener.counts[Listener::CL_REF] == 0);
+        REQUIRE(listener.counts[Listener::R_REF] == 0);
+        REQUIRE(listener.counts[Listener::CR_REF] == 1);
+    }
+
+    SECTION("listen for const&& variant events")
     {
         TestEvent::Variant event = TestEvent1{};
+        TestEvent::Dispatch(listener,std::move(event));
+
+        REQUIRE(listener.counts[Listener::VAL] == 0);
+        REQUIRE(listener.counts[Listener::L_REF] == 0);
+        REQUIRE(listener.counts[Listener::CL_REF] == 0);
+        REQUIRE(listener.counts[Listener::R_REF] == 1);
+        REQUIRE(listener.counts[Listener::CR_REF] == 0);
+    }
+    SECTION("listen for const&& concrete events")
+    {
+        TestEvent1 event = TestEvent1{};
         TestEvent::Dispatch(listener,std::move(event));
 
         REQUIRE(listener.counts[Listener::VAL] == 0);
