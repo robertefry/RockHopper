@@ -181,26 +181,3 @@ TEST_CASE("EventSet::Dispatch correctly dispatches an event to a listener")
         RunTests(std::move(listener));
     }
 }
-
-TEST_CASE("EventSet::EventKit<...>::Make correctly makes an instance of EventSet::Variant")
-{
-    auto event = TestEvent::EventKit<TestEvent1>::Make();
-    REQUIRE(std::is_same<TestEvent::Variant,std::remove_cv<decltype(event)>::type>::value);
-}
-
-TEST_CASE("EventSet::ListenerKit<...>::Make correctly makes an event listener")
-{
-    size_t count = 0;
-
-    auto listener = TestEvent::ListenerKit<TestEvent1>::Make([&]<typename E>(E&& event)
-    {
-        count += 1;
-    });
-
-    REQUIRE(count == 0);
-
-    TestEvent::Variant const event = TestEvent::EventKit<TestEvent1>::Make();
-    TestEvent::Dispatch(listener,event);
-
-    REQUIRE(count == 1);
-}
