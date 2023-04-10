@@ -16,7 +16,7 @@ TEST_CASE("EventSet::ListenerKit<...>::Make correctly makes an event listener")
 {
     size_t count = 0;
 
-    auto listener = TestEvent::ListenerKit<TestEvent1>::Make([&]<typename E>(E&& event)
+    auto listener = TestEvent::ListenerKit<TestEvent1>::Make([&]<typename E>(E&&)
     {
         count += 1;
     });
