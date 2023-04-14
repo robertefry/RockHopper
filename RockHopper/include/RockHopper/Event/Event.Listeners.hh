@@ -23,8 +23,6 @@ namespace RockHopper::Event
             using Listener::on_event;
             void on_event(T_Event const& event) override { m_OnEvent(event); }
             void on_event(T_Event & event) override { m_OnEvent(event); }
-            void on_event(T_Event const&& event) override { m_OnEvent(std::move(event)); }
-            void on_event(T_Event && event) override { m_OnEvent(std::move(event)); }
 
         private:
             T_OnEvent m_OnEvent;
