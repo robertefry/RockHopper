@@ -7,15 +7,14 @@
 namespace RockHopper::Event::Dispatch
 {
 
-    template <typename T_EventSet>
     class Sequential
     {
-        using EventSet = T_EventSet;
-
     public:
-        template <typename T_ListenerList, typename T_Event>
+        template <typename T_EventSet, typename T_ListenerList, typename T_Event>
         void dispatch(T_ListenerList const& listeners, T_Event&& event)
         {
+            using EventSet = T_EventSet;
+
             for (auto const& listener : listeners)
             {
                 EventSet::Dispatch(*listener,std::forward<T_Event>(event));

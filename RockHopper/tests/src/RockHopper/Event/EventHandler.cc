@@ -15,7 +15,7 @@ using TestEvent = RockHopper::Event::EventSet<TestEvent1,TestEvent2>;
 
 TEST_CASE("EventHandler can correctly dispatch events")
 {
-    using Dispatcher = RockHopper::Event::Dispatch::Sequential<TestEvent>;
+    using Dispatcher = RockHopper::Event::Dispatch::Sequential;
     using EventHandler = RockHopper::Event::EventHandler<TestEvent,Dispatcher>;
 
     EventHandler event_handler;

@@ -41,7 +41,7 @@ namespace RockHopper::Event
         template <typename T_Event>
         void dispatch_event(T_Event&& event) const
         {
-            m_Dispatcher.dispatch(m_ListenerList,std::forward<T_Event>(event));
+            m_Dispatcher.template dispatch<EventSet>(m_ListenerList,std::forward<T_Event>(event));
         }
 
     private:
