@@ -2,7 +2,7 @@
 #ifndef ROCKHOPPER_CHRONO_TICK_THREAD_HH
 #define ROCKHOPPER_CHRONO_TICK_THREAD_HH
 
-#include "RockHopper/Chrono/TickEvent.hh"
+#include "RockHopper/Chrono/TickThread.Events.hh"
 
 #include "RockHopper/Event/EventHandler.hh"
 
