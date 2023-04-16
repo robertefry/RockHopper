@@ -2,6 +2,7 @@
 #ifndef ROCKHOPPER_EVENT_EVENT_HH
 #define ROCKHOPPER_EVENT_EVENT_HH
 
+#include <utility>
 #include <variant>
 
 namespace RockHopper::Event
@@ -15,8 +16,8 @@ namespace RockHopper::Event
         {
             virtual ~I_Listener_Base() = default;
 
-            virtual void on_event(T_Event const&) {}
-            virtual void on_event(T_Event &) {}
+            virtual void on_event(T_Event const&) { /* do nothing by default */ }
+            virtual void on_event(T_Event & event) { on_event(std::as_const(event)); }
         };
 
         struct I_Listener : virtual I_Listener_Base<T_EventPack>...
