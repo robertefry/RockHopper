@@ -13,7 +13,7 @@ namespace RockHopper::Event
     {
     public:
         template <typename... T_Args>
-        static auto Make(T_Args&&... args) -> Variant
+        [[nodiscard]] static auto Make(T_Args&&... args) -> Variant
         {
             return T_Event{std::forward<T_Args>(args)...};
         }

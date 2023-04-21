@@ -28,7 +28,7 @@ namespace RockHopper
         static std::string DemangleFunctionName(std::string name);
 
         template <bool use_caller, typename... Args>
-        static auto PreProcessMessage(std::string const& caller,
+        [[nodiscard]] static auto PreProcessMessage(std::string const& caller,
             fmt::format_string<Args...> const& fmt, Args&&... args)
         {
             auto message = fmt::format(fmt,std::forward<Args>(args)...);

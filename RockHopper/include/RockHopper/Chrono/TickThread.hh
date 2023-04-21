@@ -28,10 +28,11 @@ namespace RockHopper::Chrono
         void start();
         void stop();
 
-        bool is_alive() const;
+        [[nodiscard]] bool is_alive() const;
 
-        void set_delta(Clock::duration const&);
+        [[nodiscard]]
         auto get_delta() const -> Clock::duration;
+        void set_delta(Clock::duration const&);
 
     protected:
         template <typename T_Event>

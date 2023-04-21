@@ -29,7 +29,7 @@ namespace RockHopper::Event
         };
 
         template <typename T_OnEvent>
-        static auto Make(T_OnEvent&& func) -> OnEventListener<T_OnEvent>
+        [[nodiscard]] static auto Make(T_OnEvent&& func) -> OnEventListener<T_OnEvent>
         {
             return OnEventListener<T_OnEvent>{std::forward<T_OnEvent>(func)};
         }
