@@ -34,7 +34,7 @@ namespace RockHopper::Chrono
         auto get_delta() const -> Clock::duration;
         void set_delta(Clock::duration const&);
 
-    protected:
+    private:
         template <typename T_Event>
         void dispatch_event(T_Event&&);
 
