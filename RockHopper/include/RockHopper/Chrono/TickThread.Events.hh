@@ -1,6 +1,6 @@
 
-#ifndef ROCKHOPPER_CHRONO_TICK_EVENT_HH
-#define ROCKHOPPER_CHRONO_TICK_EVENT_HH
+#ifndef ROCKHOPPER_CHRONO_TICK_EVENTS_HH
+#define ROCKHOPPER_CHRONO_TICK_EVENTS_HH
 
 #include "RockHopper/Event/Event.hh"
 
@@ -30,4 +30,4 @@ namespace RockHopper::Chrono
 
 } // namespace RockHopper::Chrono
 
-#endif /* ROCKHOPPER_CHRONO_TICK_EVENT_HH */
+#endif /* ROCKHOPPER_CHRONO_TICK_EVENTS_HH */
