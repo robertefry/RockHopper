@@ -3,7 +3,7 @@
 
 #include "RockHopper/Event/Event.Listeners.hh"
 #include "RockHopper/Event/EventHandler.hh"
-#include "RockHopper/Event/EventDispatcher.Sequential.hh"
+#include "RockHopper/Event/EventDispatch.Sequential.hh"
 
 /* ************************************************************************** */
 

@@ -2,7 +2,7 @@
 #include <catch2/catch_all.hpp>
 
 #include "RockHopper/Chrono/TickThread.hh"
-#include "RockHopper/Event/EventDispatcher.Sequential.hh"
+#include "RockHopper/Event/EventDispatch.Sequential.hh"
 
 TEST_CASE("Chrono::TickThread calls its own event listener")
 {
