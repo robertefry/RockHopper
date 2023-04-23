@@ -123,8 +123,8 @@ namespace RockHopper::Chrono
             dispatch_event(TickEvent_OnTick{time_delta});
         }
 
-        m_IsAlive = false;
         dispatch_event(TickEvent_Dispose{});
+        m_IsAlive = false;
     }
 
 } // namespace RockHopper::Chrono
