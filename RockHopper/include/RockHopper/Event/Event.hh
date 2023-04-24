@@ -20,7 +20,7 @@ namespace RockHopper::Event
             virtual void on_event(T_Event & event) { on_event(std::as_const(event)); }
         };
 
-        struct I_Listener : virtual I_Listener_Base<T_EventPack>...
+        struct I_Listener : I_Listener_Base<T_EventPack>...
         {
             using I_Listener_Base<T_EventPack>::on_event...;
         };
