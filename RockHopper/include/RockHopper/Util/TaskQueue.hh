@@ -52,10 +52,9 @@ namespace RockHopper::Util
 
         explicit TaskQueue(size_t capacity)
             : m_ExecutorQueue{capacity}
-        {
-        }
+        {}
 
-        inline void reserve(size_t count) { m_ExecutorQueue.reserve(count); }
+        inline void reserve(size_t capacity) { m_ExecutorQueue.reserve(capacity); }
 
         [[nodiscard]] inline bool empty() const { return m_ExecutorQueue.empty(); }
 
