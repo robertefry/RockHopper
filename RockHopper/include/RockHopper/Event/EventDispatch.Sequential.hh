@@ -17,7 +17,7 @@ namespace RockHopper::Event::Dispatch
 
             for (auto const& listener : listeners)
             {
-                EventSet::Dispatch(*listener,std::forward<T_Event>(event));
+                EventSet::Dispatch(*listener,event);
             }
         }
     };
