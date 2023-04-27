@@ -25,6 +25,10 @@ namespace RockHopper::Chrono
 
         virtual ~TickThread();
 
+        explicit TickThread(Dispatcher dispatcher = {})
+            : EventHandler{std::move(dispatcher)}
+        {}
+
         void start();
         void stop();
 
