@@ -10,6 +10,7 @@ namespace RockHopper::Event
 
     template <typename T_EventSet, typename T_Dispatcher>
     class EventHandler
+        : protected T_EventSet::Listener
     {
         using Dispatcher = T_Dispatcher;
         using EventSet = T_EventSet;
@@ -39,8 +40,9 @@ namespace RockHopper::Event
         }
 
         template <typename T_Event>
-        void dispatch_event(T_Event&& event) const
+        void dispatch_event(T_Event&& event)
         {
+            this->on_event(event);
             m_Dispatcher.template dispatch<EventSet>(m_ListenerList,std::forward<T_Event>(event));
         }
 

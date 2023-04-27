@@ -15,7 +15,6 @@ namespace RockHopper::Chrono
     template <typename T_Dispatcher>
     class TickThread
         : public Event::EventHandler<TickEvent,T_Dispatcher>
-        , protected TickEvent::Listener
     {
         using Dispatcher = T_Dispatcher;
         using EventHandler = Event::EventHandler<TickEvent,Dispatcher>;
@@ -39,8 +38,7 @@ namespace RockHopper::Chrono
         void set_delta(Clock::duration const&);
 
     private:
-        template <typename T_Event>
-        void dispatch_event(T_Event&&);
+        using EventHandler::dispatch_event;
 
     private:
         void run();
@@ -94,14 +92,6 @@ namespace RockHopper::Chrono
     auto TickThread<T_Dispatcher>::get_delta() const -> Clock::duration
     {
         return m_Delta;
-    }
-
-    template <typename T_Dispatcher>
-    template <typename T_Event>
-    void TickThread<T_Dispatcher>::dispatch_event(T_Event&& event)
-    {
-        this->on_event(event);
-        this->EventHandler::dispatch_event(std::forward<T_Event>(event));
     }
 
     template <typename T_Dispatcher>
