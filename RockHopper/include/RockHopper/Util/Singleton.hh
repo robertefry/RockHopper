@@ -11,11 +11,6 @@ namespace RockHopper::Util
     template <typename T>
     class Singleton
     {
-        static_assert(not std::is_copy_constructible<T>::value);
-        static_assert(not std::is_copy_assignable<T>::value);
-        static_assert(not std::is_move_constructible<T>::value);
-        static_assert(not std::is_move_assignable<T>::value);
-
     public:
         virtual ~Singleton();
         explicit Singleton();
@@ -55,6 +50,11 @@ namespace RockHopper::Util
     template <typename T>
     Singleton<T>::Singleton()
     {
+        static_assert(not std::is_copy_constructible<T>::value);
+        static_assert(not std::is_copy_assignable<T>::value);
+        static_assert(not std::is_move_constructible<T>::value);
+        static_assert(not std::is_move_assignable<T>::value);
+
         if (++s_UseCount == 1) s_Pointer = new T;
     }
 
