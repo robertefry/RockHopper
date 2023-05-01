@@ -10,6 +10,9 @@
 namespace RockHopper::Util
 {
 
+    class NullSingleton_T {};
+    static inline constexpr NullSingleton_T NullSingleton{};
+
     template <typename T>
     class Singleton
     {
@@ -17,11 +20,20 @@ namespace RockHopper::Util
         virtual ~Singleton();
         explicit Singleton();
 
+        Singleton(NullSingleton_T);
+        Singleton& operator=(NullSingleton_T);
+
+        friend bool operator==(Singleton const&, NullSingleton_T);
+        friend bool operator==(NullSingleton_T, Singleton const&);
+
         Singleton(Singleton const&);
         Singleton& operator=(Singleton const&);
 
         Singleton(Singleton&&) noexcept;
         Singleton& operator=(Singleton&&) noexcept;
+
+        operator bool() const { return s_UseCount != 0; }
+        auto use_count() const -> size_t { return s_UseCount; }
 
         [[nodiscard]] inline auto operator*() & -> T& { return *s_Pointer; }
         [[nodiscard]] inline auto operator*() const& -> T const& { return *s_Pointer; }
@@ -41,14 +53,35 @@ namespace RockHopper::Util
     private:
         static inline T* s_Pointer = nullptr;
         static inline std::atomic<size_t> s_UseCount = 0;
+
+    private:
         static inline std::mutex s_Mutex{};
+
+        void use_one_more();
+        void use_one_less();
     };
+
+    template <typename T>
+    void Singleton<T>::use_one_more()
+    {
+        std::unique_lock<std::mutex> lock {s_Mutex};
+
+        if (++s_UseCount == 1) s_Pointer = new T;
+    }
+
+    template <typename T>
+    void Singleton<T>::use_one_less()
+    {
+        std::unique_lock<std::mutex> lock {s_Mutex};
+
+        if (s_UseCount == 0) return;
+        if (--s_UseCount == 0) delete s_Pointer;
+    }
 
     template <typename T>
     Singleton<T>::~Singleton()
     {
-        [[maybe_unused]] auto lock = std::unique_lock{s_Mutex};
-        if (--s_UseCount == 0) delete s_Pointer;
+        use_one_less();
     }
 
     template <typename T>
@@ -59,14 +92,24 @@ namespace RockHopper::Util
         static_assert(not std::is_move_constructible<T>::value);
         static_assert(not std::is_move_assignable<T>::value);
 
-        [[maybe_unused]] auto lock = std::unique_lock{s_Mutex};
-        if (++s_UseCount == 1) s_Pointer = new T;
+        use_one_more();
+    }
+
+    template <typename T>
+    Singleton<T>::Singleton(NullSingleton_T)
+    {
+    }
+
+    template <typename T>
+    Singleton<T>& Singleton<T>::operator=(NullSingleton_T)
+    {
+        use_one_less();
     }
 
     template <typename T>
     Singleton<T>::Singleton(Singleton const&)
     {
-        ++s_UseCount;
+        use_one_more();
     }
 
     template <typename T>
@@ -78,7 +121,7 @@ namespace RockHopper::Util
     template <typename T>
     Singleton<T>::Singleton(Singleton&&) noexcept
     {
-        ++s_UseCount;
+        use_one_more();
     }
 
     template <typename T>
