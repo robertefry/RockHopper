@@ -2,6 +2,8 @@
 #ifndef ROCKHOPPER_UTIL_TASK_QUEUE_HH
 #define ROCKHOPPER_UTIL_TASK_QUEUE_HH
 
+#include "RockHopper/Util/Lifetime.hh"
+
 #include "concurrentqueue.h"
 
 #include <memory>
@@ -13,16 +15,10 @@ namespace RockHopper::Util
 
     class TaskQueue
     {
-        struct I_Executor
+        struct I_Executor : private Util::NoCopy
         {
             virtual ~I_Executor() = default;
-            explicit I_Executor() = default;
-
             virtual void operator()() = 0;
-
-            // default move disallows copy
-            I_Executor(I_Executor&&) noexcept = default;
-            I_Executor& operator=(I_Executor&&) noexcept = default;
         };
 
         template <typename T_Ret, typename... T_Args>
