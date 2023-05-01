@@ -3,6 +3,8 @@
 #define ROCKHOPPER_UTIL_SINGLETON_HH
 
 #include <cstddef>
+#include <mutex>
+#include <atomic>
 #include <type_traits>
 
 namespace RockHopper::Util
@@ -38,12 +40,14 @@ namespace RockHopper::Util
 
     private:
         static inline T* s_Pointer = nullptr;
-        static inline size_t s_UseCount = 0;
+        static inline std::atomic<size_t> s_UseCount = 0;
+        static inline std::mutex s_Mutex{};
     };
 
     template <typename T>
     Singleton<T>::~Singleton()
     {
+        [[maybe_unused]] auto lock = std::unique_lock{s_Mutex};
         if (--s_UseCount == 0) delete s_Pointer;
     }
 
@@ -55,6 +59,7 @@ namespace RockHopper::Util
         static_assert(not std::is_move_constructible<T>::value);
         static_assert(not std::is_move_assignable<T>::value);
 
+        [[maybe_unused]] auto lock = std::unique_lock{s_Mutex};
         if (++s_UseCount == 1) s_Pointer = new T;
     }
 
