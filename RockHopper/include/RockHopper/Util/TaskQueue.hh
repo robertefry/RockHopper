@@ -2,10 +2,11 @@
 #ifndef ROCKHOPPER_UTIL_TASK_QUEUE_HH
 #define ROCKHOPPER_UTIL_TASK_QUEUE_HH
 
-#include <boost/lockfree/queue.hpp>
+#include "concurrentqueue.h"
 
-#include <future>
+#include <memory>
 #include <tuple>
+#include <future>
 
 namespace RockHopper::Util
 {
@@ -15,6 +16,8 @@ namespace RockHopper::Util
         struct I_Executor
         {
             virtual ~I_Executor() = default;
+            explicit I_Executor() = default;
+
             virtual void operator()() = 0;
 
             // default move disallows copy
@@ -54,9 +57,8 @@ namespace RockHopper::Util
             : m_ExecutorQueue{capacity}
         {}
 
-        inline void reserve(size_t capacity) { m_ExecutorQueue.reserve(capacity); }
-
-        [[nodiscard]] inline bool empty() const { return m_ExecutorQueue.empty(); }
+        [[nodiscard]] inline auto size() const -> size_t { return m_ExecutorQueue.size_approx(); }
+        [[nodiscard]] inline bool empty() const { return size() == 0; }
 
         template <typename T_Func, typename... T_Args>
         [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
@@ -64,26 +66,29 @@ namespace RockHopper::Util
             using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
             using T_Executor = Executor<T_Ret,T_Args...>;
 
-            auto executor = new T_Executor{
+            auto executor = std::make_unique<T_Executor>(
                 std::forward<T_Func>(func), std::forward<T_Args>(args)...
-            };
+            );
             auto future = executor->future();
 
-            m_ExecutorQueue.push(executor);
+            bool success = m_ExecutorQueue.enqueue(std::move(executor));
+            if (not success) throw std::runtime_error{"failure to push to the task queue"};
+
             return future;
         }
 
         bool execute_one()
         {
-            I_Executor* executor;
-            bool success = m_ExecutorQueue.pop(executor);
+            std::unique_ptr<I_Executor> executor;
+
+            bool success = m_ExecutorQueue.try_dequeue(executor);
             if (success) executor->operator()();
 
             return success;
         }
 
     private:
-        using ExecutorQueue = boost::lockfree::queue<I_Executor*>;
+        using ExecutorQueue = moodycamel::ConcurrentQueue<std::unique_ptr<I_Executor>>;
         ExecutorQueue m_ExecutorQueue;
     };
 

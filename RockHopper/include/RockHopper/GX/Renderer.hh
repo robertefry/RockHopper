@@ -39,14 +39,6 @@ namespace RockHopper::GX
     public:
 
         /*
-         * reserve a number, n, of nodes for the task queue
-         */
-        inline void reserve(size_t n)
-        {
-            m_Thread->m_TaskQueue.reserve(n);
-        }
-
-        /*
          * push a task to be run on the renderer thread
          */
         template <typename T_Func, typename... T_Args>

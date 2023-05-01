@@ -27,6 +27,9 @@ CPMAddPackage(NAME "spdlog"
 CPMAddPackage(NAME Boost
   GITHUB_REPOSITORY "boostorg/boost" GIT_TAG "boost-1.81.0"
 )
+CPMAddPackage(NAME concurrentqueue
+  GITHUB_REPOSITORY "cameron314/concurrentqueue" GIT_TAG "v1.0.3"
+)
 
 # ---- project units ----
 include(.cmake/build_tools.cmake) # toolkit for buildsystem features
