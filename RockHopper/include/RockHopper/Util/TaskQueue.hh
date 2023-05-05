@@ -73,6 +73,20 @@ namespace RockHopper::Util
             return future;
         }
 
+        template <typename T_Func, typename... T_Args>
+        [[nodiscard]] auto execute_task(T_Func&& func, T_Args&&... args)
+        {
+            using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
+            using T_Executor = Executor<T_Ret,T_Args...>;
+
+            auto executor = T_Executor{
+                std::forward<T_Func>(func), std::forward<T_Args>(args)...
+            };
+            executor.operator()();
+
+            return executor.future();
+        }
+
         bool execute_one()
         {
             std::unique_ptr<I_Executor> executor;

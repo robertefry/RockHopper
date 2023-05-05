@@ -32,6 +32,7 @@ namespace RockHopper::Chrono
         void stop();
 
         [[nodiscard]] bool is_alive() const;
+        [[nodiscard]] auto alive_id() const -> std::thread::id;
 
         [[nodiscard]]
         auto get_delta() const -> Clock::duration;
@@ -80,6 +81,12 @@ namespace RockHopper::Chrono
     bool TickThread<T_Dispatcher>::is_alive() const
     {
         return m_IsAlive;
+    }
+
+    template <typename T_Dispatcher>
+    auto TickThread<T_Dispatcher>::alive_id() const -> std::thread::id
+    {
+        return m_Thread.get_id();
     }
 
     template <typename T_Dispatcher>

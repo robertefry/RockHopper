@@ -20,7 +20,7 @@ namespace RockHopper::GX
     class Renderer
     {
         struct Thread : private Util::NoMove
-            , private Chrono::TickThread<Event::Dispatch::Sequential>
+            , public Chrono::TickThread<Event::Dispatch::Sequential>
         {
             using TickThread = Chrono::TickThread<Event::Dispatch::Sequential>;
 
@@ -43,9 +43,16 @@ namespace RockHopper::GX
         template <typename T_Func, typename... T_Args>
         [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
         {
-            return m_Thread->m_TaskQueue.push_task(
-                std::forward<T_Func>(func), std::forward<T_Args>(args)...
-            );
+            if (m_Thread->alive_id() == std::this_thread::get_id())
+            {
+                return m_Thread->m_TaskQueue.execute_task(
+                    std::forward<T_Func>(func), std::forward<T_Args>(args)...
+                );
+            } else {
+                return m_Thread->m_TaskQueue.push_task(
+                    std::forward<T_Func>(func), std::forward<T_Args>(args)...
+                );
+            }
         }
 
     private:
