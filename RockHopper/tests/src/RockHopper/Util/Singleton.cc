@@ -5,7 +5,7 @@
 
 TEST_CASE("Util::Singleton")
 {
-    static size_t instance_count = 0;
+    static int instance_count = 0;
 
     struct Object
     {
@@ -25,15 +25,75 @@ TEST_CASE("Util::Singleton")
 
     REQUIRE(instance_count == 0);
 
-    Singleton* obj_1 = new Singleton;
-    REQUIRE(instance_count == 1);
+    SECTION("lifetime")
+    {
+        Singleton* obj_1 = new Singleton;
+        REQUIRE(instance_count == 1);
 
-    Singleton* obj_2 = new Singleton;
-    REQUIRE(instance_count == 1); // no object is constructed
+        Singleton* obj_2 = new Singleton;
+        REQUIRE(instance_count == 1);
 
-    delete obj_2;
-    REQUIRE(instance_count == 1); // no object is destructed
+        delete obj_2;
+        REQUIRE(instance_count == 1);
 
-    delete obj_1;
-    REQUIRE(instance_count == 0);
+        delete obj_1;
+        REQUIRE(instance_count == 0);
+    }
+
+    SECTION("copying")
+    {
+        Singleton* obj_1 = new Singleton;
+        REQUIRE(instance_count == 1);
+
+        Singleton* obj_2 = new Singleton{*obj_1};
+        REQUIRE(instance_count == 1);
+
+        delete obj_2;
+        REQUIRE(instance_count == 1);
+
+        delete obj_1;
+        REQUIRE(instance_count == 0);
+    }
+
+    SECTION("moving")
+    {
+        Singleton* obj_1 = new Singleton;
+        REQUIRE(instance_count == 1);
+
+        Singleton* obj_2 = new Singleton{std::move(*obj_1)};
+        REQUIRE(instance_count == 1);
+
+        delete obj_2;
+        REQUIRE(instance_count == 0);
+
+        delete obj_1;
+        REQUIRE(instance_count == 0);
+    }
+
+    SECTION("Util::NullSingleton lifetime")
+    {
+        Singleton* obj_1 = new Singleton{RockHopper::Util::NullSingleton};
+        REQUIRE(instance_count == 0);
+
+        Singleton* obj_2 = new Singleton{RockHopper::Util::NullSingleton};
+        REQUIRE(instance_count == 0);
+
+        *obj_1 = Singleton{};
+        REQUIRE(instance_count == 1);
+
+        *obj_2 = Singleton{};
+        REQUIRE(instance_count == 1);
+
+        *obj_2 = RockHopper::Util::NullSingleton;
+        REQUIRE(instance_count == 1);
+
+        *obj_1 = RockHopper::Util::NullSingleton;
+        REQUIRE(instance_count == 0);
+
+        delete obj_2;
+        REQUIRE(instance_count == 0);
+
+        delete obj_1;
+        REQUIRE(instance_count == 0);
+    }
 }
