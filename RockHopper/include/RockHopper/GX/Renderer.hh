@@ -20,7 +20,7 @@ namespace RockHopper::GX
     class Renderer
     {
         class Thread : private Util::NoMove
-            , public Chrono::TickThread<Event::Dispatch::Sequential>
+            , private Chrono::TickThread<Event::Dispatch::Sequential>
         {
             using TickThread = Chrono::TickThread<Event::Dispatch::Sequential>;
 
