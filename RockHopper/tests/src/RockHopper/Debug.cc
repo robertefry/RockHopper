@@ -1,2 +1,0 @@
-
-#include "RockHopper/Debug.hh"
