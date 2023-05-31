@@ -12,10 +12,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # ---- add dependencies via CPM ----
 # see https://github.com/cpm-cmake/CPM.cmake for more info
 include(.cmake/get_cpm.cmake)
+include(.cmake/declare_system_libraries.cmake)
 
 CPMAddPackage(NAME "Catch2"
-  GITHUB_REPOSITORY "catchorg/Catch2" GIT_TAG "v3.2.1"
+  GITHUB_REPOSITORY "catchorg/Catch2" GIT_TAG "v3.3.2"
 )
+
 CPMAddPackage(NAME "fmt"
   GITHUB_REPOSITORY "fmtlib/fmt" GIT_TAG "9.1.0"
   OPTIONS "FMT_INSTALL NO"
@@ -24,6 +26,8 @@ CPMAddPackage(NAME "spdlog"
   GITHUB_REPOSITORY "gabime/spdlog" GIT_TAG "v1.11.0"
   OPTIONS "SPDLOG_FMT_EXTERNAL ON"
 )
+declare_system_libraries(fmt::fmt spdlog::spdlog)
+
 CPMAddPackage(NAME Boost
   GITHUB_REPOSITORY "boostorg/boost" GIT_TAG "boost-1.81.0"
 )
