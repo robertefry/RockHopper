@@ -52,7 +52,11 @@ namespace RockHopper::Util
     public:
         virtual ~TaskQueue()
         {
-            while (not empty()) execute_one();
+            while (true)
+            {
+                bool success = try_execute_one();
+                if (not success) break;
+            }
         }
 
         explicit TaskQueue()
@@ -162,7 +166,7 @@ namespace RockHopper::Util
             [[nodiscard]] inline auto size() const -> size_t { return m_TaskQueue->size(); }
             [[nodiscard]] inline bool empty() const { return m_TaskQueue->empty(); }
 
-            [[nodiscard]] inline bool execute_one()
+            inline bool try_execute_one()
             {
                 std::unique_ptr<I_Executor> executor;
                 bool success = m_TaskQueue->m_ExecutorQueue.try_dequeue(m_Token,executor);
@@ -184,7 +188,7 @@ namespace RockHopper::Util
             return Consumer{this};
         }
 
-        [[nodiscard]] inline bool execute_one()
+        inline bool try_execute_one()
         {
             std::unique_ptr<I_Executor> executor;
             bool success = m_ExecutorQueue.try_dequeue(executor);

@@ -35,7 +35,7 @@ namespace RockHopper::Util
     {
         while (not m_IsStopRequested)
         {
-            if (not empty()) execute_one();
+            try_execute_one();
         }
     }
 
