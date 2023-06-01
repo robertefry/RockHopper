@@ -30,7 +30,7 @@ namespace RockHopper::GX
 
     void Renderer::Thread::on_event(Chrono::TickEvent_OnTick const&)
     {
-        if (not m_TaskQueue.empty()) m_TaskQueue.execute_one();
+        if (not m_Consumer.empty()) m_Consumer.execute_one();
     }
 
 } // namespace RockHopper::GX

@@ -22,26 +22,12 @@ namespace RockHopper::GX
         class Thread : private Util::NoMove
             , private Chrono::TickThread<Event::Dispatch::Sequential>
         {
+            friend Renderer;
             using TickThread = Chrono::TickThread<Event::Dispatch::Sequential>;
 
         public:
             virtual ~Thread();
             explicit Thread();
-
-            template <typename T_Func, typename... T_Args>
-            [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
-            {
-                if (alive_id() == std::this_thread::get_id())
-                {
-                    return m_TaskQueue.execute_task(
-                        std::forward<T_Func>(func), std::forward<T_Args>(args)...
-                    );
-                } else {
-                    return m_TaskQueue.push_task(
-                        std::forward<T_Func>(func), std::forward<T_Args>(args)...
-                    );
-                }
-            }
 
         private:
             void on_event(Chrono::TickEvent_Init const&);
@@ -49,16 +35,30 @@ namespace RockHopper::GX
             void on_event(Chrono::TickEvent_OnTick const&);
 
         private:
-            static constexpr size_t s_TaskQueueInitialCapacity = 1024;
-            Util::TaskQueue m_TaskQueue {s_TaskQueueInitialCapacity};
+            Util::TaskQueue m_TaskQueue{};
+            Util::TaskQueue::Consumer m_Consumer = m_TaskQueue.make_consumer();
         };
 
     public:
-        auto operator->() & -> auto& { return m_Thread; }
-        auto operator->() const& -> auto const& { return m_Thread; }
+
+        template <typename T_Func, typename... T_Args>
+        [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
+        {
+            if (m_Thread->alive_id() == std::this_thread::get_id())
+            {
+                return m_Thread->m_TaskQueue.execute_task(
+                    std::forward<T_Func>(func), std::forward<T_Args>(args)...
+                );
+            }
+
+            return m_Producer.push_task(
+                std::forward<T_Func>(func), std::forward<T_Args>(args)...
+            );
+        }
 
     private:
         Util::Singleton<Thread> m_Thread{};
+        Util::TaskQueue::Producer m_Producer = m_Thread->m_TaskQueue.make_producer();
     };
 
 } // namespace RockHopper::GX

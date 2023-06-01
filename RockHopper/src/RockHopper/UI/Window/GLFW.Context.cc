@@ -21,7 +21,7 @@ namespace RockHopper::UI::GLFW
     auto Window::Context::set_property(
         Window::Handle* handle, Util::In<T_Property> property) -> std::future<void>
     {
-        return m_Renderer->push_task([=,property=std::move(property)]()
+        return m_Renderer.push_task([=,property=std::move(property)]()
         {
             PropertyCache& cache = m_PropertyMap[handle];
             std::unique_lock lock {cache.m_Mutex};
@@ -51,7 +51,7 @@ namespace RockHopper::UI::GLFW
     auto Window::Context::get_property(
         Window::Handle* handle) const -> std::future<T_Property>
     {
-        return m_Renderer->push_task([=]() -> T_Property
+        return m_Renderer.push_task([=]() -> T_Property
         {
             PropertyCache const& cache = m_PropertyMap[handle];
             std::shared_lock lock {cache.m_Mutex};
