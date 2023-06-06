@@ -1,15 +1,49 @@
 
 #include "RockHopper/UI/Window/GLFW.Context.hh"
 
+#include "RockHopper/Logging/LoggerCore.enable.hh"
+#include "RockHopper/Logging/Asserts.hh"
+
+#include <GLFW/glfw3.h>
+
 namespace RockHopper::UI::GLFW
 {
 
+    static void GLFW_ErrorCallback(int error, const char* description)
+    {
+        ROCKHOPPER_LOG_ERROR("GLFW Error {}: {}", error, description);
+    }
+
     Window::Context::~Context()
     {
+        try
+        {
+            auto task = m_Renderer.push_task([]()
+            {
+                ROCKHOPPER_LOG_INFO("GLFW terminating");
+                glfwTerminate();
+            });
+            task.wait();
+        }
+        catch(std::exception const& e)
+        {
+            ROCKHOPPER_LOG_FATAL("Exception occoured on GLFW Context destruction.\n{}",e.what());
+        }
     }
 
     Window::Context::Context()
     {
+        auto task = m_Renderer.push_task([]()
+        {
+            ROCKHOPPER_LOG_INFO("GLFW initializing");
+            glfwSetErrorCallback(GLFW_ErrorCallback);
+
+            int status = glfwInit();
+            ROCKHOPPER_ASSERT_FATAL(status,"GLFW initialization failed");
+
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,s_VersionMajor);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,s_VersionMinor);
+        });
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)

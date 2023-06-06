@@ -32,6 +32,14 @@ CPMAddPackage(NAME concurrentqueue
   GITHUB_REPOSITORY "cameron314/concurrentqueue" GIT_TAG "v1.0.3"
 )
 
+CPMAddPackage(NAME GLFW
+  GITHUB_REPOSITORY "glfw/glfw" GIT_TAG "3.3.2"
+  OPTIONS
+    "GLFW_BUILD_TESTS OFF"
+    "GLFW_BUILD_EXAMPLES OFF"
+    "GLFW_BULID_DOCS OFF"
+)
+
 # ---- project units ----
 include(.cmake/build_tools.cmake) # toolkit for buildsystem features
 

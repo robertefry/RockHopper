@@ -15,7 +15,10 @@
 namespace RockHopper::UI::GLFW
 {
 
-    class Window::Context : private Util::NoMove
+    static inline constexpr unsigned int s_VersionMajor = 3;
+    static inline constexpr unsigned int s_VersionMinor = 3;
+
+    class Window::Context final : private Util::NoMove
     {
     public:
         virtual ~Context();
