@@ -28,9 +28,6 @@ CPMAddPackage(NAME "spdlog"
 )
 declare_system_libraries(fmt::fmt spdlog::spdlog)
 
-CPMAddPackage(NAME Boost
-  GITHUB_REPOSITORY "boostorg/boost" GIT_TAG "boost-1.81.0"
-)
 CPMAddPackage(NAME concurrentqueue
   GITHUB_REPOSITORY "cameron314/concurrentqueue" GIT_TAG "v1.0.3"
 )

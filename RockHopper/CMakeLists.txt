@@ -20,7 +20,7 @@ file(GLOB_RECURSE GLOB_SOURCES CONFIGURE_DEPENDS
 target_sources(${BINARY_NAME} PRIVATE ${GLOB_SOURCES})
 
 target_link_libraries(${BINARY_NAME} PUBLIC fmt::fmt spdlog::spdlog)
-target_link_libraries(${BINARY_NAME} PUBLIC Boost::lockfree concurrentqueue)
+target_link_libraries(${BINARY_NAME} PUBLIC concurrentqueue)
 
 
 # ---- testing ----
