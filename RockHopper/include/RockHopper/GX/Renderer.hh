@@ -30,9 +30,10 @@ namespace RockHopper::GX
             explicit Thread();
 
         private:
-            void on_event(Chrono::TickEvent_Init const&);
-            void on_event(Chrono::TickEvent_Dispose const&);
-            void on_event(Chrono::TickEvent_OnTick const&);
+            using TickThread::on_event;
+            void on_event(Chrono::TickEvent_Init const&) override;
+            void on_event(Chrono::TickEvent_Dispose const&) override;
+            void on_event(Chrono::TickEvent_OnTick const&) override;
 
         private:
             Util::TaskQueue m_TaskQueue{};

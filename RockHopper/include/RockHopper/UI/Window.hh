@@ -57,6 +57,8 @@ namespace RockHopper::UI
         using EventHandler::dispatch_event;
 
     private:
+        using TickThread::on_event;
+        using EventHandler::on_event;
         void on_event(Chrono::TickEvent_Init const&) final;
         void on_event(Chrono::TickEvent_Dispose const&) final;
         void on_event(Chrono::TickEvent_OnTick const&) final;

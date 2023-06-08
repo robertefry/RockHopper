@@ -45,8 +45,8 @@ namespace RockHopper
             auto itr_b = std::find_if(name.rbegin(),name.rend(),[](char c){ return c != ' '; });
             auto itr_a = std::find_if(itr_b,name.rend(),[](char c){ return c == ' '; });
 
-            size_t index = itr_a.base() - name.begin();
-            size_t length = itr_b.base() - itr_a.base();
+            size_t index = (size_t)(itr_a.base() - name.begin());
+            size_t length = (size_t)(itr_b.base() - itr_a.base());
 
             name = name.substr(index,length);
         };

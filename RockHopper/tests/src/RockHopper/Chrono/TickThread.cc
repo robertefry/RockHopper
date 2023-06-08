@@ -11,6 +11,8 @@ TEST_CASE("Chrono::TickThread calls its own event listener")
 
     struct TestThread : TickThread
     {
+        using TickThread::on_event;
+
         using TickEvent_Init = RockHopper::Chrono::TickEvent_Init;
         void on_event(TickEvent_Init const&) override
         {

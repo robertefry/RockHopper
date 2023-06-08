@@ -11,6 +11,8 @@ namespace RockHopper
     class Logger
     {
     public:
+        virtual ~Logger() = default;
+
         enum Level
         {
             TRACE,
@@ -20,7 +22,6 @@ namespace RockHopper
             ERROR,
             FATAL,
         };
-
         virtual void log(Level level, std::string const& msg) = 0;
 
     public:
