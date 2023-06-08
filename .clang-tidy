@@ -2,7 +2,10 @@
 Checks: '-*,
     cppcoreguidelines-*,
     hicpp-*,
+      -hicpp-braces-around-statements,
+      -hicpp-named-parameter,
     modernize-*,
+      -modernize-use-trailing-return-type,
     bugprone-*,
     cert-*,
     misc-*,
@@ -10,11 +13,19 @@ Checks: '-*,
     performance-*,
     portability-*,
     readability-*,
+      -readability-braces-around-statements,
+      -readability-named-parameter,
     clang-analyzer-*,
 
     llvm-namespace-comment,
   '
 CheckOptions:
+  - key: cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+    value: true
+  - key: hicpp-use-override,modernize-use-override.IgnoreDestructors
+    value: true
+  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: true
 
 WarningsAsErrors:   ''
 HeaderFilterRegex:  ''

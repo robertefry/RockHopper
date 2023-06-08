@@ -38,7 +38,7 @@ namespace RockHopper::UI::GLFW
             ROCKHOPPER_LOG_INFO("GLFW initializing");
             glfwSetErrorCallback(GLFW_ErrorCallback);
 
-            int status = glfwInit();
+            int const status = glfwInit();
             ROCKHOPPER_ASSERT_FATAL(status,"GLFW initialization failed");
 
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,s_VersionMajor);
@@ -58,7 +58,7 @@ namespace RockHopper::UI::GLFW
         return m_Renderer.push_task([=,property=std::move(property)]()
         {
             PropertyCache& cache = m_PropertyMap[handle];
-            std::unique_lock lock {cache.m_Mutex};
+            std::unique_lock const lock {cache.m_Mutex};
 
             if constexpr (std::is_same_v<T_Property,Window::visible_t>)       { /* todo */ }
             if constexpr (std::is_same_v<T_Property,Window::focused_t>)       { /* todo */ }
@@ -88,7 +88,7 @@ namespace RockHopper::UI::GLFW
         return m_Renderer.push_task([=]() -> T_Property
         {
             PropertyCache const& cache = m_PropertyMap[handle];
-            std::shared_lock lock {cache.m_Mutex};
+            std::shared_lock const lock {cache.m_Mutex};
 
             return std::get<T_Property>(cache.m_Tuple);
         });

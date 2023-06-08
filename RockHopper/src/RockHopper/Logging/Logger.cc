@@ -10,20 +10,20 @@ namespace RockHopper
 
     auto Logger::DemangleFunctionName(std::string name) -> std::string
     {
-        auto const erase_delimited = [&](char a, char b)
+        auto const erase_delimited = [&](char char_begin, char char_end)
         {
             auto itr_a = name.begin();
 
             while (true)
             {
-                itr_a = std::find(itr_a,name.end(),a);
+                itr_a = std::find(itr_a,name.end(),char_begin);
                 if (itr_a == name.end()) return;        // break while(true)
 
                 auto itr_b = std::next(itr_a);
                 for (size_t count = 1; count > 0; ++itr_b)
                 {
-                    if (*itr_b == a) count += 1;
-                    if (*itr_b == b) count -= 1;
+                    if (*itr_b == char_begin) count += 1;
+                    if (*itr_b == char_end) count -= 1;
                 }
                 name.erase(itr_a,itr_b);
             }
@@ -42,11 +42,11 @@ namespace RockHopper
         };
         auto const make_last_word = [&]()
         {
-            auto itr_b = std::find_if(name.rbegin(),name.rend(),[](char c){ return c != ' '; });
-            auto itr_a = std::find_if(itr_b,name.rend(),[](char c){ return c == ' '; });
+            auto itr_b = std::find_if(name.rbegin(),name.rend(),[](char chr){ return chr != ' '; });
+            auto itr_a = std::find_if(itr_b,name.rend(),[](char chr){ return chr == ' '; });
 
-            size_t index = (size_t)(itr_a.base() - name.begin());
-            size_t length = (size_t)(itr_b.base() - itr_a.base());
+            size_t const index = (size_t)(itr_a.base() - name.begin());
+            size_t const length = (size_t)(itr_b.base() - itr_a.base());
 
             name = name.substr(index,length);
         };
