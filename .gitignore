@@ -3,6 +3,9 @@
 ## CMake
 # ############################################################################ #
 
+.build
+.cpm
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles

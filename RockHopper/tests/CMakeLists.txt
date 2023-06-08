@@ -4,14 +4,14 @@ enable_testing()
 
 # ---- binary ----
 
-set(TESTS_NAME ${BINARY_NAME}-Tests)
+set(TESTS_NAME ${LIBRARY_NAME}-Tests)
 add_executable(${TESTS_NAME} "")
 
-target_link_libraries(${TESTS_NAME} PRIVATE ${BINARY_NAME})
+target_link_libraries(${TESTS_NAME} PRIVATE ${LIBRARY_NAME})
 
 # ---- cmake targets ----
 
-add_custom_target(test-${BINARY_NAME}
+add_custom_target(test-${LIBRARY_NAME}
   COMMAND $<TARGET_FILE:${TESTS_NAME}>
   DEPENDS ${TESTS_NAME})
 
