@@ -47,159 +47,113 @@ namespace RockHopper::Util
 
     private:
         using ExecutorQueue = moodycamel::ConcurrentQueue<std::unique_ptr<I_Executor>>;
-        ExecutorQueue m_ExecutorQueue;
+        std::shared_ptr<ExecutorQueue> m_ExecutorQueue;
 
     public:
-        virtual ~TaskQueue()
-        {
-            while (true)
-            {
-                bool success = try_execute_one();
-                if (not success) break;
-            }
-        }
+        virtual ~TaskQueue();
+        explicit TaskQueue();
 
-        explicit TaskQueue()
-        {}
+        explicit TaskQueue(size_t capacity);
 
-        explicit TaskQueue(size_t capacity)
-            : m_ExecutorQueue{capacity}
-        {}
-
-        [[nodiscard]] inline auto size() const -> size_t { return m_ExecutorQueue.size_approx(); }
-        [[nodiscard]] inline bool empty() const { return size() == 0; }
+        [[nodiscard]] auto size() const -> size_t;
+        [[nodiscard]] bool empty() const { return size() == 0; }
 
         template <typename T_Func, typename... T_Args>
-        [[nodiscard]] auto execute_task(T_Func&& func, T_Args&&... args)
-        {
-            using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
-            using T_Executor = Executor<T_Ret,T_Args...>;
-
-            auto executor = T_Executor{
-                std::forward<T_Func>(func), std::forward<T_Args>(args)...
-            };
-            executor.operator()();
-
-            return executor.future();
-        }
+        [[nodiscard]] auto execute_task(T_Func&& func, T_Args&&... args);
 
     public:
-        class Producer final
+        class Producer
         {
             friend TaskQueue;
 
-            explicit Producer(TaskQueue* task_queue)
-                : m_TaskQueue{task_queue}
-                , m_Token{task_queue->m_ExecutorQueue}
-            {}
+            std::shared_ptr<ExecutorQueue> m_ExecutorQueue;
+            moodycamel::ProducerToken m_ProducerToken;
+
+            explicit Producer(std::shared_ptr<ExecutorQueue> const& executor_queue);
 
         public:
-            virtual ~Producer()
-            {
-                while (true)
-                {
-                    std::unique_ptr<I_Executor> executor;
-                    bool success = m_TaskQueue->m_ExecutorQueue.try_dequeue_from_producer(m_Token,executor);
-                    if (not success) break;
+            virtual ~Producer();
 
-                    // drop the unprocessed task
-                    ROCKHOPPER_LOG_ERROR("Unprocessed task dropped from a TaskQueue.");
-                }
-            }
-
-        public:
             template <typename T_Func, typename... T_Args>
-            [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
-            {
-                using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
-                using T_Executor = Executor<T_Ret,T_Args...>;
-
-                auto executor = std::make_unique<T_Executor>(
-                    std::forward<T_Func>(func), std::forward<T_Args>(args)...
-                );
-                auto future = executor->future();
-
-                bool success = m_TaskQueue->m_ExecutorQueue.enqueue(m_Token,std::move(executor));
-                if (not success) throw std::runtime_error{"failure to push to the task queue"};
-
-                return future;
-            }
-
-        private:
-            TaskQueue* m_TaskQueue;
-            moodycamel::ProducerToken m_Token;
+            [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args);
         };
 
-        [[nodiscard]] inline auto make_producer()
-        {
-            return Producer{this};
-        }
+        [[nodiscard]] Producer make_producer();
 
         template <typename T_Func, typename... T_Args>
-        [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
-        {
-            using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
-            using T_Executor = Executor<T_Ret,T_Args...>;
-
-            auto executor = std::make_unique<T_Executor>(
-                std::forward<T_Func>(func), std::forward<T_Args>(args)...
-            );
-            auto future = executor->future();
-
-            bool success = m_ExecutorQueue.enqueue(std::move(executor));
-            if (not success) throw std::runtime_error{"failure to push to the task queue"};
-
-            return future;
-        }
+        [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args);
 
     public:
-        class Consumer final
+        class Consumer
         {
             friend TaskQueue;
 
-            explicit Consumer(TaskQueue* task_queue)
-                : m_TaskQueue{task_queue}
-                , m_Token{task_queue->m_ExecutorQueue}
-            {}
+            std::shared_ptr<ExecutorQueue> m_ExecutorQueue;
+            moodycamel::ConsumerToken m_ConsumerToken;
+
+            explicit Consumer(std::shared_ptr<ExecutorQueue> const& executor_queue);
 
         public:
-            [[nodiscard]] inline auto size() const -> size_t { return m_TaskQueue->size(); }
-            [[nodiscard]] inline bool empty() const { return m_TaskQueue->empty(); }
+            virtual ~Consumer();
 
-            inline bool try_execute_one()
-            {
-                std::unique_ptr<I_Executor> executor;
-                bool success = m_TaskQueue->m_ExecutorQueue.try_dequeue(m_Token,executor);
+            [[nodiscard]] auto size() const -> size_t;
+            [[nodiscard]] bool empty() const { return size() == 0; }
 
-                if (success)
-                {
-                    executor->operator()();
-                }
-                return success;
-            }
-
-        private:
-            TaskQueue* m_TaskQueue;
-            moodycamel::ConsumerToken m_Token;
+            bool try_execute_one();
         };
 
-        [[nodiscard]] inline auto make_consumer()
-        {
-            return Consumer{this};
-        }
+        [[nodiscard]] Consumer make_consumer();
 
-        inline bool try_execute_one()
-        {
-            std::unique_ptr<I_Executor> executor;
-            bool success = m_ExecutorQueue.try_dequeue(executor);
-
-            if (success)
-            {
-                executor->operator()();
-            }
-            return success;
-        }
+        bool try_execute_one();
     };
+
+    template <typename T_Func, typename... T_Args>
+    [[nodiscard]] auto TaskQueue::execute_task(T_Func&& func, T_Args&&... args)
+    {
+        using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
+        using T_Executor = Executor<T_Ret,T_Args...>;
+
+        auto executor = T_Executor{
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...
+        };
+        executor.operator()();
+
+        return executor.future();
+    }
+
+    template <typename T_Func, typename... T_Args>
+    [[nodiscard]] auto TaskQueue::push_task(T_Func&& func, T_Args&&... args)
+    {
+        using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
+        using T_Executor = Executor<T_Ret,T_Args...>;
+
+        auto executor = std::make_unique<T_Executor>(
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...
+        );
+        auto future = executor->future();
+
+        bool success = m_ExecutorQueue->enqueue(std::move(executor));
+        if (not success) throw std::runtime_error{"failure to push to the task queue"};
+
+        return future;
+    }
+
+    template <typename T_Func, typename... T_Args>
+    [[nodiscard]] auto TaskQueue::Producer::push_task(T_Func&& func, T_Args&&... args)
+    {
+        using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
+        using T_Executor = Executor<T_Ret,T_Args...>;
+
+        auto executor = std::make_unique<T_Executor>(
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...
+        );
+        auto future = executor->future();
+
+        bool success = m_ExecutorQueue->enqueue(m_ProducerToken,std::move(executor));
+        if (not success) throw std::runtime_error{"failure to push to the task queue"};
+
+        return future;
+    }
 
 } // namespace RockHopper::Util
 
