@@ -15,6 +15,7 @@ Checks: '-*,
     readability-*,
       -readability-braces-around-statements,
       -readability-named-parameter,
+      -readability-redundant-member-init,
     clang-analyzer-*,
 
     llvm-namespace-comment,

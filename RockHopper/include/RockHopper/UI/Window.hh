@@ -28,8 +28,8 @@ namespace RockHopper::UI
         virtual ~Window() = default;
         explicit Window() = default;
 
-        Window(Window&&) = delete;
-        Window& operator=(Window&&) = delete;
+        Window(Window const&) = delete;
+        Window& operator=(Window const&) = delete;
 
         [[nodiscard]] auto renderer() & -> GX::Renderer& { return m_Renderer; }
         [[nodiscard]] auto renderer() const& -> GX::Renderer const& { return m_Renderer; }

@@ -10,6 +10,7 @@ namespace RockHopper::UI::GLFW
     }
 
     Window::Window()
+        : m_Context{}
     {
     }
 

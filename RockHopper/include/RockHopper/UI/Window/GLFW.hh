@@ -15,6 +15,9 @@ namespace RockHopper::UI::GLFW
         virtual ~Window();
         explicit Window();
 
+        Window(Window const&) = delete;
+        Window& operator=(Window const&) = delete;
+
         [[nodiscard]] auto get_visible() const -> visible_t override;
         [[nodiscard]] auto set_visible(Util::In<visible_t>) -> std::future<void> override;
 
