@@ -29,8 +29,8 @@ namespace RockHopper::Util
         Singleton(NullSingleton_T);
         Singleton& operator=(NullSingleton_T);
 
-        friend bool operator==(Singleton const&, NullSingleton_T);
-        friend bool operator==(NullSingleton_T, Singleton const&);
+        template <typename S> friend bool operator==(Singleton<S> const&, NullSingleton_T);
+        template <typename S> friend bool operator==(NullSingleton_T, Singleton<S> const&);
 
         operator bool() const { return m_IsValid; }
 
@@ -149,6 +149,18 @@ namespace RockHopper::Util
     {
         DetachThisUse();
         return *this;
+    }
+
+    template <typename T>
+    bool operator==(Singleton<T> const& singleton, NullSingleton_T)
+    {
+        return singleton.s_Pointer == nullptr;
+    }
+
+    template <typename T>
+    bool operator==(NullSingleton_T, Singleton<T> const& singleton)
+    {
+        return nullptr == singleton.s_Pointer;
     }
 
 } // namespace RockHopper::Util
