@@ -47,9 +47,10 @@ endif()
 set(USE_CLANG_TIDY ON
   CACHE BOOL "Use the clang-tidy static analyzer.")
 
-if(USE_CLANG_TIDY)
+if(USE_CLANG_TIDY AND NOT FOUND_CLANG_TIDY)
   find_program(CLANG_TIDY NAMES "clang-tidy")
   if(CLANG_TIDY)
+    set(FOUND_CLANG_TIDY TRUE)
     message(STATUS "Found clang-tidy: ${CLANG_TIDY}")
   else()
     message(SEND_ERROR "Cannot enable clang-tidy, executable not found!")
