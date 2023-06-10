@@ -79,15 +79,15 @@ namespace RockHopper::UI::GLFW
     // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
     #define ExplicitlyInstantiateGetProperty(property_t) \
     template auto Window::Context::get_property<property_t> \
-        (Window::Handle* handle) const -> std::future<property_t>
+        (Window::Handle* handle) -> std::future<property_t>
 
     template <typename T_Property>
     auto Window::Context::get_property(
-        Window::Handle* handle) const -> std::future<T_Property>
+        Window::Handle* handle) -> std::future<T_Property>
     {
         return m_Renderer.push_task([=,this]() -> T_Property
         {
-            PropertyCache const& cache = m_PropertyMap[handle];
+            PropertyCache& cache = m_PropertyMap[handle];
             std::shared_lock const lock {cache.m_Mutex};
 
             return std::get<T_Property>(cache.m_Tuple);

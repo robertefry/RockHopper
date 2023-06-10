@@ -35,7 +35,7 @@ namespace RockHopper::UI::GLFW
 
     private:
         class Context; friend Context;
-        Util::Singleton<Context> m_Context;
+        Util::Singleton<Context> mutable m_Context;
 
         struct Handle;
         Handle* m_Handle = nullptr;
