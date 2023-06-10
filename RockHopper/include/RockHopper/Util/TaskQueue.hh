@@ -74,14 +74,17 @@ namespace RockHopper::Util
         public:
             virtual ~Producer();
 
+            Producer(Producer&&) = default;
+            Producer& operator=(Producer&&) = default;
+
             template <typename T_Func, typename... T_Args>
-            [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args);
+            auto push_task(T_Func&& func, T_Args&&... args);
         };
 
         [[nodiscard]] Producer make_producer();
 
         template <typename T_Func, typename... T_Args>
-        [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args);
+        auto push_task(T_Func&& func, T_Args&&... args);
 
     public:
         class Consumer
@@ -96,6 +99,9 @@ namespace RockHopper::Util
         public:
             virtual ~Consumer();
 
+            Consumer(Consumer&&) = default;
+            Consumer& operator=(Consumer&&) = default;
+
             [[nodiscard]] auto size() const -> size_t;
             [[nodiscard]] bool empty() const { return size() == 0; }
 
@@ -108,7 +114,7 @@ namespace RockHopper::Util
     };
 
     template <typename T_Func, typename... T_Args>
-    [[nodiscard]] auto TaskQueue::execute_task(T_Func&& func, T_Args&&... args)
+    auto TaskQueue::execute_task(T_Func&& func, T_Args&&... args)
     {
         using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
         using T_Executor = Executor<T_Ret,T_Args...>;
@@ -122,7 +128,7 @@ namespace RockHopper::Util
     }
 
     template <typename T_Func, typename... T_Args>
-    [[nodiscard]] auto TaskQueue::push_task(T_Func&& func, T_Args&&... args)
+    auto TaskQueue::push_task(T_Func&& func, T_Args&&... args)
     {
         using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
         using T_Executor = Executor<T_Ret,T_Args...>;
@@ -139,7 +145,7 @@ namespace RockHopper::Util
     }
 
     template <typename T_Func, typename... T_Args>
-    [[nodiscard]] auto TaskQueue::Producer::push_task(T_Func&& func, T_Args&&... args)
+    auto TaskQueue::Producer::push_task(T_Func&& func, T_Args&&... args)
     {
         using T_Ret = typename std::invoke_result<T_Func,T_Args...>::type;
         using T_Executor = Executor<T_Ret,T_Args...>;
