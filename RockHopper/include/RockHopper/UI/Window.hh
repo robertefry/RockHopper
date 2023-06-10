@@ -31,8 +31,8 @@ namespace RockHopper::UI
         Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
 
-        [[nodiscard]] auto renderer() & -> GX::Renderer& { return m_Renderer; }
-        [[nodiscard]] auto renderer() const& -> GX::Renderer const& { return m_Renderer; }
+        [[nodiscard]] virtual auto renderer() & -> GX::Renderer& = 0;
+        [[nodiscard]] virtual auto renderer() const& -> GX::Renderer const& = 0;
 
     public:
 
@@ -66,8 +66,6 @@ namespace RockHopper::UI
         void on_event(Chrono::TickEvent_Dispose const&) final;
         void on_event(Chrono::TickEvent_OnTick const&) final;
 
-    protected:
-        GX::Renderer m_Renderer{};
     };
 
 } // namespace RockHopper::UI

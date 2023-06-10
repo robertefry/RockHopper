@@ -14,6 +14,16 @@ namespace RockHopper::UI::GLFW
     {
     }
 
+    auto Window::renderer() & -> GX::Renderer&
+    {
+        return m_Context->renderer();
+    }
+
+    auto Window::renderer() const& -> GX::Renderer const&
+    {
+        return m_Context->renderer();
+    }
+
     auto Window::get_visible() const -> visible_t
     {
         auto future = m_Context->get_property<visible_t>(m_Handle);

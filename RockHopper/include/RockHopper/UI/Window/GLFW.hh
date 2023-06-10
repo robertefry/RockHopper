@@ -18,6 +18,9 @@ namespace RockHopper::UI::GLFW
         Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
 
+        [[nodiscard]] auto renderer() & -> GX::Renderer& override;
+        [[nodiscard]] auto renderer() const& -> GX::Renderer const& override;
+
         [[nodiscard]] auto get_visible() const -> visible_t override;
         [[nodiscard]] auto set_visible(Util::In<visible_t>) -> std::future<void> override;
 

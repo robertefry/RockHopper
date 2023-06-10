@@ -24,6 +24,9 @@ namespace RockHopper::UI::GLFW
         virtual ~Context();
         explicit Context();
 
+        [[nodiscard]] auto renderer() & -> GX::Renderer& { return m_Renderer; };
+        [[nodiscard]] auto renderer() const& -> GX::Renderer const& { return m_Renderer; };
+
     public:
         template <typename T_Property>
         auto set_property(Window::Handle*, Util::In<T_Property>) -> std::future<void>;
