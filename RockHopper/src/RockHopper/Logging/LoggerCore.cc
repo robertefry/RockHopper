@@ -56,7 +56,7 @@ namespace RockHopper
 
         case FATAL:
             m_Impl->logger->critical(msg);
-            abort();
+            std::terminate();
         }
     }
 
