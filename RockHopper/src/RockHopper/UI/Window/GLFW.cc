@@ -34,14 +34,24 @@ namespace RockHopper::UI::GLFW
         return m_Context->set_property<focused_t>(m_Handle,focused);
     }
 
-    auto Window::get_dimensions() const -> dimension_t
+    auto Window::get_position() const -> position_t
+    {
+        return m_Context->get_property<position_t>(m_Handle);
+    }
+
+    auto Window::set_position(Util::In<position_t> position) -> std::future<void>
+    {
+        return m_Context->set_property<position_t>(m_Handle,position);
+    }
+
+    auto Window::get_dimension() const -> dimension_t
     {
         return m_Context->get_property<dimension_t>(m_Handle);
     }
 
-    auto Window::set_dimensions(Util::In<dimension_t> dimensions) -> std::future<void>
+    auto Window::set_dimension(Util::In<dimension_t> dimension) -> std::future<void>
     {
-        return m_Context->set_property<dimension_t>(m_Handle,dimensions);
+        return m_Context->set_property<dimension_t>(m_Handle,dimension);
     }
 
     auto Window::get_title() const -> title_t

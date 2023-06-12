@@ -24,8 +24,11 @@ namespace RockHopper::UI::GLFW
         [[nodiscard]] auto get_focused() const -> focused_t override;
         [[nodiscard]] auto set_focused(Util::In<focused_t>) -> std::future<void> override;
 
-        [[nodiscard]] auto get_dimensions() const -> dimension_t override;
-        [[nodiscard]] auto set_dimensions(Util::In<dimension_t>) -> std::future<void> override;
+        [[nodiscard]] auto get_position() const -> position_t override;
+        [[nodiscard]] auto set_position(Util::In<position_t>) -> std::future<void> override;
+
+        [[nodiscard]] auto get_dimension() const -> dimension_t override;
+        [[nodiscard]] auto set_dimension(Util::In<dimension_t>) -> std::future<void> override;
 
         [[nodiscard]] auto get_title() const -> title_t override;
         [[nodiscard]] auto set_title(Util::In<title_t>) -> std::future<void> override;

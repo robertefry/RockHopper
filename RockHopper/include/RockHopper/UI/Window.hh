@@ -39,9 +39,13 @@ namespace RockHopper::UI
         [[nodiscard]] virtual auto get_focused() const -> focused_t = 0;
         [[nodiscard]] virtual auto set_focused(Util::In<focused_t>) -> std::future<void> = 0;
 
-        struct dimension_t { uint32_t x, y, wid, hei; };
-        [[nodiscard]] virtual auto get_dimensions() const -> dimension_t = 0;
-        [[nodiscard]] virtual auto set_dimensions(Util::In<dimension_t>) -> std::future<void> = 0;
+        struct position_t { uint32_t x, y; };
+        [[nodiscard]] virtual auto get_position() const -> position_t = 0;
+        [[nodiscard]] virtual auto set_position(Util::In<position_t>) -> std::future<void> = 0;
+
+        struct dimension_t { uint32_t wid, hei; };
+        [[nodiscard]] virtual auto get_dimension() const -> dimension_t = 0;
+        [[nodiscard]] virtual auto set_dimension(Util::In<dimension_t>) -> std::future<void> = 0;
 
         using title_t = std::string;
         [[nodiscard]] virtual auto get_title() const -> title_t = 0;

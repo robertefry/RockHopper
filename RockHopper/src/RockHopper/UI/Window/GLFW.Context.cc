@@ -62,6 +62,7 @@ namespace RockHopper::UI::GLFW
 
             if constexpr (std::is_same_v<T_Property,Window::visible_t>)       { /* todo */ }
             if constexpr (std::is_same_v<T_Property,Window::focused_t>)       { /* todo */ }
+            if constexpr (std::is_same_v<T_Property,Window::position_t>)      { /* todo */ }
             if constexpr (std::is_same_v<T_Property,Window::dimension_t>)     { /* todo */ }
             if constexpr (std::is_same_v<T_Property,Window::title_t>)         { /* todo */ }
             if constexpr (std::is_same_v<T_Property,Window::swap_interval_t>) { /* todo */ }
@@ -72,6 +73,7 @@ namespace RockHopper::UI::GLFW
 
     ExplicitlyInstantiateSetProperty(Window::visible_t);
     ExplicitlyInstantiateSetProperty(Window::focused_t);
+    ExplicitlyInstantiateSetProperty(Window::position_t);
     ExplicitlyInstantiateSetProperty(Window::dimension_t);
     ExplicitlyInstantiateSetProperty(Window::title_t);
     ExplicitlyInstantiateSetProperty(Window::swap_interval_t);
@@ -93,6 +95,7 @@ namespace RockHopper::UI::GLFW
 
     ExplicitlyInstantiateGetProperty(Window::visible_t);
     ExplicitlyInstantiateGetProperty(Window::focused_t);
+    ExplicitlyInstantiateGetProperty(Window::position_t);
     ExplicitlyInstantiateGetProperty(Window::dimension_t);
     ExplicitlyInstantiateGetProperty(Window::title_t);
     ExplicitlyInstantiateGetProperty(Window::swap_interval_t);

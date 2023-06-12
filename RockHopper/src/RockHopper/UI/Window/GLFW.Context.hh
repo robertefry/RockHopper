@@ -38,7 +38,13 @@ namespace RockHopper::UI::GLFW
 
         struct PropertyCache
         {
-            using Tuple = std::tuple<visible_t,focused_t,dimension_t,title_t,swap_interval_t>;
+            using Tuple = std::tuple<
+                visible_t,
+                focused_t,
+                position_t,
+                dimension_t,
+                title_t,
+                swap_interval_t>;
             Tuple m_Tuple {};
 
             std::shared_mutex m_Mutex {};
