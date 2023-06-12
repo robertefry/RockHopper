@@ -43,24 +43,25 @@ namespace RockHopper::GX
     public:
 
         template <typename T_Func, typename... T_Args>
-        auto push_task(T_Func&& func, T_Args&&... args)
-        {
-            if (m_Thread->alive_id() == std::this_thread::get_id())
-            {
-                return m_Thread->m_TaskQueue.execute_task(
-                    std::forward<T_Func>(func), std::forward<T_Args>(args)...
-                );
-            }
-
-            return m_Producer.push_task(
-                std::forward<T_Func>(func), std::forward<T_Args>(args)...
-            );
-        }
+        auto push_task(T_Func&& func, T_Args&&... args);
 
     private:
         Util::Singleton<Thread> m_Thread{};
         Util::TaskQueue::Producer m_Producer = m_Thread->m_TaskQueue.make_producer();
     };
+
+    template <typename T_Func, typename... T_Args>
+    auto Renderer::push_task(T_Func&& func, T_Args&&... args)
+    {
+        if (m_Thread->alive_id() == std::this_thread::get_id())
+        {
+            return m_Thread->m_TaskQueue.execute_task(
+                std::forward<T_Func>(func), std::forward<T_Args>(args)...);
+        }
+
+        return m_Producer.push_task(
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...);
+    }
 
 } // namespace RockHopper::GX
 
