@@ -6,6 +6,8 @@
 
 #include "RockHopper/Util/Singleton.hh"
 
+struct GLFWwindow;
+
 namespace RockHopper::UI::GLFW
 {
 
@@ -40,7 +42,7 @@ namespace RockHopper::UI::GLFW
         class Context; friend Context;
         Util::Singleton<Context> mutable m_Context;
 
-        struct Handle;
+        using Handle = GLFWwindow;
         Handle* m_Handle = nullptr;
     };
 

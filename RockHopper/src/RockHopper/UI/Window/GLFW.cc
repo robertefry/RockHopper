@@ -2,16 +2,39 @@
 #include "RockHopper/UI/Window/GLFW.hh"
 #include "RockHopper/UI/Window/GLFW.Context.hh"
 
+#include "RockHopper/Logging/LoggerCore.enable.hh"
+
+#include <GLFW/glfw3.h>
+
 namespace RockHopper::UI::GLFW
 {
 
     Window::~Window()
     {
+        try
+        {
+            static constexpr auto task = [](GLFWwindow* handle)
+            {
+                if ((bool)handle) glfwDestroyWindow(handle);
+            };
+            m_Context->renderer().push_task(task,m_Handle);
+        }
+        catch (std::exception const& e)
+        {
+            ROCKHOPPER_LOG_FATAL("Exception occoured on GLFW Window destruction.\n{}",e.what());
+        }
     }
 
     Window::Window()
         : m_Context{}
     {
+        auto future = m_Context->renderer().push_task([this]()
+        {
+            static constexpr int wid = 800;
+            static constexpr int hei = 600;
+            m_Handle = glfwCreateWindow(wid,hei,"RockHopper",nullptr,nullptr);
+        });
+        future.wait();
     }
 
     auto Window::get_visible() const -> visible_t
