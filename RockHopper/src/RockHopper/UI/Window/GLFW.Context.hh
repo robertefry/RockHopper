@@ -31,7 +31,7 @@ namespace RockHopper::UI::GLFW
         template <typename T_Property>
         auto set_property(Window::Handle*, Util::In<T_Property>) -> std::future<void>;
         template <typename T_Property>
-        auto get_property(Window::Handle*) -> std::future<T_Property>;
+        auto get_property(Window::Handle*) -> T_Property;
 
     private:
         GX::Renderer m_Renderer{};
