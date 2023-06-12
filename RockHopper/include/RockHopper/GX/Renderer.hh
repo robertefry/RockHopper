@@ -43,7 +43,7 @@ namespace RockHopper::GX
     public:
 
         template <typename T_Func, typename... T_Args>
-        [[nodiscard]] auto push_task(T_Func&& func, T_Args&&... args)
+        auto push_task(T_Func&& func, T_Args&&... args)
         {
             if (m_Thread->alive_id() == std::this_thread::get_id())
             {
