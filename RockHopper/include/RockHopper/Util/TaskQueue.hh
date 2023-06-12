@@ -120,8 +120,7 @@ namespace RockHopper::Util
         using T_Executor = Executor<T_Ret,T_Args...>;
 
         auto executor = T_Executor{
-            std::forward<T_Func>(func), std::forward<T_Args>(args)...
-        };
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...};
         executor.operator()();
 
         return executor.future();
@@ -134,8 +133,7 @@ namespace RockHopper::Util
         using T_Executor = Executor<T_Ret,T_Args...>;
 
         auto executor = std::make_unique<T_Executor>(
-            std::forward<T_Func>(func), std::forward<T_Args>(args)...
-        );
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...);
         auto future = executor->future();
 
         bool success = m_ExecutorQueue->enqueue(std::move(executor));
@@ -151,8 +149,7 @@ namespace RockHopper::Util
         using T_Executor = Executor<T_Ret,T_Args...>;
 
         auto executor = std::make_unique<T_Executor>(
-            std::forward<T_Func>(func), std::forward<T_Args>(args)...
-        );
+            std::forward<T_Func>(func), std::forward<T_Args>(args)...);
         auto future = executor->future();
 
         bool success = m_ExecutorQueue->enqueue(m_ProducerToken,std::move(executor));
