@@ -4,8 +4,6 @@
 
 #include "RockHopper/UI/Window.Events.hh"
 
-#include "RockHopper/GX/Renderer.hh"
-
 #include "RockHopper/Event/EventHandler.hh"
 #include "RockHopper/Event/EventDispatch.Sequential.hh"
 #include "RockHopper/Event/EventDispatch.ThreadPool.hh"
@@ -30,9 +28,6 @@ namespace RockHopper::UI
 
         Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
-
-        [[nodiscard]] virtual auto renderer() & -> GX::Renderer& = 0;
-        [[nodiscard]] virtual auto renderer() const& -> GX::Renderer const& = 0;
 
     public:
 
