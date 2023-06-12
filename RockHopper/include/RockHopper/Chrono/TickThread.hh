@@ -3,8 +3,9 @@
 #define ROCKHOPPER_CHRONO_TICK_THREAD_HH
 
 #include "RockHopper/Chrono/TickThread.Events.hh"
-
 #include "RockHopper/Event/EventHandler.hh"
+
+#include "RockHopper/Logging/LoggerCore.enable.hh"
 
 #include <chrono>
 #include <thread>
@@ -31,8 +32,8 @@ namespace RockHopper::Chrono
         void start();
         void stop();
 
-        [[nodiscard]] bool is_alive() const;
-        [[nodiscard]] auto alive_id() const -> std::thread::id;
+        [[nodiscard]] bool is_alive() const noexcept;
+        [[nodiscard]] auto alive_id() const noexcept -> std::thread::id;
 
         [[nodiscard]]
         auto get_delta() const -> Clock::duration;
@@ -78,13 +79,13 @@ namespace RockHopper::Chrono
     }
 
     template <typename T_Dispatcher>
-    bool TickThread<T_Dispatcher>::is_alive() const
+    bool TickThread<T_Dispatcher>::is_alive() const noexcept
     {
         return m_IsAlive;
     }
 
     template <typename T_Dispatcher>
-    auto TickThread<T_Dispatcher>::alive_id() const -> std::thread::id
+    auto TickThread<T_Dispatcher>::alive_id() const noexcept -> std::thread::id
     {
         return m_Thread.get_id();
     }
