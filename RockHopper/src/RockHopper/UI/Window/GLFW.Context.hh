@@ -28,6 +28,9 @@ namespace RockHopper::UI::GLFW
         [[nodiscard]] auto renderer() const& -> GX::Renderer const& { return m_Renderer; };
 
     public:
+        void create_window(Window::Handle**) noexcept;
+        void dispose_window(Window::Handle**) noexcept;
+
         template <typename T_Property>
         auto set_property(Window::Handle*, Util::In<T_Property>) -> std::future<void>;
         template <typename T_Property>

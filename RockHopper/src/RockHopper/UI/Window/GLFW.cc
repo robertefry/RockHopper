@@ -11,30 +11,13 @@ namespace RockHopper::UI::GLFW
 
     Window::~Window()
     {
-        try
-        {
-            static constexpr auto task = [](GLFWwindow* handle)
-            {
-                if ((bool)handle) glfwDestroyWindow(handle);
-            };
-            m_Context->renderer().push_task(task,m_Handle);
-        }
-        catch (std::exception const& e)
-        {
-            ROCKHOPPER_LOG_FATAL("Exception occoured on GLFW Window destruction.\n{}",e.what());
-        }
+        m_Context->dispose_window(&m_Handle);
     }
 
     Window::Window()
         : m_Context{}
     {
-        auto future = m_Context->renderer().push_task([this]()
-        {
-            static constexpr int wid = 800;
-            static constexpr int hei = 600;
-            m_Handle = glfwCreateWindow(wid,hei,"RockHopper",nullptr,nullptr);
-        });
-        future.wait();
+        m_Context->create_window(&m_Handle);
     }
 
     auto Window::get_visible() const -> visible_t

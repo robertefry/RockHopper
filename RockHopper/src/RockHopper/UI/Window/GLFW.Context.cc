@@ -46,6 +46,40 @@ namespace RockHopper::UI::GLFW
         });
     }
 
+    void Window::Context::create_window(Window::Handle** handle) noexcept
+    {
+        try
+        {
+            auto future = m_Renderer.push_task([=]()
+            {
+                static constexpr int wid = 800;
+                static constexpr int hei = 600;
+                *handle = glfwCreateWindow(wid,hei,"RockHopper",nullptr,nullptr);
+            });
+            future.wait();
+        }
+        catch (std::exception const& e)
+        {
+            ROCKHOPPER_LOG_FATAL("GLFW encountered an error when creating a window.\n{}",e.what());
+        }
+    }
+
+    void Window::Context::dispose_window(Window::Handle** handle) noexcept
+    {
+        try
+        {
+            auto future = m_Renderer.push_task([=]()
+            {
+                if ((bool)*handle) glfwDestroyWindow(*handle);
+            });
+            future.wait();
+        }
+        catch (std::exception const& e)
+        {
+            ROCKHOPPER_LOG_FATAL("GLFW encountered an error when disposing a window.\n{}",e.what());
+        }
+    }
+
     // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
     #define ExplicitlyInstantiateSetProperty(property_t) \
     template auto Window::Context::set_property<property_t> \
