@@ -7,26 +7,22 @@ namespace RockHopper::UI
     struct WindowEvent_Init;
     struct WindowEvent_Dispose;
     struct WindowEvent_Refresh;
-    struct WindowEvent_Close;
-    struct WindowEvent_Focus;
-    struct WindowEvent_Minimise;
-    struct WindowEvent_Maximise;
-    struct WindowEvent_Move;
-    struct WindowEvent_Size;
-    struct WindowEvent_Scale;
-    struct WindowEvent_BufferSize;
+    struct WindowEvent_OnChange_Visable;
+    struct WindowEvent_OnChange_Focus;
+    struct WindowEvent_OnChange_Position;
+    struct WindowEvent_OnChange_Dimensions;
+    struct WindowEvent_OnChange_Title;
+    struct WindowEvent_OnChange_SwapInterval;
 
     using WindowEvent = Event::EventSet<
         WindowEvent_Init,
         WindowEvent_Dispose,
         WindowEvent_Refresh,
-        WindowEvent_Close,
-        WindowEvent_Focus,
-        WindowEvent_Minimise,
-        WindowEvent_Maximise,
-        WindowEvent_Move,
-        WindowEvent_Size,
-        WindowEvent_Scale,
-        WindowEvent_BufferSize >;
+        WindowEvent_OnChange_Visable,
+        WindowEvent_OnChange_Focus,
+        WindowEvent_OnChange_Position,
+        WindowEvent_OnChange_Dimensions,
+        WindowEvent_OnChange_Title,
+        WindowEvent_OnChange_SwapInterval >;
 
 } // namespace RockHopper::UI
