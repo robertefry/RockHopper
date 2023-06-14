@@ -40,7 +40,7 @@ namespace RockHopper::UI
         [[nodiscard]] virtual auto get_focused() const -> focused_t = 0;
         [[nodiscard]] virtual auto set_focused(Util::In<focused_t>) -> Util::Future<void> = 0;
 
-        struct position_t { uint32_t x, y; };
+        struct position_t { int32_t x, y; };
         [[nodiscard]] virtual auto get_position() const -> position_t = 0;
         [[nodiscard]] virtual auto set_position(Util::In<position_t>) -> Util::Future<void> = 0;
 
