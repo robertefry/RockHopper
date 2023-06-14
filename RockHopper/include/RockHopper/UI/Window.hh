@@ -2,7 +2,7 @@
 #ifndef ROCKHOPPER_UI_WINDOW_HH
 #define ROCKHOPPER_UI_WINDOW_HH
 
-#include "RockHopper/UI/Window.Events.hh"
+#include "RockHopper/UI/Window.Events.fwd"
 
 #include "RockHopper/Event/EventHandler.hh"
 #include "RockHopper/Event/EventDispatch.Sequential.hh"
@@ -68,5 +68,8 @@ namespace RockHopper::UI
     };
 
 } // namespace RockHopper::UI
+
+// window events use typedefs in the window class
+#include "RockHopper/UI/Window.Events.hh"
 
 #endif /* ROCKHOPPER_UI_WINDOW_HH */

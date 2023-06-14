@@ -2,20 +2,12 @@
 #ifndef ROCKHOPPER_UI_WINDOW_EVENTS_HH
 #define ROCKHOPPER_UI_WINDOW_EVENTS_HH
 
-#include "RockHopper/Event/Event.hh"
+#include "RockHopper/UI/Window.hh"
 
 #include <cstdint>
 
 namespace RockHopper::UI
 {
-
-    struct WindowEvent_Create
-    {
-    };
-
-    struct WindowEvent_Destroy
-    {
-    };
 
     struct WindowEvent_Init
     {
@@ -68,21 +60,6 @@ namespace RockHopper::UI
     {
         uint32_t width, height;
     };
-
-    using WindowEvent = Event::EventSet<
-        WindowEvent_Create,
-        WindowEvent_Destroy,
-        WindowEvent_Init,
-        WindowEvent_Dispose,
-        WindowEvent_Refresh,
-        WindowEvent_Close,
-        WindowEvent_Focus,
-        WindowEvent_Minimise,
-        WindowEvent_Maximise,
-        WindowEvent_Move,
-        WindowEvent_Size,
-        WindowEvent_Scale,
-        WindowEvent_BufferSize >;
 
 } // namespace RockHopper::UI
 
