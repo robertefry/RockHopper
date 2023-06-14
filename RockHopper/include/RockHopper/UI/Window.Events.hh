@@ -3,6 +3,7 @@
 #define ROCKHOPPER_UI_WINDOW_EVENTS_HH
 
 #include "RockHopper/UI/Window.hh"
+#include "RockHopper/UI/Window.Events.fwd"
 
 #include <cstdint>
 
@@ -21,44 +22,34 @@ namespace RockHopper::UI
     {
     };
 
-    struct WindowEvent_Close
+    struct WindowEvent_OnChange_Visable
     {
-        bool closed;
+        Window::visible_t visible;
     };
 
-    struct WindowEvent_Focus
+    struct WindowEvent_OnChange_Focus
     {
-        bool focus;
+        Window::focused_t focus;
     };
 
-    struct WindowEvent_Minimise
+    struct WindowEvent_OnChange_Position
     {
-        bool minimised;
+        Window::position_t position;
     };
 
-    struct WindowEvent_Maximise
+    struct WindowEvent_OnChange_Dimensions
     {
-        bool maximised;
+        Window::dimension_t dimensions;
     };
 
-    struct WindowEvent_Move
+    struct WindowEvent_OnChange_Title
     {
-        uint32_t x, y;
+        Window::title_t title;
     };
 
-    struct WindowEvent_Size
+    struct WindowEvent_OnChange_SwapInterval
     {
-        uint32_t width, height;
-    };
-
-    struct WindowEvent_Scale
-    {
-        uint32_t scale_x, scale_y;
-    };
-
-    struct WindowEvent_BufferSize
-    {
-        uint32_t width, height;
+        Window::swap_interval_t swap_interval;
     };
 
 } // namespace RockHopper::UI
