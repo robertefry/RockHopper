@@ -25,9 +25,7 @@ namespace RockHopper::Chrono
 
         virtual ~TickThread();
 
-        explicit TickThread(Dispatcher dispatcher = {})
-            : EventHandler{std::move(dispatcher)}
-        {}
+        explicit TickThread(Dispatcher dispatcher = {});
 
         void start();
         void stop();
@@ -58,6 +56,12 @@ namespace RockHopper::Chrono
     {
         m_IsStopRequested = true;
         if (m_Thread.joinable()) m_Thread.join();
+    }
+
+    template <typename T_Dispatcher>
+    TickThread<T_Dispatcher>::TickThread(Dispatcher dispatcher)
+        : EventHandler{std::move(dispatcher)}
+    {
     }
 
     template <typename T_Dispatcher>
