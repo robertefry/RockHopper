@@ -19,7 +19,7 @@ namespace RockHopper::Event::Dispatch
         {
             using EventSet = T_EventSet;
 
-            std::vector<std::future<void>> future_list;
+            std::vector<Util::Future<void>> future_list;
             future_list.reserve(listeners.size());
 
             for (auto const& listener : listeners)

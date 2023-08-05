@@ -11,6 +11,7 @@
 #include "RockHopper/Chrono/TickThread.hh"
 
 #include "RockHopper/Util/ArgTraits.hh"
+#include "RockHopper/Util/Future.hh"
 
 namespace RockHopper::UI
 {
@@ -33,27 +34,27 @@ namespace RockHopper::UI
 
         enum visible_t { CLOSED, TRAY, MINIMISED, VISIBLE, MAXIMISED };
         [[nodiscard]] virtual auto get_visible() const -> visible_t = 0;
-        [[nodiscard]] virtual auto set_visible(Util::In<visible_t>) -> std::future<void> = 0;
+        [[nodiscard]] virtual auto set_visible(Util::In<visible_t>) -> Util::Future<void> = 0;
 
         enum focused_t { UNFOCUSED, FOCUSED };
         [[nodiscard]] virtual auto get_focused() const -> focused_t = 0;
-        [[nodiscard]] virtual auto set_focused(Util::In<focused_t>) -> std::future<void> = 0;
+        [[nodiscard]] virtual auto set_focused(Util::In<focused_t>) -> Util::Future<void> = 0;
 
         struct position_t { uint32_t x, y; };
         [[nodiscard]] virtual auto get_position() const -> position_t = 0;
-        [[nodiscard]] virtual auto set_position(Util::In<position_t>) -> std::future<void> = 0;
+        [[nodiscard]] virtual auto set_position(Util::In<position_t>) -> Util::Future<void> = 0;
 
         struct dimension_t { uint32_t wid, hei; };
         [[nodiscard]] virtual auto get_dimension() const -> dimension_t = 0;
-        [[nodiscard]] virtual auto set_dimension(Util::In<dimension_t>) -> std::future<void> = 0;
+        [[nodiscard]] virtual auto set_dimension(Util::In<dimension_t>) -> Util::Future<void> = 0;
 
         using title_t = std::string;
         [[nodiscard]] virtual auto get_title() const -> title_t = 0;
-        [[nodiscard]] virtual auto set_title(Util::In<title_t>) -> std::future<void> = 0;
+        [[nodiscard]] virtual auto set_title(Util::In<title_t>) -> Util::Future<void> = 0;
 
         using swap_interval_t = uint32_t;
         [[nodiscard]] virtual auto get_swap_interval() const -> swap_interval_t = 0;
-        [[nodiscard]] virtual auto set_swap_interval(Util::In<swap_interval_t>) -> std::future<void> = 0;
+        [[nodiscard]] virtual auto set_swap_interval(Util::In<swap_interval_t>) -> Util::Future<void> = 0;
 
     protected:
         using EventHandler::dispatch_event;

@@ -5,6 +5,7 @@
 #include "RockHopper/Logging/LoggerCore.enable.hh"
 
 #include "RockHopper/Util/Lifetime.hh"
+#include "RockHopper/Util/Future.hh"
 
 #include <concurrentqueue.h>
 
@@ -32,7 +33,7 @@ namespace RockHopper::Util
                 : m_PackagedTask{std::forward<T_Func>(func)}
                 , m_PackagedArgs{std::forward<T_Args>(args)...}
             {}
-            [[nodiscard]] std::future<T_Ret> future()
+            [[nodiscard]] Util::Future<T_Ret> future()
             {
                 return m_PackagedTask.get_future();
             }

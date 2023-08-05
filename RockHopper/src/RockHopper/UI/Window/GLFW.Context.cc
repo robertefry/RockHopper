@@ -83,11 +83,11 @@ namespace RockHopper::UI::GLFW
     // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
     #define ExplicitlyInstantiateSetProperty(property_t) \
     template auto Window::Context::set_property<property_t> \
-        (Window::Handle*,Util::In<property_t>) -> std::future<void>
+        (Window::Handle*,Util::In<property_t>) -> Util::Future<void>
 
     template <typename T_Property>
     auto Window::Context::set_property(
-        Window::Handle* handle, Util::In<T_Property> property) -> std::future<void>
+        Window::Handle* handle, Util::In<T_Property> property) -> Util::Future<void>
     {
         return m_Renderer.push_task([=,this,property=std::move(property)]()
         {

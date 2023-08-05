@@ -21,22 +21,22 @@ namespace RockHopper::UI::GLFW
         Window& operator=(Window const&) = delete;
 
         [[nodiscard]] auto get_visible() const -> visible_t override;
-        [[nodiscard]] auto set_visible(Util::In<visible_t>) -> std::future<void> override;
+        [[nodiscard]] auto set_visible(Util::In<visible_t>) -> Util::Future<void> override;
 
         [[nodiscard]] auto get_focused() const -> focused_t override;
-        [[nodiscard]] auto set_focused(Util::In<focused_t>) -> std::future<void> override;
+        [[nodiscard]] auto set_focused(Util::In<focused_t>) -> Util::Future<void> override;
 
         [[nodiscard]] auto get_position() const -> position_t override;
-        [[nodiscard]] auto set_position(Util::In<position_t>) -> std::future<void> override;
+        [[nodiscard]] auto set_position(Util::In<position_t>) -> Util::Future<void> override;
 
         [[nodiscard]] auto get_dimension() const -> dimension_t override;
-        [[nodiscard]] auto set_dimension(Util::In<dimension_t>) -> std::future<void> override;
+        [[nodiscard]] auto set_dimension(Util::In<dimension_t>) -> Util::Future<void> override;
 
         [[nodiscard]] auto get_title() const -> title_t override;
-        [[nodiscard]] auto set_title(Util::In<title_t>) -> std::future<void> override;
+        [[nodiscard]] auto set_title(Util::In<title_t>) -> Util::Future<void> override;
 
         [[nodiscard]] auto get_swap_interval() const -> swap_interval_t override;
-        [[nodiscard]] auto set_swap_interval(Util::In<swap_interval_t>) -> std::future<void> override;
+        [[nodiscard]] auto set_swap_interval(Util::In<swap_interval_t>) -> Util::Future<void> override;
 
     private:
         class Context; friend Context;

@@ -32,7 +32,7 @@ namespace RockHopper::UI::GLFW
         void dispose_window(Window::Handle**) noexcept;
 
         template <typename T_Property>
-        auto set_property(Window::Handle*, Util::In<T_Property>) -> std::future<void>;
+        auto set_property(Window::Handle*, Util::In<T_Property>) -> Util::Future<void>;
         template <typename T_Property>
         auto get_property(Window::Handle*) -> T_Property;
 
