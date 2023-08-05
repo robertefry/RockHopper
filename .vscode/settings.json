@@ -1,6 +1,5 @@
 {
     // CMake
-    "cmake.configureOnOpen": true,
     "cmake.buildDirectory": "${workspaceFolder}/.build",
 
     // Clang-Tidy
