@@ -39,6 +39,7 @@ namespace RockHopper::Event
             std::erase(m_ListenerList.begin(),m_ListenerList.end(),ptr);
         }
 
+    protected:
         template <typename T_Event>
         void dispatch_event(T_Event&& event)
         {

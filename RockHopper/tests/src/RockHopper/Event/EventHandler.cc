@@ -5,20 +5,25 @@
 #include "RockHopper/Event/EventHandler.hh"
 #include "RockHopper/Event/EventDispatch.Sequential.hh"
 
+using namespace RockHopper;
+
 /* ************************************************************************** */
 
 struct TestEvent1 { std::unique_ptr<int> no_copy; };
 struct TestEvent2 { std::unique_ptr<int> no_copy; };
-using TestEvent = RockHopper::Event::EventSet<TestEvent1,TestEvent2>;
+using TestEvent = Event::EventSet<TestEvent1,TestEvent2>;
+
+struct TestEventHandler : public Event::EventHandler<TestEvent,Event::Dispatch::Sequential>
+{
+    using EventHandler = Event::EventHandler<TestEvent,Event::Dispatch::Sequential>;
+    using EventHandler::dispatch_event;
+};
 
 /* ************************************************************************** */
 
 TEST_CASE("EventHandler can correctly dispatch events")
 {
-    using Dispatcher = RockHopper::Event::Dispatch::Sequential;
-    using EventHandler = RockHopper::Event::EventHandler<TestEvent,Dispatcher>;
-
-    EventHandler event_handler;
+    TestEventHandler event_handler;
 
     size_t count = 0;
     event_handler.emplace_event_listener(
