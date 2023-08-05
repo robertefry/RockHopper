@@ -52,3 +52,22 @@ RockHopper as the following build variables;
 * `ROCKHOPPER_LOG_LEVEL=<integer>`
 <br> This manually sets the logging level as an integer (`0` for no logging). (See `RockHopper/include/RockHopper/Logging/logger.hh` for details)
 <br> <i>While development is ongoing, this is set as default to `4`.</i>
+
+# Conventional Commits
+
+Commit messages MUST follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification. Commit types (prefixes) MUST be one of the following;
+
+| Prefix            | Meaning                                       |
+|-------------------|-----------------------------------------------|
+| `api`             | API changes                                   |
+| `feat`            | New feature additions                         |
+| `fix`             | Bug fixes                                     |
+| `perf`            | Performance improvements                      |
+| `refact`          | Code refactoring                              |
+| `revert`          | Revert a previous change                      |
+| `style`           | Style changes                                 |
+| `test`            | New tests or fixes to current tests           |
+| `doc` or `docs`   | Documentation changes                         |
+| `chore`           | Mundane chore-like changes                    |
+| `build`           | Changes to the buildsystem                    |
+| `ci`              | Changes to the continuous-integration system  |
