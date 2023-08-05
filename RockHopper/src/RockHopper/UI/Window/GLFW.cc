@@ -15,7 +15,6 @@ namespace RockHopper::UI::GLFW
     }
 
     Window::Window()
-        : m_Context{}
     {
         m_Context->create_window(&m_Handle);
     }
