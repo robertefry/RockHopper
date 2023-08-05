@@ -11,13 +11,27 @@ namespace RockHopper::UI::GLFW
 
     Window::~Window()
     {
-        m_Context->dispose_window(&m_Handle);
+        UI::Window::stop();
     }
 
     Window::Window()
         : m_Context{}
     {
+        UI::Window::start();
+    }
+
+    void Window::on_event(WindowEvent_Init const&)
+    {
         m_Context->create_window(&m_Handle);
+    }
+
+    void Window::on_event(WindowEvent_Dispose const&)
+    {
+        m_Context->dispose_window(&m_Handle);
+    }
+
+    void Window::on_event(WindowEvent_Refresh const&)
+    {
     }
 
     auto Window::get_visible() const -> visible_t

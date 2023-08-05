@@ -20,6 +20,14 @@ namespace RockHopper::UI::GLFW
         Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
 
+    protected:
+
+        void on_event(WindowEvent_Init const&) override;
+        void on_event(WindowEvent_Dispose const&) override;
+        void on_event(WindowEvent_Refresh const&) override;
+
+    public:
+
         [[nodiscard]] auto get_visible() const -> visible_t override;
         [[nodiscard]] auto set_visible(Util::In<visible_t>) -> Util::Future<void> override;
 
