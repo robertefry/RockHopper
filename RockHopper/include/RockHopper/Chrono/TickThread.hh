@@ -74,12 +74,16 @@ namespace RockHopper::Chrono
             if (m_Thread.joinable()) m_Thread.join();
             m_Thread = std::thread{[this]{ this->run(); }};
         }
+
+        while (not m_IsAlive) { /* spin */ }
     }
 
     template <typename T_Dispatcher>
     void TickThread<T_Dispatcher>::stop()
     {
         m_IsStopRequested = true;
+
+        while (m_IsAlive) { /* spin */ }
     }
 
     template <typename T_Dispatcher>
