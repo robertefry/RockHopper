@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7.2)
 
 # ---- project ----
-include(.cmake/project_options.cmake) # toolkit of project options
+include(.cmake/options.cmake)
 include(.cmake/declare_project_targets.cmake)
 
 project("RockHopper" VERSION "1.0.0" LANGUAGES "C" "CXX"
@@ -15,7 +15,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # -Wpedantic being enabled and -std=c++20 and -std=gnu++20 for example
 # when compiling with PCH enabled
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+#
 # ---- add dependencies via CPM ----
 # see https://github.com/cpm-cmake/CPM.cmake for more info
 include(.cmake/get_cpm.cmake)
@@ -23,7 +23,7 @@ include(.cmake/declare_system_libraries.cmake)
 
 CPMAddPackage(NAME "Catch2"
   GITHUB_REPOSITORY "catchorg/Catch2" GIT_TAG "v3.3.2")
-declare_system_libraries(Catch2::Catch2 Catch2::Catch2WithMain)
+opt_declare_system_libraries(Catch2::Catch2 Catch2::Catch2WithMain)
 
 CPMAddPackage(NAME "fmt"
   GITHUB_REPOSITORY "fmtlib/fmt" GIT_TAG "9.1.0"
@@ -31,11 +31,11 @@ CPMAddPackage(NAME "fmt"
 CPMAddPackage(NAME "spdlog"
   GITHUB_REPOSITORY "gabime/spdlog" GIT_TAG "v1.11.0"
   OPTIONS "SPDLOG_FMT_EXTERNAL ON")
-declare_system_libraries(fmt::fmt spdlog::spdlog)
+opt_declare_system_libraries(fmt::fmt spdlog::spdlog)
 
 CPMAddPackage(NAME concurrentqueue
   GITHUB_REPOSITORY "cameron314/concurrentqueue" GIT_TAG "v1.0.3")
-declare_system_libraries(concurrentqueue)
+opt_declare_system_libraries(concurrentqueue)
 
 CPMAddPackage(NAME GLFW
   GITHUB_REPOSITORY "glfw/glfw" GIT_TAG "3.3.2"
@@ -43,10 +43,9 @@ CPMAddPackage(NAME GLFW
     "GLFW_BUILD_TESTS OFF"
     "GLFW_BUILD_EXAMPLES OFF"
     "GLFW_BULID_DOCS OFF")
-declare_system_libraries(glfw)
+opt_declare_system_libraries(glfw)
 
 # ---- project targets ----
-include(.cmake/build_defaults.cmake) # toolkit of buildsystem　defaults
 
 add_subdirectory(RockHopper)
 add_subdirectory(RockHopper-Sandbox)

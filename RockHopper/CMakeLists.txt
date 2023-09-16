@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12)
 
 set(LIBRARY_NAME "RockHopper")
 add_library(${LIBRARY_NAME} SHARED "")
-declare_project_target(${LIBRARY_NAME})
+opt_declare_project_target(${LIBRARY_NAME})
 
 # ---- compiler targets ----
 

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.5)
 
 set(BINARY_NAME "RockHopper-Sandbox")
 add_executable(${BINARY_NAME} "")
-declare_project_targets(${BINARY_NAME})
+opt_declare_project_target(${BINARY_NAME})
 
 target_link_libraries(${BINARY_NAME} PRIVATE RockHopper)
 
