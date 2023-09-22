@@ -17,8 +17,8 @@ namespace RockHopper::UI
 {
 
     class Window
-        : public Event::EventHandler<WindowEvent,Event::Dispatch::ThreadPool>
-        , protected Chrono::TickThread<Event::Dispatch::Sequential>
+        : public Chrono::TickThread<Event::Dispatch::Sequential>
+        , public Event::EventHandler<WindowEvent,Event::Dispatch::ThreadPool>
     {
         using EventHandler = Event::EventHandler<WindowEvent,Event::Dispatch::ThreadPool>;
         using TickThread = Chrono::TickThread<Event::Dispatch::Sequential>;

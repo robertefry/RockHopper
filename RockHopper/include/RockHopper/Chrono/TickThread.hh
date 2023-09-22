@@ -30,6 +30,9 @@ namespace RockHopper::Chrono
         void start();
         void stop();
 
+        void join();
+        void detach();
+
         [[nodiscard]] bool is_alive() const noexcept;
         [[nodiscard]] auto alive_id() const noexcept -> std::thread::id;
 
@@ -82,8 +85,18 @@ namespace RockHopper::Chrono
     void TickThread<T_Dispatcher>::stop()
     {
         m_IsStopRequested = true;
+    }
 
-        while (m_IsAlive) { /* spin */ }
+    template <typename T_Dispatcher>
+    void TickThread<T_Dispatcher>::join()
+    {
+        if (m_Thread.joinable()) m_Thread.join();
+    }
+
+    template <typename T_Dispatcher>
+    void TickThread<T_Dispatcher>::detach()
+    {
+        if (m_Thread.joinable()) m_Thread.detach();
     }
 
     template <typename T_Dispatcher>
