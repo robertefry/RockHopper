@@ -4,7 +4,6 @@
 
 #include "RockHopper/Logging/LoggerCore.enable.hh"
 
-#include "RockHopper/Util/Lifetime.hh"
 #include "RockHopper/Util/Future.hh"
 
 #include <concurrentqueue.h>
@@ -18,10 +17,15 @@ namespace RockHopper::Util
 
     class TaskQueue
     {
-        struct I_Executor : private Util::NoCopy
+        struct I_Executor
         {
             virtual ~I_Executor() = default;
+            explicit I_Executor() = default;
+
             virtual void operator()() = 0;
+
+            I_Executor(I_Executor&&) noexcept = default;
+            I_Executor& operator=(I_Executor&&) noexcept = default;
         };
 
         template <typename T_Ret, typename... T_Args>

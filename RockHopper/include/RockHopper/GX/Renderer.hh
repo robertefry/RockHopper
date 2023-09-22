@@ -7,7 +7,6 @@
 
 #include "RockHopper/Util/Singleton.hh"
 #include "RockHopper/Util/TaskQueue.hh"
-#include "RockHopper/Util/Lifetime.hh"
 
 namespace RockHopper::GX
 {
@@ -19,11 +18,14 @@ namespace RockHopper::GX
      */
     class Renderer
     {
-        class Thread : private Util::NoMove
-            , private Chrono::TickThread<Event::Dispatch::Sequential>
+        class Thread final
+            : private Chrono::TickThread<Event::Dispatch::Sequential>
         {
             friend Renderer;
             using TickThread = Chrono::TickThread<Event::Dispatch::Sequential>;
+
+            Thread(Thread const&) = delete;
+            Thread& operator=(Thread const&) = delete;
 
         public:
             virtual ~Thread();

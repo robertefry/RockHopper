@@ -6,8 +6,6 @@
 
 #include "RockHopper/GX/Renderer.hh"
 
-#include "RockHopper/Util/Lifetime.hh"
-
 #include <tuple>
 #include <unordered_map>
 #include <shared_mutex>
@@ -18,8 +16,11 @@ namespace RockHopper::UI::GLFW
     static inline constexpr unsigned int s_VersionMajor = 3;
     static inline constexpr unsigned int s_VersionMinor = 3;
 
-    class Window::Context final : private Util::NoMove
+    class Window::Context final
     {
+        Context(Context const&) = delete;
+        Context& operator=(Context const&) = delete;
+
     public:
         virtual ~Context();
         explicit Context();
