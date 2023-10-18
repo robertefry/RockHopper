@@ -4,9 +4,7 @@
 
 #include "RockHopper/UI/Window.hh"
 
-#include "RockHopper/Util/Singleton.hh"
-
-struct GLFWwindow;
+#include <memory>
 
 namespace RockHopper::UI::GLFW
 {
@@ -19,14 +17,6 @@ namespace RockHopper::UI::GLFW
 
         Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
-
-    protected:
-
-        void on_event(WindowEvent_Init const&) override;
-        void on_event(WindowEvent_Dispose const&) override;
-        void on_event(WindowEvent_Refresh const&) override;
-
-    public:
 
         [[nodiscard]] auto get_visible() const -> visible_t override;
         [[nodiscard]] auto set_visible(Util::In<visible_t>) -> Util::Future<void> override;
@@ -46,11 +36,16 @@ namespace RockHopper::UI::GLFW
         [[nodiscard]] auto get_swap_interval() const -> swap_interval_t override;
         [[nodiscard]] auto set_swap_interval(Util::In<swap_interval_t>) -> Util::Future<void> override;
 
+    protected:
+        void on_event(WindowEvent_Init const&) override;
+        void on_event(WindowEvent_Dispose const&) override;
+        void on_event(WindowEvent_Refresh const&) override;
+
     private:
         class Context; friend Context;
-        Util::Singleton<Context> mutable m_Context;
+        std::unique_ptr<Context> m_Context;
 
-        using Handle = GLFWwindow;
+        using Handle = void;
         Handle* m_Handle = nullptr;
     };
 

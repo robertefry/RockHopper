@@ -30,8 +30,6 @@ namespace RockHopper::UI
         virtual ~Window() = default;
         explicit Window() = default;
 
-    public:
-
         enum visible_t { CLOSED, TRAY, MINIMISED, VISIBLE, MAXIMISED };
         [[nodiscard]] virtual auto get_visible() const -> visible_t = 0;
         [[nodiscard]] virtual auto set_visible(Util::In<visible_t>) -> Util::Future<void> = 0;
@@ -58,7 +56,6 @@ namespace RockHopper::UI
 
     protected:
         using EventHandler::dispatch_event;
-
         using EventHandler::on_event;
 
     private:

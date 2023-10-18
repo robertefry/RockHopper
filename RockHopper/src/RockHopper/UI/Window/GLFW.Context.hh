@@ -6,10 +6,6 @@
 
 #include "RockHopper/GX/Renderer.hh"
 
-#include <tuple>
-#include <unordered_map>
-#include <shared_mutex>
-
 namespace RockHopper::UI::GLFW
 {
 
@@ -18,43 +14,18 @@ namespace RockHopper::UI::GLFW
 
     class Window::Context final
     {
-        Context(Context const&) = delete;
-        Context& operator=(Context const&) = delete;
-
     public:
         virtual ~Context();
         explicit Context();
 
-        [[nodiscard]] auto renderer() & -> GX::Renderer& { return m_Renderer; };
-        [[nodiscard]] auto renderer() const& -> GX::Renderer const& { return m_Renderer; };
+        Context(Context const&) = default;
+        Context& operator=(Context const&) = default;
 
-    public:
         void create_window(Window::Handle**) noexcept;
         void dispose_window(Window::Handle**) noexcept;
 
-        template <typename T_Property>
-        auto set_property(Window::Handle*, Util::In<T_Property>) -> Util::Future<void>;
-        template <typename T_Property>
-        auto get_property(Window::Handle*) -> T_Property;
-
     private:
         GX::Renderer m_Renderer{};
-
-        struct PropertyCache
-        {
-            using Tuple = std::tuple<
-                visible_t,
-                focused_t,
-                position_t,
-                dimension_t,
-                title_t,
-                swap_interval_t>;
-            Tuple m_Tuple {};
-
-            std::shared_mutex m_Mutex {};
-        };
-        using PropertyMap = std::unordered_map<Window::Handle*,PropertyCache>;
-        PropertyMap m_PropertyMap{};
     };
 
 } // namespace RockHopper::UI::GLFW

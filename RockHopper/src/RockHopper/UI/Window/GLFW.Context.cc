@@ -27,7 +27,7 @@ namespace RockHopper::UI::GLFW
         }
         catch(std::exception const& e)
         {
-            ROCKHOPPER_LOG_FATAL("Exception occoured on GLFW Context destruction.\n{}",e.what());
+            ROCKHOPPER_LOG_FATAL("Exception occurred on GLFW Context destruction.\n{}",e.what());
         }
     }
 
@@ -70,7 +70,7 @@ namespace RockHopper::UI::GLFW
         {
             auto future = m_Renderer.push_task([=]()
             {
-                if ((bool)*handle) glfwDestroyWindow(*handle);
+                if ((bool)*handle) glfwDestroyWindow(static_cast<GLFWwindow*>(*handle));
             });
             future.wait();
         }
@@ -79,59 +79,5 @@ namespace RockHopper::UI::GLFW
             ROCKHOPPER_LOG_FATAL("GLFW encountered an error when disposing a window.\n{}",e.what());
         }
     }
-
-    // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-    #define ExplicitlyInstantiateSetProperty(property_t) \
-    template auto Window::Context::set_property<property_t> \
-        (Window::Handle*,Util::In<property_t>) -> Util::Future<void>
-
-    template <typename T_Property>
-    auto Window::Context::set_property(
-        Window::Handle* handle, Util::In<T_Property> property) -> Util::Future<void>
-    {
-        return m_Renderer.push_task([=,this,property=std::move(property)]()
-        {
-            PropertyCache& cache = m_PropertyMap[handle];
-            std::unique_lock const lock {cache.m_Mutex};
-
-            if constexpr (std::is_same_v<T_Property,Window::visible_t>)       { /* todo */ }
-            if constexpr (std::is_same_v<T_Property,Window::focused_t>)       { /* todo */ }
-            if constexpr (std::is_same_v<T_Property,Window::position_t>)      { /* todo */ }
-            if constexpr (std::is_same_v<T_Property,Window::dimension_t>)     { /* todo */ }
-            if constexpr (std::is_same_v<T_Property,Window::title_t>)         { /* todo */ }
-            if constexpr (std::is_same_v<T_Property,Window::swap_interval_t>) { /* todo */ }
-
-            std::get<T_Property>(cache.m_Tuple) = property;
-        });
-    }
-
-    ExplicitlyInstantiateSetProperty(Window::visible_t);
-    ExplicitlyInstantiateSetProperty(Window::focused_t);
-    ExplicitlyInstantiateSetProperty(Window::position_t);
-    ExplicitlyInstantiateSetProperty(Window::dimension_t);
-    ExplicitlyInstantiateSetProperty(Window::title_t);
-    ExplicitlyInstantiateSetProperty(Window::swap_interval_t);
-
-    // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-    #define ExplicitlyInstantiateGetProperty(property_t) \
-    template auto Window::Context::get_property<property_t> \
-        (Window::Handle* handle) -> property_t
-
-    template <typename T_Property>
-    auto Window::Context::get_property(
-        Window::Handle* handle) -> T_Property
-    {
-        PropertyCache& cache = m_PropertyMap[handle];
-        std::shared_lock const lock {cache.m_Mutex};
-
-        return std::get<T_Property>(cache.m_Tuple);
-    }
-
-    ExplicitlyInstantiateGetProperty(Window::visible_t);
-    ExplicitlyInstantiateGetProperty(Window::focused_t);
-    ExplicitlyInstantiateGetProperty(Window::position_t);
-    ExplicitlyInstantiateGetProperty(Window::dimension_t);
-    ExplicitlyInstantiateGetProperty(Window::title_t);
-    ExplicitlyInstantiateGetProperty(Window::swap_interval_t);
 
 } // namespace RockHopper::UI::GLFW
