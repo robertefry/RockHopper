@@ -7,7 +7,7 @@ namespace RockHopper::UI
     struct WindowEvent_Init;
     struct WindowEvent_Dispose;
     struct WindowEvent_Refresh;
-    struct WindowEvent_OnChange_Visable;
+    struct WindowEvent_OnChange_Visible;
     struct WindowEvent_OnChange_Focus;
     struct WindowEvent_OnChange_Position;
     struct WindowEvent_OnChange_Dimensions;
@@ -18,7 +18,7 @@ namespace RockHopper::UI
         WindowEvent_Init,
         WindowEvent_Dispose,
         WindowEvent_Refresh,
-        WindowEvent_OnChange_Visable,
+        WindowEvent_OnChange_Visible,
         WindowEvent_OnChange_Focus,
         WindowEvent_OnChange_Position,
         WindowEvent_OnChange_Dimensions,

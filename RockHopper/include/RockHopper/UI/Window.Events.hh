@@ -5,8 +5,6 @@
 #include "RockHopper/UI/Window.hh"
 #include "RockHopper/UI/Window.Events.fwd"
 
-#include <cstdint>
-
 namespace RockHopper::UI
 {
 
@@ -22,7 +20,7 @@ namespace RockHopper::UI
     {
     };
 
-    struct WindowEvent_OnChange_Visable
+    struct WindowEvent_OnChange_Visible
     {
         Window::visible_t visible;
     };
