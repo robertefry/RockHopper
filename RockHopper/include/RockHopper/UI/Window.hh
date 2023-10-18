@@ -23,12 +23,12 @@ namespace RockHopper::UI
         using EventHandler = Event::EventHandler<WindowEvent,Event::Dispatch::ThreadPool>;
         using TickThread = Chrono::TickThread<Event::Dispatch::Sequential>;
 
+        Window(Window const&) = delete;
+        Window& operator=(Window const&) = delete;
+
     public:
         virtual ~Window() = default;
         explicit Window() = default;
-
-        Window(Window const&) = delete;
-        Window& operator=(Window const&) = delete;
 
     public:
 
