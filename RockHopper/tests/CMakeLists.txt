@@ -31,4 +31,9 @@ file(GLOB_RECURSE GLOB_SOURCES CONFIGURE_DEPENDS
   "src/*.c" "src/*.cc" "src/*.cpp" "src/*.cxx")
 target_sources(${TESTS_NAME} PRIVATE ${GLOB_SOURCES})
 
+# ---- dependencies ----
+
+CPMAddPackage(NAME "Catch2"
+  GITHUB_REPOSITORY "catchorg/Catch2" GIT_TAG "v3.3.2"
+)
 target_link_libraries(${TESTS_NAME} PUBLIC Catch2::Catch2WithMain)
